@@ -1,27 +1,21 @@
 # Workflow name
 name: Deploy Static Frontend to GitHub Pages
 
-# Controls when the workflow will run
 on:
-  # Runs on pushes targeting the default branch (usually main or master)
   push:
     branches: [ "main" ] 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN 
 permissions:
   contents: write # Needed for peaceiris/actions-gh-pages to push to gh-pages branch
 
-# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Build and deploy job
   deploy:
-    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+    runs-on: ubuntu-latest 
 
     steps:
       # Step 1: Check out your repository code
@@ -32,18 +26,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x # Specify desired Node.js version
-          cache: 'npm' # Cache npm dependencies
+          node-version: 20.x 
+          cache: 'npm' 
 
       # Step 3: Install dependencies
       - name: Install Dependencies
-        run: npm ci # Use 'ci' for cleaner installs in CI environments
+        run: npm ci 
 
-      # Step 4: Run the full build process
+      # Step 4: Run your project's build command
       - name: Build Project
-        run: npm run build # Assumes this creates dist/client, etc.
+        run: npm run build # This should run tsc, webpack, copy-json etc.
 
-      # Step 5: Verify Build Output (Optional but helpful)
+      # Step 5: Verify Build Output (Optional)
       - name: List Build Artifacts
         run: |
           echo "--- Listing dist/ ---"
@@ -52,80 +46,48 @@ jobs:
           ls -R styles || echo "styles/ directory not found."
           echo "--- Listing public/ ---"
           ls -R public || echo "public/ directory not found."
-      # End Verification Step
 
-      # Step 6: Prepare deployment directory ('docs' folder) - SIMPLIFIED
+      # Step 6: Prepare deployment directory ('docs' folder) - Simplified
       - name: Prepare Deployment Directory
         run: |
-          rm -rf docs # Clean previous deployment folder
-          mkdir docs # Create the main deployment folder
+          rm -rf docs 
+          mkdir -p docs 
           
           echo "Copying necessary files to docs/ ..."
           
           # Copy HTML files from public to docs root
-          # Use 'if' checks and 'cp -v' for better logging
-          if ls public/*.html 1> /dev/null 2>&1; then 
-            cp -v public/*.html docs/
-          else 
-            echo "No HTML files found in public/, skipping."
-          fi
+          if ls public/*.html 1> /dev/null 2>&1; then cp -v public/*.html docs/; else echo "No HTML files found in public/, skipping."; fi
           
-          # Copy assets from public (like images, fonts)
-          if [ -d "public/images" ]; then 
-            echo "Copying public/images..."
-            mkdir -p docs/images && cp -r public/images/* docs/images/
-          else 
-            echo "No public/images directory found, skipping."
-          fi
-          if [ -d "public/fonts" ]; then 
-            echo "Copying public/fonts..."
-            mkdir -p docs/fonts && cp -r public/fonts/* docs/fonts/
-          else 
-            echo "No public/fonts directory found, skipping."
-          fi
+          # Copy assets from public (images, fonts)
+          if [ -d "public/images" ]; then mkdir -p docs/images && cp -r public/images/* docs/images/; else echo "No public/images directory found, skipping."; fi
+          if [ -d "public/fonts" ]; then mkdir -p docs/fonts && cp -r public/fonts/* docs/fonts/; else echo "No public/fonts directory found, skipping."; fi
           
           # Copy the entire styles directory
-          if [ -d "styles" ]; then 
-            echo "Copying styles directory..."
-            cp -r styles docs/styles
-          else 
-            echo "No styles directory found, skipping."
-          fi
+          if [ -d "styles" ]; then cp -r styles docs/styles; else echo "No styles directory found, skipping."; fi
           
           # Copy the built JavaScript bundles
-          if [ -d "dist/client" ]; then 
-            echo "Copying dist/client directory..."
-            mkdir -p docs/dist/client 
-            cp -r dist/client/* docs/dist/client/
-          else 
-            echo "No dist/client directory found, skipping."
-          fi 
+          if [ -d "dist/client" ]; then mkdir -p docs/dist/client && cp -r dist/client/* docs/dist/client/; else echo "No dist/client directory found, skipping."; fi 
           
           # Optional: Copy data if needed client-side
-          if [ -f "data/posts.json" ]; then 
-             echo "Copying data/posts.json..."
-             mkdir -p docs/data
-             cp data/posts.json docs/data/posts.json
-          else
-             echo "No data/posts.json found, skipping."
-          fi
+          if [ -f "data/posts.json" ]; then mkdir -p docs/data && cp data/posts.json docs/data/posts.json; else echo "No data/posts.json found, skipping."; fi
 
           echo "Finished copying files."
           echo "--- Listing final docs/ contents ---" 
-          ls -R docs # List contents for verification
+          ls -R docs 
 
-      # REMOVED Step: Fix paths in HTML files (Should be relative in source HTML now)
-      # REMOVED Step: Fix paths in CSS files (Should be relative in source CSS now)
+      # REMOVED: Path fixing steps (Ensure paths are relative in source HTML/CSS)
 
       # Step 7: Deploy the 'docs' folder to the 'gh-pages' branch
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs # Directory to deploy
+          publish_dir: ./docs 
           # Optional: uncomment below if you want to deploy to a specific branch like 'gh-pages'
           # publish_branch: gh-pages 
           # Optional: uncomment below to clean the target branch before deploying
           # force_orphan: true 
           # Optional: add custom commit message
           # commit_message: 'Deploy static site to GitHub Pages'
+
+      # IMPORTANT: Ensure no steps using actions/jekyll-build-pages@v1 exist in this file.
