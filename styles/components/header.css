@@ -1,0 +1,127 @@
+/* styles/components.css OR styles/components/header.css */
+
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem; /* Horizontal padding */
+    height: var(--header-height, 70px); 
+    background-color: var(--surface-color, #ffffff);
+    border-bottom: 1px solid var(--border-color-light, #eee);
+    box-shadow: var(--box-shadow-light, 0 2px 4px rgba(0, 0, 0, 0.08));
+    position: fixed; /* Keep fixed positioning */
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000; 
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.site-header h1 {
+    margin: 0; /* Reset margin */
+    font-size: 1.75rem; /* Slightly larger title */
+    font-weight: 700;
+}
+
+.site-header h1 a {
+    color: var(--heading-color, #222);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.site-header h1 a:hover {
+    color: var(--primary-color, #3498db);
+    text-decoration: none;
+}
+
+.site-header nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center; /* Vertically align nav items */
+    gap: 2rem; /* Increase gap between nav items */
+    margin: 0;
+    padding: 0;
+}
+
+.site-header nav ul li a {
+    text-decoration: none;
+    color: var(--text-muted, #666); 
+    font-family: var(--font-primary, 'Inter', sans-serif); 
+    font-size: 1rem;
+    font-weight: 600; 
+    padding: 0.5rem 0; /* Add vertical padding for larger click area */
+    border-bottom: 2px solid transparent; /* Prepare for active state underline */
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.site-header nav ul li a:hover,
+.site-header nav ul li a:focus {
+    color: var(--text-color, #333);
+    border-bottom-color: var(--primary-color-light, #ddd); /* Subtle underline on hover */
+}
+
+/* Active nav link style */
+.site-header nav ul li a.active {
+    color: var(--primary-color, #3498db); 
+    font-weight: 700; 
+    border-bottom-color: var(--primary-color, #3498db); /* Solid underline for active */
+}
+
+.site-header .search-bar {
+    padding: 0.5rem 1rem; /* Adjust padding */
+    font-size: 0.9rem;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 20px; /* Pill shape */
+    background-color: var(--surface-alt, #f9f9f9);
+    color: var(--text-muted, #666);
+    min-width: 200px; /* Give it some minimum width */
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.site-header .search-bar:focus {
+     background-color: var(--surface-color, #fff);
+     border-color: var(--primary-color, #3498db);
+     color: var(--text-color, #333);
+}
+
+
+/* --- Dark Mode Header Styles --- */
+
+body.dark-mode .site-header {
+    background-color: var(--surface-color-dark, #1e1e1e);
+    border-bottom-color: var(--border-color-dark, #444);
+    box-shadow: var(--box-shadow-light-dark, 0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+body.dark-mode .site-header h1 a {
+    color: var(--heading-color-dark, #eee);
+}
+body.dark-mode .site-header h1 a:hover {
+    color: var(--primary-color-dark, #4dabf7);
+}
+
+body.dark-mode .site-header nav ul li a {
+    color: var(--text-muted-dark, #aaa);
+}
+
+body.dark-mode .site-header nav ul li a:hover,
+body.dark-mode .site-header nav ul li a:focus {
+    color: var(--text-color-dark, #eee);
+    border-bottom-color: var(--border-color, #555); /* Subtle underline on hover */
+}
+
+body.dark-mode .site-header nav ul li a.active {
+    color: var(--primary-color-dark, #4dabf7); 
+    border-bottom-color: var(--primary-color-dark, #4dabf7); 
+}
+
+body.dark-mode .site-header .search-bar {
+    background-color: #333; /* Match input background from base */
+    border-color: #555;
+    color: var(--text-muted-dark, #aaa);
+}
+body.dark-mode .site-header .search-bar:focus {
+     background-color: #444; /* Slightly lighter on focus */
+     border-color: var(--primary-color-dark, #4dabf7);
+     color: var(--text-color-dark, #eee);
+}
+
