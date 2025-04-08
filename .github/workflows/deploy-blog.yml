@@ -53,7 +53,6 @@ jobs:
       # Step 5: Prepare deployment directory ('docs' folder)
       - name: Prepare Deployment Directory
         run: |
-          mkdir docs # Create the docs directory
           # Copy necessary files/folders (adjust paths if structure differs)
           echo "Copying files to docs/ ..."
           cp public/index.html public/admin.html public/post.html docs/
