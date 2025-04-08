@@ -49,27 +49,50 @@ jobs:
       # Step 5: Prepare deployment directory ('docs' folder)
       - name: Prepare Deployment Directory
         run: |
-          # Copy necessary files/folders (adjust paths if structure differs)
+          # Create the docs directory and subdirectories
+          mkdir -p docs/dist/client docs/styles docs/images
+          
           echo "Copying files to docs/ ..."
-          cp public/index.html public/admin.html public/post.html docs/
-          # Copy directories recursively, handle errors if source doesn't exist
-          cp -r public/images docs/images || echo "No public/images directory found, skipping."
-          cp -r styles docs/styles
-          cp -r dist/client docs/dist/client
-          # Optional: Copy data if needed client-side
-          cp data/posts.json docs/data/posts.json || echo "No data/posts.json found, skipping."
+          
+          # Copy HTML files
+          cp public/*.html docs/ || echo "No HTML files found in public/, skipping."
+          
+          # Copy CSS files (to both locations for compatibility)
+          cp -r styles/* docs/styles/ || echo "No styles found, skipping."
+          # Also copy to root for paths without prefix
+          cp styles/*.css docs/ || echo "No CSS files found, skipping."
+          
+          # Copy JavaScript bundle
+          cp dist/client/*.js docs/dist/client/ || echo "No JS files found in dist/client, skipping."
+          # Also copy to root for direct references
+          cp dist/client/*.js docs/ || echo "No JS files found, skipping."
+          
+          # Copy image files from multiple possible locations
+          cp -r public/images/* docs/images/ 2>/dev/null || echo "No images in public/images/, skipping."
+          cp -r images/* docs/images/ 2>/dev/null || echo "No images/ directory, skipping."
+          
+          # Copy background images that might be referenced directly
+          find . -name "background.jpg" -exec cp {} docs/ \; 2>/dev/null || echo "No background.jpg found."
+          
+          # Copy data files
+          mkdir -p docs/data
+          cp -r data/*.json docs/data/ 2>/dev/null || echo "No JSON data files found, skipping."
+          
           echo "Finished copying files."
-          echo "--- Listing final docs/ contents ---" # Added header for clarity
+          echo "--- Listing final docs/ contents ---"
           ls -R docs 
 
-      # Step 6: Fix paths in HTML files within 'docs' directory
+      # Step 6: Fix paths in HTML files for GitHub Pages
       - name: Fix HTML Paths
         run: |
           echo "Fixing paths in HTML files..."
+          # Basic path fixes
           find docs/ -name '*.html' -print0 | xargs -0 sed -i 's|href="/|href="|g'
           find docs/ -name '*.html' -print0 | xargs -0 sed -i 's|src="/|src="|g'
-          echo "HTML paths fixed."
-      
+          
+          # Fix references to stylesheets
+          find docs/ -name '*.html' -print0 | xargs -0 sed -i 's|href="styles/|href="./styles/|g
+
       # Step 7: Fix paths in CSS files within 'docs' directory (Basic Example)
       - name: Fix CSS Paths (Basic)
         run: |
@@ -82,4 +105,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs 
+          publish_dir: ./docs
