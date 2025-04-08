@@ -58,7 +58,6 @@ jobs:
           cp public/index.html public/admin.html public/post.html docs/
           # Copy directories recursively, handle errors if source doesn't exist
           cp -r public/images docs/images || echo "No public/images directory found, skipping."
-          cp -r public/fonts docs/fonts || echo "No public/fonts directory found, skipping."
           cp -r styles docs/styles
           cp -r dist/client docs/dist/client
           # Optional: Copy data if needed client-side
