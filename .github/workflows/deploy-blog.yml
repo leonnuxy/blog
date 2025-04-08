@@ -1,72 +1,73 @@
 # Workflow name
 name: Deploy Static Frontend to GitHub Pages
 
-# Controls when the workflow will run
 on:
-  # Runs on pushes targeting the default branch (usually main or master)
   push:
-    branches: [ "main" ] # Adjust if your default branch is different
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches: [ "main" ] 
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-# Using peaceiris/actions-gh-pages to push to gh-pages branch needs contents: write
 permissions:
-  contents: write
-  # pages: write # Needed if deploying directly to Pages environment
-  # id-token: write # Needed if deploying directly to Pages environment
+  contents: write 
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Build and deploy job
   deploy:
-    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+    runs-on: ubuntu-latest 
 
     steps:
-      # Step 1: Check out your repository code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x # Specify desired Node.js version
-          cache: 'npm' # Cache npm dependencies
+          node-version: 20.x 
+          cache: 'npm' 
 
-      # Step 3: Install dependencies
       - name: Install Dependencies
-        run: npm ci # Use 'ci' for cleaner installs in CI environments
+        run: npm ci 
 
-      # Step 4: Run the full build process
-      # Assumes 'npm run build' correctly runs tsc, webpack, copy-json etc.
-      # and generates output in 'dist/client/' and other necessary places.
       - name: Build Project
         run: npm run build
+
+      # --- NEW: Verify Build Output ---
+      - name: List Build Artifacts
+        run: |
+          echo "--- Listing dist/ ---"
+          ls -R dist || echo "dist/ directory not found."
+          echo "--- Listing styles/ ---"
+          ls -R styles || echo "styles/ directory not found."
+          echo "--- Listing public/ ---"
+          ls -R public || echo "public/ directory not found."
+          echo "--- Listing data/ ---"
+          ls -R data || echo "data/ directory not found."
+      # --- End Verification Step ---
 
       # Step 5: Prepare deployment directory ('docs' folder)
       - name: Prepare Deployment Directory
         run: |
-          # Copy necessary files/folders (adjust paths if structure differs)
+          mkdir -p docs 
           echo "Copying files to docs/ ..."
-          cp public/index.html public/admin.html public/post.html docs/
+          # Check if source HTML files exist before copying
+          ls public/*.html && cp public/index.html public/admin.html public/post.html docs/ || echo "HTML files not found in public/, skipping."
           # Copy directories recursively, handle errors if source doesn't exist
           cp -r public/images docs/images || echo "No public/images directory found, skipping."
-          cp -r styles docs/styles
-          cp -r dist/client docs/dist/client
+          cp -r public/fonts docs/fonts || echo "No public/fonts directory found, skipping."
+          cp -r styles docs/styles || echo "No styles directory found, skipping."
+          
+          mkdir -p docs/dist 
+          cp -r dist/client docs/dist/client || echo "No dist/client directory found, skipping."
+          
           # Optional: Copy data if needed client-side
           cp data/posts.json docs/data/posts.json || echo "No data/posts.json found, skipping."
           echo "Finished copying files."
-          ls -R docs # List contents of docs for verification in logs
+          echo "--- Listing final docs/ contents ---" # Added header for clarity
+          ls -R docs 
 
       # Step 6: Fix paths in HTML files within 'docs' directory
-      # This uses 'find' and 'sed' to replace root-relative paths with relative paths
       - name: Fix HTML Paths
         run: |
           echo "Fixing paths in HTML files..."
@@ -75,13 +76,10 @@ jobs:
           echo "HTML paths fixed."
       
       # Step 7: Fix paths in CSS files within 'docs' directory (Basic Example)
-      # WARNING: This simple 'sed' command might not correctly handle all relative path calculations 
-      # (e.g., url(/...) in nested CSS files). 
-      # A more robust script or configuring Webpack's publicPath might be better long-term.
       - name: Fix CSS Paths (Basic)
         run: |
           echo "Fixing basic paths in CSS files..."
-          find docs/styles/ -name '*.css' -print0 | xargs -0 sed -i 's|url(/|url(../|g' # Simple replacement, assumes assets are one level up
+          find docs/styles/ -name '*.css' -print0 | xargs -0 sed -i 's|url(/|url(../|g' 
           echo "Basic CSS paths adjusted."
 
       # Step 8: Deploy the 'docs' folder to the 'gh-pages' branch
@@ -89,11 +87,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs # Directory to deploy
-          # Optional: Specify branch, default is gh-pages
-          # publish_branch: gh-pages 
-          # Optional: Add a commit message
-          # commit_message: ${{ github.event.head_commit.message }} 
-          # Optional: Keep history or force push
-          # keep_files: false # Set to true to keep old files on gh-pages branch
-          # force_orphan: true # Creates a clean branch history
+          publish_dir: ./docs 
