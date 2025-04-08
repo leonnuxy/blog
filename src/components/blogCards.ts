@@ -32,7 +32,7 @@ export function createBlogCardElement(post: BlogPostData): HTMLElement {
     let tagsHTML = '';
     if (post.tags && post.tags.length > 0) {
         tagsHTML = '<div class="post-tags">' +
-            post.tags.map(tag => `<span class="tag-badge">${tag}</span>`).join('') +
+            post.tags.map(tag => `<span class="tag-badge" data-tag="${tag}">${tag}</span>`).join('') +
             '</div>';
     }
 
@@ -61,6 +61,20 @@ export function createBlogCardElement(post: BlogPostData): HTMLElement {
             </div>
         </div>
     `; 
+
+    // Add event listeners for tag clicks
+    const tagBadges = blogCard.querySelectorAll('.tag-badge');
+    tagBadges.forEach(badge => {
+        badge.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent the blog card click
+            const tag = (event.target as HTMLElement).dataset.tag;
+            if (tag) {
+                // Use client-side navigation instead of direct links
+                // This uses the index.html page with a query parameter instead of a /tag/ path
+                window.location.href = `index.html?tag=${encodeURIComponent(tag)}`;
+            }
+        });
+    });
 
      const socialSharingDiv = blogCard.querySelector('.social-sharing');
      if (socialSharingDiv) {

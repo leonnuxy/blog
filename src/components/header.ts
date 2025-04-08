@@ -21,13 +21,15 @@ export function renderHeader(containerId: string = 'header-placeholder'): void {
     // Define the header HTML structure - matching index.html
     headerContainer.innerHTML = `
         <header class="site-header">
-            <h1><a href="/">Blog</a></h1>
+            <h1><a href="/">Blog</a></h1> {/* Link H1 to root */}
             <nav>
                 <ul>
+                    {/* Use root-relative paths or hash links as appropriate */}
                     <li><a href="/">Home</a></li> 
                     <li><a href="/#about" id="about-btn">About</a></li>
                     <li><a href="/#portfolio">Portfolio</a></li>
                     <li><a href="/#contact" id="contact-btn">Contact</a></li>
+                    <li><a href="admin.html">Admin</a></li> {/* Link to admin page */}
                 </ul>
             </nav>
             <input type="search" placeholder="Search for articles..." class="search-bar"> 
