@@ -21,15 +21,13 @@ export function renderHeader(containerId: string = 'header-placeholder'): void {
     // Define the header HTML structure - matching index.html
     headerContainer.innerHTML = `
         <header class="site-header">
-            <h1><a href="/">Blog</a></h1> {/* Link H1 to root */}
+            <h1><a href="/">Blog</a></h1>
             <nav>
                 <ul>
-                    {/* Use root-relative paths or hash links as appropriate */}
                     <li><a href="/">Home</a></li> 
                     <li><a href="/#about" id="about-btn">About</a></li>
                     <li><a href="/#portfolio">Portfolio</a></li>
                     <li><a href="/#contact" id="contact-btn">Contact</a></li>
-                    <li><a href="admin.html">Admin</a></li> {/* Link to admin page */}
                 </ul>
             </nav>
             <input type="search" placeholder="Search for articles..." class="search-bar"> 
@@ -44,29 +42,28 @@ export function renderHeader(containerId: string = 'header-placeholder'): void {
             console.error('Search bar element not found.');
             return;
         }
-    
+
         searchBar.addEventListener('input', (event) => {
             const query = (event.target as HTMLInputElement).value;
             console.log(`Searching for: ${query}`);
-            // Add search logic here
         });
     }
-    
-        setupSearch(); // Setup search functionality
+
+    setupSearch(); // Setup search functionality
     // Define the setupPopupButtons function to handle popup functionality
     function setupPopupButtons(buttonId: string, popupId: string): void {
         const button = document.getElementById(buttonId);
         const popup = document.getElementById(popupId);
-    
+
         if (!button || !popup) {
             console.error(`Button with ID '${buttonId}' or popup with ID '${popupId}' not found.`);
             return;
         }
-    
+
         button.addEventListener('click', () => {
             popup.classList.toggle('visible'); // Toggle visibility of the popup
         });
     }
-    
+
     setupPopupButtons('about-btn', 'about-popup'); // Setup popup for about button
 }
