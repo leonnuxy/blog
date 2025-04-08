@@ -97,7 +97,7 @@ function handleBlogCardClick(event: Event): void {
         const postId = card.getAttribute('data-post-id');
         
         if (postId) {
-            window.location.href = `/post.html?id=${postId}`; // NOT /public/post.html
+            window.location.href = `post.html?id=${postId}`; // NOT /public/post.html
 
         }
     }
