@@ -40,7 +40,7 @@ export function createBlogCardElement(post: BlogPostData): HTMLElement {
     }
 
     // Use the correct public path for the fallback image
-    const fallbackImageUrl = '/images/blog_image_3.jpeg'; 
+    const fallbackImageUrl = 'images/blog_image_3.jpeg'; 
 
     // Create HTML for blog card
     blogCard.innerHTML = `
