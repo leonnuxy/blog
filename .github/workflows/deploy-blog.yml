@@ -49,38 +49,64 @@ jobs:
       # Step 5: Prepare deployment directory ('docs' folder)
       - name: Prepare Deployment Directory
         run: |
-          # Create the docs directory and subdirectories
-          mkdir -p docs/dist/client docs/styles docs/images
+          # Clean up and create the docs directory structure
+          rm -rf docs
+          mkdir -p docs/dist/client docs/styles docs/images docs/js
           
           echo "Copying files to docs/ ..."
           
           # Copy HTML files
-          cp public/*.html docs/ || echo "No HTML files found in public/, skipping."
+          cp -v public/*.html docs/ || echo "No HTML files found in public/, skipping."
           
-          # Copy CSS files (to both locations for compatibility)
-          cp -r styles/* docs/styles/ || echo "No styles found, skipping."
-          # Also copy to root for paths without prefix
-          cp styles/*.css docs/ || echo "No CSS files found, skipping."
+          # Copy CSS files with explicit verification
+          echo "Copying CSS files..."
+          if [ -d "styles" ]; then
+            cp -rv styles docs/ || echo "Failed to copy styles directory"
+            # Also copy individual CSS files to the root (flat structure)
+            find styles -name "*.css" -exec cp -v {} docs/ \; || echo "No individual CSS files found"
+          else
+            echo "No styles directory found"
+          fi
           
-          # Copy JavaScript bundle
-          cp dist/client/*.js docs/dist/client/ || echo "No JS files found in dist/client, skipping."
-          # Also copy to root for direct references
-          cp dist/client/*.js docs/ || echo "No JS files found, skipping."
+          # Copy JavaScript with explicit verification
+          echo "Copying JavaScript files..."
+          # Check for client.bundle.js specifically
+          if [ -f "dist/client/client.bundle.js" ]; then
+            cp -v dist/client/client.bundle.js docs/ || echo "Failed to copy client.bundle.js"
+          else
+            echo "client.bundle.js not found in dist/client/"
+          fi
+          # Copy all JS files from dist/client to docs/dist/client
+          if [ -d "dist/client" ]; then
+            cp -rv dist/client/*.js docs/dist/client/ || echo "No JS files in dist/client"
+            # Also copy JS files to root
+            cp -v dist/client/*.js docs/ || echo "No JS files to copy to root"
+          fi
           
           # Copy image files from multiple possible locations
-          cp -r public/images/* docs/images/ 2>/dev/null || echo "No images in public/images/, skipping."
-          cp -r images/* docs/images/ 2>/dev/null || echo "No images/ directory, skipping."
+          echo "Copying image files..."
+          if [ -d "public/images" ]; then
+            cp -rv public/images/* docs/images/ || echo "Failed to copy from public/images"
+          fi
+          if [ -d "images" ]; then
+            cp -rv images/* docs/images/ || echo "Failed to copy from images directory"
+          fi
           
-          # Copy background images that might be referenced directly
-          find . -name "background.jpg" -exec cp {} docs/ \; 2>/dev/null || echo "No background.jpg found."
+          # Copy background image with explicit checks
+          echo "Locating background.jpg..."
+          find . -name "background.jpg" -not -path "./docs/*" -not -path "./node_modules/*" -exec cp -v {} docs/ \; || echo "No background.jpg found"
           
           # Copy data files
+          echo "Copying data files..."
           mkdir -p docs/data
-          cp -r data/*.json docs/data/ 2>/dev/null || echo "No JSON data files found, skipping."
+          if [ -d "data" ]; then
+            cp -rv data/*.json docs/data/ || echo "No JSON data files found"
+          fi
           
           echo "Finished copying files."
           echo "--- Listing final docs/ contents ---"
-          ls -R docs 
+          ls -la docs
+          find docs -type f | sort
 
       # Step 6: Fix paths in HTML files for GitHub Pages
       - name: Fix HTML Paths
@@ -91,7 +117,7 @@ jobs:
           find docs/ -name '*.html' -print0 | xargs -0 sed -i 's|src="/|src="|g'
           
           # Fix references to stylesheets
-          find docs/ -name '*.html' -print0 | xargs -0 sed -i 's|href="styles/|href="./styles/|g
+          find docs/ -name '*.html' -print0 | xargs -0 sed -i 's|href="styles/|href="./styles/|g'
 
       # Step 7: Fix paths in CSS files within 'docs' directory (Basic Example)
       - name: Fix CSS Paths (Basic)
