@@ -1,0 +1,35 @@
+/* File: dark-mode.css */
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #6c63ff;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: none;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1);
+    background-color: #5145cd;
+}
+
+body.dark-mode .dark-mode-toggle {
+    background-color: #f7c52b;
+    color: #333;
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    background-color: #ffdb70;
+}

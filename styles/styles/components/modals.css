@@ -1,0 +1,274 @@
+/* File: modals.css */
+
+/* Base Popup and Modal Styles 
+   This file serves as the foundation for all popup/modal elements in the project */
+
+/* Shared container styles */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(3px);
+    visibility: hidden;
+}
+
+.popup.open {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Ensure the modal is vertically and horizontally centered */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    inset: 0; /* shorthand for top: 0; right: 0; bottom: 0; left: 0 */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Shared content container styles */
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    animation: fadeInUp 0.4s forwards;
+    text-align: center;
+}
+
+.popup.open .popup-content {
+    transform: scale(1);
+}
+
+/* Ensure all shared modal styles are consolidated */
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    animation: fadeInUp 0.4s forwards;
+    text-align: center;
+}
+
+.modal.open .modal-content {
+    transform: scale(1);
+}
+
+/* Popup/Modal headers and text styling */
+.popup-content h2, .modal-content h2 {
+    margin-top: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.popup-content p, .modal-content p {
+    line-height: 1.6;
+    color: #666;
+    margin: 10px 0;
+}
+
+/* Close button styles */
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.close-popup:hover {
+    color: #333;
+    background-color: #f0f0f0;
+}
+
+/* Ensure all shared modal styles are consolidated */
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.close-modal:hover {
+    color: #333;
+    background-color: #f0f0f0;
+}
+
+/* Shared form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 1.5rem;
+}
+
+form label {
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+}
+
+form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+form input:focus, form textarea:focus {
+    outline: none;
+    border-color: #6c63ff;
+    box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.1);
+}
+
+form button {
+    background-color: #6c63ff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.3s;
+    align-self: flex-start;
+}
+
+form button:hover {
+    background-color: #5145cd;
+    transform: translateY(-2px);
+}
+
+/* Popup/Modal specific styles */
+/* About popup specific */
+#about-popup .popup-content {
+    max-width: 600px;
+}
+
+#image-preview {
+    margin-top: 1rem;
+    max-width: 100%;
+    height: 100px;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Dark Mode Overrides */
+body.dark-mode .popup-content,
+body.dark-mode .modal-content {
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+}
+
+body.dark-mode .popup-content h2,
+body.dark-mode .modal-content h2 {
+    color: #f5f5f5;
+}
+
+body.dark-mode .popup-content p,
+body.dark-mode .modal-content p {
+    color: #ccc;
+}
+
+body.dark-mode form label {
+    color: #ddd;
+}
+
+body.dark-mode form input,
+body.dark-mode form textarea {
+    background-color: #333;
+    color: #f5f5f5;
+    border-color: #444;
+}
+
+body.dark-mode .close-popup:hover,
+body.dark-mode .close-modal:hover {
+    background-color: #444;
+    color: #f5f5f5;
+}
+
+body.dark-mode #image-preview {
+    background-color: #333;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .popup-content, .modal-content {
+        max-width: 90%;
+        max-height: 80%;
+        padding: 15px;
+    }
+}
+
+/* Moved @keyframes modalSlideIn here as it is specific to modals */

@@ -1,0 +1,150 @@
+/* File: notifications.css */
+
+/* Notification System Styling */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 300px;
+}
+
+.notification {
+    background-color: #fff;
+    border-left: 4px solid #6c63ff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    position: relative;
+    animation: slideIn 0.3s ease-in-out;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.notification.error {
+    border-left-color: #ff5252;
+}
+
+.notification.success {
+    border-left-color: #4caf50;
+}
+
+.notification-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 18px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.notification-close:hover {
+    color: #333;
+}
+
+.notification.hide {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+/* Animation for new comments */
+.comment.new-comment {
+    background-color: rgba(108, 99, 255, 0.05);
+    transition: background-color 0.5s;
+}
+
+.comment.highlight {
+    background-color: rgba(108, 99, 255, 0.1);
+}
+
+/* Like button animation */
+.post-actions button.liked {
+    animation: pulse 0.5s;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Post navigation styling */
+.post-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0;
+    padding: 15px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-link {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #5145cd;
+}
+
+.nav-link i {
+    margin: 0 5px;
+}
+
+/* Loading indicator */
+.loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 0;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #6c63ff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+/* Dark mode overrides */
+body.dark-mode .notification {
+    background-color: #333;
+    color: #f5f5f5;
+}
+
+body.dark-mode .notification-close:hover {
+    color: #fff;
+}
+
+body.dark-mode .post-navigation {
+    border-color: #444;
+}
+
+body.dark-mode .spinner {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: #6c63ff;
+}
