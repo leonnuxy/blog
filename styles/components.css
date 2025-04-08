@@ -1,0 +1,34 @@
+/* File: components.css */
+
+/* Component Styles - Main Import File */
+@import 'components/modals.css';       /* Base styles for popups and modals */
+@import 'components/buttons.css';      /* Button styles */
+@import 'components/contact.css';      /* Contact-specific styles */
+@import 'components/blog-cards.css';   /* Blog card styles */
+@import 'components/dark-mode.css';    /* Dark mode styles */
+@import 'components/comments.css';     /* Comment section styles */
+@import 'components/pagination.css';   /* Pagination styles */
+
+/* Global component adjustments */
+body {
+    font-size: 80%; /* Reduce base font size by 20% */
+}
+
+/* Animation keyframes shared across components */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments for all components */
+@media (max-width: 768px) {
+    body {
+        font-size: 70%; /* Further reduce base font size for smaller screens */
+    }
+}

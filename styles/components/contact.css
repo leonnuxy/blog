@@ -1,0 +1,52 @@
+/* File: contact.css */
+
+/* Contact-specific styles that extend the base modal styles */
+
+/* Keep unique styles for contact modal */
+#contact-popup .popup-content {
+    text-align: center;
+}
+
+/* Additional styling specific to the contact form */
+#contact-popup .popup-content h2 {
+    margin-bottom: 1.5rem;
+}
+
+/* Contact form button specific styles */
+#contact-form button {
+    padding: 0.8rem 1.5rem;
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+/* Success and error messages for the contact form */
+.form-message {
+    margin-top: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.form-message.success {
+    background-color: rgba(46, 204, 113, 0.2);
+    color: #27ae60;
+    border: 1px solid #2ecc71;
+}
+
+.form-message.error {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #c0392b;
+    border: 1px solid #e74c3c;
+}
+
+/* Dark mode specific overrides for contact messages */
+body.dark-mode .form-message.success {
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+}
+
+body.dark-mode .form-message.error {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+}

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS", // <--- CHANGE THIS LINE
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./", // Adjust rootDir to include the shared directory
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/*", "src/*", "shared/*"] // Add shared directory to paths
+    }
+  },
+  "include": [
+    "src/**/*",
+    "shared/**/*" // Include the shared directory
+
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

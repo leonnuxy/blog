@@ -1,0 +1,121 @@
+/* File: styles/layout.css OR styles/components/hero.css + blog-intro.css */
+
+/* Define fadeIn animation if not already defined elsewhere */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* --- Hero Section Styles --- */
+  .hero {
+      display: flex;
+      align-items: center;
+      gap: 2rem; /* Add gap between text and image */
+      text-align: left;
+      flex-direction: row-reverse; /* Image on left, text on right */
+      padding: 3rem;
+      margin: 3rem auto; /* Spacing above/below */
+      max-width: 900px; /* Slightly wider max-width */
+      background-color: var(--surface-color, #ffffff); /* Use CSS variables if defined */
+      color: var(--text-color, #333);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slightly softer shadow */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeIn 0.6s ease-out forwards; /* Apply animation */
+      overflow: hidden; /* Prevent content overflow */
+  }
+  
+  .hero:hover {
+      transform: translateY(-3px); /* Lift effect instead of scale */
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+  
+  .hero-content {
+      flex: 1; /* Allow text content to take available space */
+      max-width: 50%; /* Limit text width */
+  }
+  
+  .hero-content h1 {
+      font-family: 'Inter', sans-serif; /* Use linked font */
+      font-size: 2.5rem; /* Adjust size */
+      font-weight: 600; /* Semi-bold */
+      margin-bottom: 1rem; /* Space below H1 */
+      color: var(--heading-color, #333); /* Use variable or specific color */
+      line-height: 1.3;
+  }
+  
+  .hero-content p {
+      margin: 0;
+      color: var(--text-muted, #555); /* Use variable or specific color */
+      font-size: 1.1rem;
+      line-height: 1.6;
+  }
+  
+  .hero-image {
+      flex-shrink: 0; /* Prevent image from shrinking */
+      max-width: 45%; /* Adjust size relative to container */
+      height: auto;
+      display: block;
+      margin: 0;
+      border-radius: 8px;
+      object-fit: cover; /* Ensure image covers its area well */
+  }
+  
+  /* Dark mode adjustments for Hero */
+  body.dark-mode .hero {
+      background-color: var(--surface-color-dark, #2a2a2a);
+      color: var(--text-color-dark, #eee);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  body.dark-mode .hero:hover {
+       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  }
+  
+  body.dark-mode .hero-content h1 {
+       color: var(--heading-color-dark, #fff);
+  }
+  body.dark-mode .hero-content p {
+       color: var(--text-muted-dark, #aaa);
+  }
+  
+  /* --- Blog Intro Section Styles --- */
+  .blog-intro {
+      max-width: 800px; /* Slightly narrower than hero */
+      margin: 0 auto 3rem auto; /* 0 top margin (space handled by hero margin-bottom), space below, centered horizontally */
+      padding: 1.5rem;
+      text-align: center; /* Center align the text */
+      border-bottom: 1px solid var(--border-color-light, #eee); /* Subtle separator */
+  }
+  
+  .blog-intro h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 2rem; /* Slightly smaller than hero H1 */
+      font-weight: 600;
+      color: var(--heading-color, #333);
+      margin-bottom: 0.75rem; /* Space below heading */
+  }
+  
+  .blog-intro p {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      color: var(--text-muted, #666);
+      line-height: 1.6;
+      max-width: 600px; /* Limit line length for readability */
+      margin-left: auto; /* Center the paragraph block */
+      margin-right: auto;
+  }
+  
+  /* Dark mode adjustments for Blog Intro */
+  body.dark-mode .blog-intro {
+      border-bottom-color: var(--border-color-dark, #444);
+  }
+  
+  body.dark-mode .blog-intro h2 {
+      color: var(--heading-color-dark, #eee);
+  }
+  
+  body.dark-mode .blog-intro p {
+      color: var(--text-muted-dark, #aaa);
+  }
+  
+  
