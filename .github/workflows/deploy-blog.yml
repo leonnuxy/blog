@@ -53,15 +53,31 @@ jobs:
       # Step 5: Prepare deployment directory ('docs' folder)
       - name: Prepare Deployment Directory
         run: |
-          # Copy necessary files/folders (adjust paths if structure differs)
+          # Create docs directory structure first
+          mkdir -p docs/dist/client docs/styles docs/data docs/assets docs/js
+
           echo "Copying files to docs/ ..."
-          cp public/index.html public/admin.html public/post.html docs/
-          # Copy directories recursively, handle errors if source doesn't exist
+          
+          # Copy all HTML files
+          find public -name "*.html" -exec cp {} docs/ \;
+          
+          # Copy all static assets directories recursively
           cp -r public/images docs/images || echo "No public/images directory found, skipping."
+          cp -r public/assets docs/assets || echo "No public/assets directory found, skipping."
+          cp -r public/js docs/js || echo "No public/js directory found, skipping."
+          cp -r public/fonts docs/fonts || echo "No public/fonts directory found, skipping."
+          
+          # Copy favicon and other root files
+          find public -maxdepth 1 -type f ! -name "*.html" -exec cp {} docs/ \; || echo "No additional root files found."
+          
+          # Copy CSS and build files
           cp -r styles docs/styles
           cp -r dist/client docs/dist/client
-          # Optional: Copy data if needed client-side
-          cp data/posts.json docs/data/posts.json || echo "No data/posts.json found, skipping."
+          
+          # Copy data files
+          mkdir -p docs/data
+          cp -r data/*.json docs/data/ || echo "No JSON data files found, skipping."
+          
           echo "Finished copying files."
           ls -R docs # List contents of docs for verification in logs
 
