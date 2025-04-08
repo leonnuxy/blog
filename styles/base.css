@@ -1,70 +1,117 @@
-/* File: base.css */
+/* File: base.css (Refactored) */
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Merriweather:wght@300;400&display=swap');
+/* --- Font Import --- */
+/* Using 'Inter' consistently as linked in HTML */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+/* --- CSS Variables --- */
 :root {
+    /* Light Theme Defaults */
+    --font-primary: 'Inter', sans-serif;
+
     --surface-color: #ffffff;
+    --surface-alt: #f9f9f9; /* Slightly off-white for contrast */
     --text-color: #333333;
     --text-muted: #666666;
-    --primary-color: #3498db;
+    --heading-color: #222222;
+    --primary-color: #3498db; /* Example blue */
+    --primary-color-dark: #2980b9; /* Darker shade for hover */
     --danger-color: #e74c3c;
     --success-color: #28a745;
+    --like-color: #e74c3c; /* Color for liked heart */
+    --border-color-light: #eeeeee;
     --border-color: #dddddd;
-    --hover-color: #f5f5f5;
+    --surface-hover: #f0f0f0; /* Hover background */
     --input-background: #ffffff;
-}
+    --link-color: var(--primary-color);
+    --link-hover-color: var(--primary-color-dark);
 
-[data-theme="dark"] {
-    --surface-color: #1e1e1e;
-    --text-color: #f5f5f5;
-    --text-muted: #999999;
-    --primary-color: #3498db;
-    --danger-color: #ff6b6b;
-    --success-color: #2ecc71;
-    --border-color: #333333;
-    --hover-color: #2c2c2c;
-    --input-background: #333333;
-}
-
-/* Base Styles */
-body {
-    font-family: 'Merriweather', serif;
-    margin: 0;
-    padding: 0;
-    color: #444;
-    background-color: #f7f7f7;
-    line-height: 1.8;
-    transition: background-color 0.3s, color 0.3s;
-    /* Add padding to top to account for fixed header */
-    padding-top: 70px;
-    box-sizing: border-box;
+    --header-height: 70px; /* Define header height as variable */
+    --border-radius-small: 4px;
+    --border-radius-medium: 6px;
+    --border-radius-large: 8px;
+    --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --box-shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 body.dark-mode {
+    /* Dark Theme Variable Overrides */
+    --surface-color: #1e1e1e;
+    --surface-alt: #2a2a2a; 
+    --text-color: #f5f5f5;
+    --text-muted: #aaaaaa;
+    --heading-color: #ffffff;
+    --primary-color: #4dabf7; /* Lighter blue for dark mode */
+    --primary-color-dark: #80d4ff; /* Lighter hover for dark mode */
+    --danger-color: #ff6b6b;
+    --success-color: #2ecc71;
+    --like-color: #ff6b6b; /* Brighter red for dark mode */
+    --border-color-light: #333333;
+    --border-color: #444444;
+    --surface-hover: rgba(255, 255, 255, 0.1); 
+    --input-background: #333333;
+    --link-color: var(--primary-color);
+    --link-hover-color: var(--primary-color-dark);
+
+    --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --box-shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.4);
+
+    /* Base dark mode styles applied directly */
     background-color: #121212;
-    color: #e0e0e0;
+    color: var(--text-color); /* Use variable */
 }
 
-* {
+/* --- Base Styles & Resets --- */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
-    box-sizing: inherit;
+    box-sizing: border-box; /* Use border-box globally */
 }
 
-section {
-    margin-bottom: 2rem;
+html {
+    scroll-behavior: smooth;
 }
 
+body {
+    font-family: var(--font-primary);
+    background-color: var(--surface-alt); /* Use alt surface for body bg */
+    color: var(--text-color);
+    line-height: 1.7; /* Slightly adjusted line-height */
+    transition: background-color 0.3s, color 0.3s;
+    padding-top: var(--header-height); /* Account for fixed header */
+    font-size: 16px; /* Base font size */
+}
+
+/* --- Base Typography --- */
 h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1rem;
-    line-height: 1.2;
+    line-height: 1.3;
+    font-weight: 600; /* Default weight for headings */
+    color: var(--heading-color);
 }
+/* Example specific heading sizes */
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
 
 p {
-    margin-bottom: 1rem;
-    line-height: 1.8;
-    font-size: 1rem;
-    color: #666;
+    margin-bottom: 1.25rem; /* Slightly more spacing */
+    color: var(--text-color); 
+    font-size: 1rem; /* Explicitly set base paragraph size */
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover, a:focus {
+    color: var(--link-hover-color);
+    text-decoration: underline; /* Add underline on hover/focus */
 }
 
 ul, ol {
@@ -72,323 +119,147 @@ ul, ol {
     padding-left: 1.5rem;
 }
 
+/* --- Base Form Element Styles --- */
 button {
     margin: 0;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem; /* Base padding */
     border: none;
+    background: none; /* Remove default background */
     cursor: pointer;
+    font-family: inherit; /* Inherit font */
+    font-size: inherit; /* Inherit font size */
+    line-height: inherit; /* Inherit line height */
+    color: inherit; /* Inherit text color */
+    text-align: center;
+    border-radius: var(--border-radius-medium); /* Consistent border radius */
 }
 
-input, textarea {
+input, 
+textarea,
+select {
     margin: 0;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 0.75rem; /* Consistent padding */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    font-family: inherit;
+    font-size: 1rem;
+    background-color: var(--input-background);
+    color: var(--text-color);
+    width: 100%; /* Default to full width */
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
-header {
+input:focus, 
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color), 0.2); /* Focus ring */
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* --- Fixed Header Styles --- */
+/* Assuming a single header structure - adjust if needed */
+.site-header { /* Use a class instead of just 'header' for specificity */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 2rem;
-    background: linear-gradient(to right, #ffffff, #f7f7f7);
-    border-bottom: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Make header fixed */
+    padding: 0 2rem; /* Adjust padding */
+    height: var(--header-height); /* Use variable */
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color-light);
+    box-shadow: var(--box-shadow-light);
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
-    box-sizing: border-box;
-    z-index: 1000;
+    z-index: 1000; /* Ensure header stays on top */
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
-header h1 {
-    font-family: 'Roboto', sans-serif;
+.site-header h1 {
+    font-family: var(--font-primary); /* Consistent font */
     font-size: 1.5rem;
+    font-weight: 700; /* Bolder for logo/title */
     margin: 0;
-    color: #333;
+    color: var(--heading-color);
+}
+.site-header h1 a {
+    color: inherit; /* Inherit color */
+    text-decoration: none; /* Remove underline */
+}
+.site-header h1 a:hover,
+.site-header h1 a:focus {
+    text-decoration: none; /* Keep underline removed */
 }
 
-header nav ul {
+
+.site-header nav ul {
     list-style: none;
     display: flex;
-    gap: 1.5rem;
+    gap: 1.5rem; /* Adjust gap */
     margin: 0;
     padding: 0;
 }
 
-header nav ul li a {
+.site-header nav ul li a {
     text-decoration: none;
-    color: #555;
-    font-family: 'Roboto', sans-serif;
+    color: var(--text-muted); /* Use muted color for nav links */
+    font-family: var(--font-primary); /* Consistent font */
     font-size: 1rem;
-    transition: color 0.3s, border-bottom 0.3s;
-    padding-bottom: 5px;
+    font-weight: 600; /* Semi-bold for nav */
+    transition: color 0.2s ease;
+    padding-bottom: 5px; /* For underline effect */
     position: relative;
 }
 
-header nav ul li a:hover {
-    color: #000;
+.site-header nav ul li a:hover,
+.site-header nav ul li a:focus {
+    color: var(--text-color);
+    text-decoration: none; /* Remove underline on hover */
 }
 
 /* Style for active nav link */
-header nav ul li a.active {
-    color: #000;
-    font-weight: 500;
+.site-header nav ul li a.active {
+    color: var(--primary-color); /* Use primary color for active */
+    font-weight: 700; /* Bolder active link */
 }
 
-header nav ul li a.active:after {
+.site-header nav ul li a.active::after { /* Use ::after for underline */
     content: '';
     position: absolute;
-    bottom: -2px;
+    bottom: 0px; /* Adjust position */
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: #000;
+    background-color: var(--primary-color);
 }
 
-/* Dark mode for active links */
-body.dark-mode header nav ul li a.active {
-    color: #01a27cfd; /* Or your chosen accent color */
-}
 
-body.dark-mode header nav ul li a.active:after {
-    background-color: #01a27cfd; /* Or your chosen accent color */
-}
-
-.search-bar {
-    padding: 0.6rem;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding-left: 1.0rem;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 2rem;
-    margin: 0;
-    padding: 0;
-}
-
-nav ul li {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    color: #555;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-nav ul li:hover {
-    color: #000;
-}
-
-.featured-image {
-    max-width: 100%;
-    height: auto;
-    margin: 1rem 0;
-    border-radius: 8px;
-}
-
-article {
-    max-width: 800px;
-    margin: 2rem auto;
-    background-color: var(--surface-color, #ffffff);
-    color: var(--text-color, #333333);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    padding: 2rem;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
-
-article.dark-mode {
-    background-color: #1e1e1e;
-    color: #f5f5f5;
-}
-
-#about, #contact {
-    max-width: 800px;
-    margin: 3rem auto;
-    padding: 2rem;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#about h2, #contact h2 {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #333;
-    text-align: center;
-}
-
-#about p, #contact p {
-    font-family: 'Merriweather', serif;
-    font-size: 1rem;
-    color: #666;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-/* Dark mode styles for contact popup */
-body.dark-mode .contact-popup-content {
-    background-color: #1e1e1e;
-    color: #f5f5f5;
-}
-
-body.dark-mode .contact-form input,
-body.dark-mode .contact-form textarea {
-    background-color: #333;
-    color: #f5f5f5;
-    border-color: #444;
-}
-
-body.dark-mode .close-popup:hover {
-    background-color: #444;
-    color: #f5f5f5;
-}
-
-body.dark-mode #about, body.dark-mode #contact {
-    background-color: #1e1e1e;
-    color: #f5f5f5;
-}
-
-body.dark-mode #about h2, body.dark-mode #contact h2 {
-    color: #f5f5f5;
-}
-
-body.dark-mode #about p, body.dark-mode #contact p {
-    color: #ddd;
-}
-
-/* Consolidated shared styles from post.css and admin.css */
-
-/* Shared Layout Styles */
-.site-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* Shared Table Styles */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-}
-.table th, 
-.table td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-.table th {
-    font-weight: 600;
-    color: #555;
-    background-color: var(--surface-color);
-}
-
-/* Shared Button Styles */
-.button {
-    padding: 0.7rem 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background-color 0.2s;
-}
-.button-primary {
-    background-color: #3498db;
-    color: white;
-    border: none;
-}
-.button-primary:hover {
-    background-color: #2980b9;
-}
-.button-secondary {
-    background-color: #f5f5f5;
-    color: #333;
-    border: 1px solid #ddd;
-}
-.button-secondary:hover {
-    background-color: #e8e8e8;
-}
-
-/* Shared Dark Mode Adjustments */
-body.dark-mode .table th {
-    background-color: #2a2a2a;
-    color: #ccc;
-}
-body.dark-mode .table td {
-    border-bottom: 1px solid #333;
-}
-body.dark-mode .button-secondary {
-    background-color: #333;
-    color: #f5f5f5;
-    border-color: #444;
-}
-body.dark-mode .button-secondary:hover {
-    background-color: #444;
-}
-
-/* Consolidated Typography Styles */
-body {
-    font-family: 'Merriweather', serif;
-    color: #444;
-    line-height: 1.8;
-}
-h1, h2, h3, h4, h5, h6 {
-    line-height: 1.2;
-    margin-bottom: 1rem;
-}
-p {
-    font-size: 1rem;
-    line-height: 1.8;
-    color: #666;
-    margin-bottom: 1rem;
-}
-.nav ul li a {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    color: #555;
-}
-/* Modifier Classes */
-.post-meta {
-    font-size: 0.9rem;
-    color: var(--text-muted, #666666);
-}
-.blog-card-title {
-    font-size: 1.25rem;
-    color: #333;
-}
-.blog-card-excerpt {
-    font-size: 0.95rem;
-    color: #555;
-    line-height: 1.5;
-}
-
-/* Moved @keyframes fadeIn and slideIn here for broader usage */
+/* --- Keyframes --- */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes slideIn {
-    from {
-        transform: translateX(-100%);
-    }
-    to {
-        transform: translateX(0);
-    }
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
 }
+
+/* --- REMOVED Styles (Move to appropriate files) --- */
+/* - .search-bar
+  - .featured-image
+  - article styles (use .post-article from post.css instead)
+  - #about, #contact styles (move to layout.css or components.css)
+  - .table styles (move to components.css)
+  - .button, .button-primary, .button-secondary (move to components/buttons.css)
+  - .post-meta, .blog-card-title, .blog-card-excerpt (move to components/blog-cards.css or post.css)
+  - Redundant typography section
+*/
+
