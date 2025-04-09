@@ -18,7 +18,6 @@ exports.initializeBlogFrontend = initializeBlogFrontend;
 const api_1 = require("../services/api"); // Uses static fetch now
 const blogCards_1 = require("../components/blogCards");
 const pagination_1 = require("../components/pagination");
-const search_1 = require("../components/search");
 const about_1 = require("../components/about");
 const navigation_1 = require("../components/navigation");
 /**
@@ -28,7 +27,6 @@ function initializeBlogFrontend() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, navigation_1.initializeNavigation)();
         (0, about_1.initializeAbout)();
-        (0, search_1.initializeSearch)();
         // Initialize posts, which now includes filtering based on URL params
         yield initializePosts();
         (0, pagination_1.initializePagination)(); // Initialize pagination after initial posts (possibly filtered) are loaded

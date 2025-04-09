@@ -20,7 +20,6 @@ const api_1 = require("../services/api");
 const blogCards_1 = require("../components/blogCards");
 const darkMode_1 = require("../components/darkMode");
 const pagination_1 = require("../components/pagination");
-const search_1 = require("../components/search");
 /**
  * Initialize the blog functionality
  * Sets up all UI components and initializes the blog posts display
@@ -31,7 +30,6 @@ function initializeBlog() {
         (0, darkMode_1.checkSystemDarkModePreference)();
         // Initialize all UI components
         (0, darkMode_1.initializeDarkMode)();
-        (0, search_1.initializeSearch)();
         yield initializePosts();
         (0, pagination_1.initializePagination)();
         // Add event listener for reloading posts (used by search)

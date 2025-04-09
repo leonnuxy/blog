@@ -1,11 +1,15 @@
-/* File: buttons.css */
+/* filepath: /Users/noel/Library/CloudStorage/OneDrive-Personal/Projects/Git/blog/styles/components/buttons.css */
+/* ===================================================
+   BUTTON COMPONENTS
+   Contains styles for various button types used throughout the site
+   =================================================== */
 
-/* Consolidate shared button styles */
+/* --- Base Button Styles --- */
 button {
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--font-primary);
     font-size: 1rem;
     padding: 0.5rem 1rem;
-    border-radius: 5px;
+    border-radius: var(--border-radius-small);
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
@@ -14,12 +18,11 @@ button:hover {
     transform: scale(1.05);
 }
 
-
-/* Load More Button */
+/* --- Load More Button --- */
 .load-more-button {
     padding: 10px 20px;
-    background-color: #f0f0f0;
-    color: #444;
+    background-color: var(--surface-hover);
+    color: var(--text-color);
     border: none;
     border-radius: 30px;
     cursor: pointer;
@@ -31,7 +34,7 @@ button:hover {
 }
 
 .load-more-button:hover {
-    background-color: #e0e0e0;
+    background-color: var(--border-color-light);
     transform: translateY(-2px);
 }
 
@@ -40,21 +43,99 @@ button:hover {
     opacity: 0.7;
 }
 
-/* Dark Mode Adjustments */
+/* --- Primary Button --- */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* --- Secondary Button --- */
+.btn-secondary {
+    background-color: var(--surface-hover);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--border-color-light);
+}
+
+/* --- Danger Button --- */
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b; /* Darker red */
+}
+
+/* --- Disabled State --- */
+button:disabled,
+button[disabled],
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+button:disabled:hover,
+button[disabled]:hover,
+.btn-disabled:hover {
+    transform: none;
+    background-color: inherit;
+}
+
+/* ===================================================
+   DARK MODE OVERRIDES
+   These styles should ideally be moved to dark-mode.css
+   =================================================== */
+
+/* Base dark mode button styles */
 body.dark-mode button {
-    background-color: #333;
-    color: #f5f5f5;
+    background-color: var(--surface-alt);
+    color: var(--text-color);
 }
 
 body.dark-mode button:hover {
-    background-color: #444;
+    background-color: var(--border-color);
 }
 
+/* Load more button in dark mode */
 body.dark-mode .load-more-button {
-    background-color: #333;
-    color: #f5f5f5;
+    background-color: var(--surface-alt);
+    color: var(--text-color);
 }
 
 body.dark-mode .load-more-button:hover {
-    background-color: #444;
+    background-color: var(--border-color);
+}
+
+/* Other button types in dark mode */
+body.dark-mode .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* Responsive button adjustments */
+@media (max-width: 768px) {
+    button {
+        padding: 0.5rem 0.75rem; /* Slightly smaller padding on mobile */
+    }
+    
+    .load-more-button {
+        width: 100%; /* Full width on mobile */
+        justify-content: center;
+    }
 }

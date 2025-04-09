@@ -8,7 +8,6 @@ import { fetchBlogPosts } from '../services/api';
 import { createBlogCardElement } from '../components/blogCards';
 import { initializeDarkMode, checkSystemDarkModePreference } from '../components/darkMode';
 import { initializePagination } from '../components/pagination';
-import { initializeSearch } from '../components/search';
 
 /**
  * Initialize the blog functionality
@@ -20,7 +19,6 @@ export async function initializeBlog(): Promise<void> {
     
     // Initialize all UI components
     initializeDarkMode();
-    initializeSearch();
     await initializePosts();
     initializePagination();
     

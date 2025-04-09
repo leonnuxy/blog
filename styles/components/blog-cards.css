@@ -24,9 +24,10 @@
     }
 }
 
+/* --- Blog Card Structure --- */
 .blog-card {
-    background-color: #ffffff;
-    border-radius: 10px;
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius-medium);
     overflow: hidden;
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -34,30 +35,35 @@
     transform: translateY(0);
 }
 
+/* Card animation states */
 .blog-card.new {
     animation: fadeInUp 0.6s ease forwards;
 }
 
+/* Card hover effect */
 .blog-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* Card featured image */
 .blog-card img {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: var(--border-radius-medium);
+    border-top-right-radius: var(--border-radius-medium);
 }
 
+/* Card content container */
 .blog-card-content {
     padding: 1.5rem;
 }
 
+/* --- Blog Card Text Content --- */
 .blog-card-date-author {
     font-size: 0.85rem;
-    color: #666;
+    color: var(--text-muted);
     margin-bottom: 0.5rem;
     font-style: italic;
 }
@@ -69,16 +75,17 @@
 .blog-card-title {
     margin-bottom: 1rem;
     font-size: 1.25rem;
-    color: #333;
+    color: var(--heading-color);
 }
 
 .blog-card-excerpt {
     margin-bottom: 1rem;
     font-size: 0.95rem;
-    color: #555;
+    color: var(--text-color);
     line-height: 1.5;
 }
 
+/* --- Post Tags --- */
 .post-tags {
     display: flex;
     flex-wrap: wrap;
@@ -87,50 +94,14 @@
 }
 
 .tag-badge {
-    background-color: #f0f0f0;
+    background-color: var(--surface-hover);
     padding: 0.25rem 0.5rem;
-    border-radius: 15px;
+    border-radius: var(--border-radius-small);
     font-size: 0.75rem;
-    color: #555;
+    color: var(--text-color);
 }
 
-.post-actions {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    justify-content: flex-start;
-    gap: 1rem;
-}
-
-.like-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 15px;
-    transition: all 0.2s ease;
-}
-
-.like-button:hover {
-    background-color: rgba(255, 100, 100, 0.1);
-    color: #ff6464;
-}
-
-.like-button.liked {
-    animation: pulse 1s ease;
-}
-
-.like-button i {
-    transition: transform 0.3s ease;
-}
-
-.like-button:hover i {
-    transform: scale(1.2);
-}
+/* --- Social Sharing Component --- */
 
 .social-sharing {
     display: flex;
@@ -141,13 +112,13 @@
 
 .social-sharing span {
     font-size: 0.9rem;
-    color: var(--text-muted, #666);
+    color: var(--text-muted);
     margin-right: 0.25rem;
 }
 
 .share-button {
     background: none;
-    border: 1px solid var(--border-color, #ddd);
+    border: 1px solid var(--border-color);
     padding: 0;
     margin: 0;
     cursor: pointer;
@@ -157,7 +128,7 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    color: var(--text-muted, #777);
+    color: var(--text-muted);
     font-size: 1rem;
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
     text-decoration: none;
@@ -190,55 +161,16 @@
     border-color: #0A66C2;
 }
 
-.comments-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 15px;
-    transition: all 0.2s ease;
-}
 
-.comments-toggle:hover {
-    background-color: rgba(100, 100, 255, 0.1);
-    color: #6464ff;
-}
 
-.comments-toggle i {
-    transition: transform 0.3s ease;
-}
-
-.comments-toggle:hover i {
-    transform: scale(1.2);
-}
-
-.comments-section {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease;
-    border-top: 1px solid transparent;
-    margin-top: 0;
-}
-
-.comments-section.active {
-    max-height: 1000px;
-    margin-top: 1.5rem;
-    border-top: 1px solid #eee;
-    padding-top: 1.5rem;
-}
-
-/* Loading states and API indicators */
+/* --- Loading States and API Indicators --- */
 .loading-spinner {
     display: block;
     width: 50px;
     height: 50px;
     border: 3px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
-    border-top-color: #3498db;
+    border-top-color: var(--primary-color);
     animation: spin 1s ease-in-out infinite;
     margin: 2rem auto;
 }
@@ -259,19 +191,7 @@
     margin-right: 8px;
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
 
-    50% {
-        transform: scale(1.2);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
 
 /* Kept @keyframes fadeInUp here as it is specific to blog cards */
 @keyframes fadeInUp {
@@ -286,14 +206,14 @@
     }
 }
 
-/* Error and empty states */
+/* --- Error and Empty States --- */
 .error-state,
 .empty-state,
 .empty-search {
     text-align: center;
     padding: 3rem;
-    background-color: #fff;
-    border-radius: 10px;
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius-medium);
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
     grid-column: 1 / -1;
 }
@@ -305,7 +225,7 @@
 .error-state i,
 .empty-state i,
 .empty-search i {
-    color: #ddd;
+    color: var(--border-color-light);
     margin-bottom: 1rem;
 }
 
@@ -313,13 +233,13 @@
 .empty-state h3,
 .empty-search h3 {
     margin-bottom: 0.5rem;
-    color: #333;
+    color: var(--heading-color);
 }
 
 .error-state p,
 .empty-state p,
 .empty-search p {
-    color: #666;
+    color: var(--text-muted);
 }
 
 .error-message,
@@ -328,7 +248,7 @@
     bottom: 20px;
     right: 20px;
     padding: 1rem 1.5rem;
-    border-radius: 5px;
+    border-radius: var(--border-radius-small);
     color: white;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
@@ -336,11 +256,11 @@
 }
 
 .success-message {
-    background-color: #4caf50;
+    background-color: var(--success-color);
 }
 
 .error-message {
-    background-color: #f44336;
+    background-color: var(--danger-color);
 }
 
 @keyframes slideIn {
@@ -365,50 +285,4 @@
     }
 }
 
-/* Dark Mode Overrides */
-body.dark-mode .blog-card {
-    background-color: #1e1e1e;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .blog-card-title {
-    color: #f5f5f5;
-}
-
-body.dark-mode .blog-card-date-author {
-    color: #aaa;
-}
-
-body.dark-mode .social-sharing span {
-    color: #aaa; /* Lighter muted text */
-  }
-  
-  body.dark-mode .share-link {
-    border-color: #555; /* Darker border */
-    color: #aaa; /* Lighter icon color */
-  }
-  
-  body.dark-mode .share-link:hover,
-  body.dark-mode .share-link:focus {
-    color: #fff; /* White icon */
-    /* Keep brand background colors for visibility */
-  }
-  
-  /* Optional: Slightly adjust brand colors for dark mode if needed */
-  body.dark-mode .share-link.twitter:hover,
-  body.dark-mode .share-link.twitter:focus {
-    background-color: #1A91DA; /* Slightly adjusted Twitter blue */
-    border-color: #1A91DA;
-  }
-  
-  body.dark-mode .share-link.facebook:hover,
-  body.dark-mode .share-link.facebook:focus {
-    background-color: #176CDA; /* Slightly adjusted Facebook blue */
-    border-color: #176CDA;
-  }
-  
-  body.dark-mode .share-link.linkedin:hover,
-  body.dark-mode .share-link.linkedin:focus {
-    background-color: #0959A9; /* Slightly adjusted LinkedIn blue */
-    border-color: #0959A9;
-  }
+/* Dark mode styles moved to dark-mode.css */

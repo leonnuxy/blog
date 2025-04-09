@@ -38,7 +38,12 @@ export function renderHeader(containerId: string = 'header-placeholder'): void {
                     <li><a href="https://noelugwoke.com/">Portfolio</a></li>
                 </ul>
             </nav>
-            <input type="search" placeholder="Search for articles..." class="search-bar"> 
+            <div class="header-right">
+                <input type="search" placeholder="Search for articles..." class="search-bar">
+                <button id="hamburger-btn" class="mobile-nav-toggle" aria-label="Open Navigation Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </header>
     `;
 

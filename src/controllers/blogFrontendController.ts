@@ -6,7 +6,6 @@
 import { fetchBlogPosts } from '../services/api'; // Uses static fetch now
 import { createBlogCardElement } from '../components/blogCards';
 import { initializePagination } from '../components/pagination'; 
-import { initializeSearch } from '../components/search'; 
 import { initializeAbout } from '../components/about'; 
 import { initializeNavigation } from '../components/navigation'; 
 
@@ -16,11 +15,9 @@ import { initializeNavigation } from '../components/navigation';
 export async function initializeBlogFrontend(): Promise<void> {
     initializeNavigation();
     initializeAbout();     
-    initializeSearch();    
 
     // Initialize posts, which now includes filtering based on URL params
     await initializePosts(); 
-    
     initializePagination(); // Initialize pagination after initial posts (possibly filtered) are loaded
     
     setupBlogCardsDelegation();

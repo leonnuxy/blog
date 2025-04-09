@@ -10,19 +10,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// Imports remain the same...
+// --- Imports ---
+// Page Specific Logic
 const blogFrontendController_1 = require("../controllers/blogFrontendController");
 const postDetail_1 = require("../modules/postDetail");
+// Common Components & Utilities
 const header_1 = require("../components/header");
 const darkMode_1 = require("../components/darkMode");
+const mobileNav_1 = require("../components/mobileNav"); // Assuming path is correct
+const search_1 = require("../components/search"); // Assuming path is correct
+const navigation_1 = require("../components/navigation"); // Assuming path is correct
+const about_1 = require("../components/about"); // Assuming path is correct
+// Import tag filtering if it sets up global listeners or needs to run early
+// import { initializeTagFiltering } from '../components/tagFilter'; // Assuming path is correct
 /**
  * Client-side entry point initializer.
+ * Initializes common components and page-specific logic.
  */
 function initializeClient() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Client initializing...');
-        // Initialize common elements first
+        // --- Initialize Common Elements & Functionality ---
+        // These run on every page that loads client.bundle.js
         try {
+            // Theme and Header first
             (0, darkMode_1.checkSystemDarkModePreference)();
             (0, darkMode_1.initializeDarkMode)();
             console.log('Dark mode initialized globally.');
@@ -30,33 +41,44 @@ function initializeClient() {
             if (document.getElementById('header-placeholder')) {
                 (0, header_1.renderHeader)();
                 console.log('Header rendered globally.');
+                // Initialize components dependent on header *after* rendering
+                (0, mobileNav_1.initializeMobileNav)(); // Initialize mobile nav using header elements
+                (0, search_1.initializeSearch)(); // Initialize search bar in header
+                (0, navigation_1.initializeNavigation)(); // Initialize nav link active states
             }
             else {
-                console.warn('Header placeholder not found on this page.');
+                console.warn('Header placeholder not found on this page. Skipping header-dependent initializations.');
             }
+            // Initialize other common UI elements like popups
+            (0, about_1.initializeAbout)(); // Assumes #about-btn and #about-popup might exist globally or are handled safely inside
+            // Initialize tag filtering listeners if needed globally (e.g., if tags appear in header/footer)
+            // initializeTagFiltering(); 
         }
         catch (error) {
             console.error("Error initializing common elements:", error);
         }
-        // Page-specific logic
+        // --- End Common Elements ---
+        // --- Page-Specific Logic ---
         const pageType = document.body.dataset.page;
         const currentPage = window.location.pathname;
-        // Get the base name of the file/path, removing trailing slash if present
-        const pathEnd = currentPage.endsWith('/') ? currentPage.slice(0, -1).split('/').pop() : currentPage.split('/').pop();
-        const isRootOrIndex = currentPage.endsWith('/') || currentPage.endsWith('/index.html'); // Check if it's the root of the deployment
+        const isRootOrIndex = currentPage.endsWith('/') || currentPage.endsWith('/index.html');
         try {
-            console.log(`Detected pageType: ${pageType}, currentPage: ${currentPage}, pathEnd: ${pathEnd}, isRootOrIndex: ${isRootOrIndex}`);
-            // Check for Main Page (using data-page or path ending in / or /index.html)
+            console.log(`Detected pageType: ${pageType}, currentPage: ${currentPage}, isRootOrIndex: ${isRootOrIndex}`);
+            // Check for Main Page 
             if (pageType === 'main' || (!pageType && isRootOrIndex)) {
-                yield (0, blogFrontendController_1.initializeBlogFrontend)();
-                // Check for Post Detail Page (using data-page or path ending in /post.html)
+                console.log('Initializing main blog page logic...');
+                yield (0, blogFrontendController_1.initializeBlogFrontend)(); // Handles posts, pagination, card delegation etc.
+                console.log('Main blog page logic initialized.');
+                // Check for Post Detail Page
             }
             else if (pageType === 'post' || (!pageType && currentPage.endsWith('/post.html'))) {
-                yield (0, postDetail_1.initializePostDetailPageLogic)();
-                // Check for Admin Page (using data-page or path ending in /admin.html)
+                console.log('Initializing post detail page logic (from module)...');
+                yield (0, postDetail_1.initializePostDetailPageLogic)(); // Handles single post display, like, comments etc.
+                console.log('Post detail page logic initialized.');
+                // Check for Admin Page
             }
             else if (pageType === 'admin' || (!pageType && currentPage.endsWith('/admin.html'))) {
-                console.log('Admin page detected by client.ts - no action taken.');
+                console.log('Admin page detected by client.ts - no action taken.'); // Admin logic is in admin.bundle.js
             }
             else {
                 console.log(`Unknown page type ('${pageType}') or path ('${currentPage}'). No specific initialization needed from client.ts.`);
@@ -67,10 +89,12 @@ function initializeClient() {
         }
     });
 }
-// DOMContentLoaded listener remains the same...
+// --- Global Execution ---
+// Run initialization logic when the DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeClient);
 }
 else {
+    // DOMContentLoaded has already fired
     initializeClient();
 }

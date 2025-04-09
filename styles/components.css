@@ -1,32 +1,54 @@
-/* File: components.css */
+/* File: styles/components.css */
 
-/* Component Styles - Main Import File */
-@import 'components/modals.css';       /* Base styles for popups and modals */
-@import 'components/buttons.css';      /* Button styles */
-@import 'components/blog-cards.css';   /* Blog card styles */
-@import 'components/dark-mode.css';    /* Dark mode styles */
-@import 'components/pagination.css';   /* Pagination styles */
+/*
+ * Component Imports
+ * -----------------
+ * This file imports all individual component stylesheets.
+ * In production, consider using a build tool to combine these
+ * files instead of using @import for better performance.
+ */
 
-/* Global component adjustments */
-body {
-    font-size: 80%; /* Reduce base font size by 20% */
-}
+/* Layout Components */
+@import 'components/header.css';                    /* Header and navigation */
+@import 'components/mobile-nav.css';                /* Mobile navigation drawer */
 
-/* Animation keyframes shared across components */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* Interactive Elements */
+@import 'components/buttons.css';                   /* Button styles */
+@import 'components/forms.css';                     /* Form styles */
+@import 'components/modals.css';                    /* Dialogs and popups */
 
-/* Responsive adjustments for all components */
+/* Content Components */
+@import 'components/blog-cards.css';                /* Blog card styles */
+@import 'components/pagination.css';                /* Pagination styles */
+
+/* Utility Components */
+@import 'components/notifications.css';             /* Toast notification styles */
+@import 'components/status-indicators.css';         /* Status indicator styles */
+@import 'components/dark-mode.css';                 /* Dark mode specific styles */
+
+
+/* REMOVED: Global body font-size overrides. Control base size in base.css */
+/* body { */
+/* font-size: 80%; /* Reduce base font size by 20% */
+/* } */
+
+/* REMOVED: Duplicate keyframes (defined in base.css) */
+/* @keyframes fadeInUp { ... } */
+
+/* --- Component-Specific Responsive Adjustments --- */
+/* Only include adjustments specific to MULTIPLE components here, */
+
 @media (max-width: 768px) {
-    body {
-        font-size: 70%; /* Further reduce base font size for smaller screens */
+    /* Keep pagination adjustments if they belong here */
+    .pagination-container {
+        padding: 15px 0; /* Adjust padding */
+    }
+
+    .load-more-button {
+        padding: 8px 16px; /* Adjust button padding */
+        font-size: 0.9em; /* Adjust button font size */
     }
 }
+
+/* Add any other general component styles below */
+

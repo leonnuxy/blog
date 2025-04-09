@@ -1,14 +1,19 @@
-/* styles/components.css OR styles/components/header.css */
+/* filepath: /Users/noel/Library/CloudStorage/OneDrive-Personal/Projects/Git/blog/styles/components/header.css */
+/* ===================================================
+   HEADER COMPONENT
+   Contains styles for site header, navigation and search
+   =================================================== */
 
+/* --- Header Container --- */
 .site-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem; /* Horizontal padding */
-    height: var(--header-height, 70px); 
-    background-color: var(--surface-color, #ffffff);
-    border-bottom: 1px solid var(--border-color-light, #eee);
-    box-shadow: var(--box-shadow-light, 0 2px 4px rgba(0, 0, 0, 0.08));
+    height: var(--header-height); 
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color-light);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     position: fixed; /* Keep fixed positioning */
     top: 0;
     left: 0;
@@ -18,6 +23,7 @@
     transition: background-color 0.3s, border-color 0.3s;
 }
 
+/* --- Site Logo/Title --- */
 .site-header h1 {
     margin: 0; /* Reset margin */
     font-size: 1.75rem; /* Slightly larger title */
@@ -25,15 +31,17 @@
 }
 
 .site-header h1 a {
-    color: var(--heading-color, #222);
+    color: var(--heading-color);
     text-decoration: none;
     transition: color 0.2s ease;
 }
+
 .site-header h1 a:hover {
-    color: var(--primary-color, #3498db);
+    color: var(--primary-color);
     text-decoration: none;
 }
 
+/* --- Navigation --- */
 .site-header nav ul {
     list-style: none;
     display: flex;
@@ -45,8 +53,8 @@
 
 .site-header nav ul li a {
     text-decoration: none;
-    color: var(--text-muted, #666); 
-    font-family: var(--font-primary, 'Inter', sans-serif); 
+    color: var(--text-muted); 
+    font-family: var(--font-primary); 
     font-size: 1rem;
     font-weight: 600; 
     padding: 0.5rem 0; /* Add vertical padding for larger click area */
@@ -56,72 +64,75 @@
 
 .site-header nav ul li a:hover,
 .site-header nav ul li a:focus {
-    color: var(--text-color, #333);
-    border-bottom-color: var(--primary-color-light, #ddd); /* Subtle underline on hover */
+    color: var(--text-color);
+    border-bottom-color: var(--border-color); /* Subtle underline on hover */
 }
 
 /* Active nav link style */
 .site-header nav ul li a.active {
-    color: var(--primary-color, #3498db); 
+    color: var(--primary-color); 
     font-weight: 700; 
-    border-bottom-color: var(--primary-color, #3498db); /* Solid underline for active */
+    border-bottom-color: var(--primary-color); /* Solid underline for active */
 }
 
+/* --- Search Bar --- */
 .site-header .search-bar {
     padding: 0.5rem 1rem; /* Adjust padding */
     font-size: 0.9rem;
-    border: 1px solid var(--border-color, #ddd);
-    border-radius: 20px; /* Pill shape */
-    background-color: var(--surface-alt, #f9f9f9);
-    color: var(--text-muted, #666);
-    min-width: 200px; /* Give it some minimum width */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-medium);
+    background-color: var(--surface-alt);
+    color: var(--text-muted);
+    min-width: 200px; /* Default width */
+    width: auto; /* Allow resizing */
     transition: border-color 0.2s ease, background-color 0.2s ease;
 }
+
 .site-header .search-bar:focus {
-     background-color: var(--surface-color, #fff);
-     border-color: var(--primary-color, #3498db);
-     color: var(--text-color, #333);
+    background-color: var(--surface-color);
+    border-color: var(--primary-color);
+    color: var(--text-color);
 }
 
-
-/* --- Dark Mode Header Styles --- */
-
-body.dark-mode .site-header {
-    background-color: var(--surface-color-dark, #1e1e1e);
-    border-bottom-color: var(--border-color-dark, #444);
-    box-shadow: var(--box-shadow-light-dark, 0 2px 4px rgba(0, 0, 0, 0.3));
+/* --- Header Right Section (Search + Hamburger) --- */
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Ensure right alignment */
+    gap: 1rem; /* Space between search bar and hamburger */
+    margin-left: auto; /* Push to the right edge */
 }
 
-body.dark-mode .site-header h1 a {
-    color: var(--heading-color-dark, #eee);
-}
-body.dark-mode .site-header h1 a:hover {
-    color: var(--primary-color-dark, #4dabf7);
-}
-
-body.dark-mode .site-header nav ul li a {
-    color: var(--text-muted-dark, #aaa);
-}
-
-body.dark-mode .site-header nav ul li a:hover,
-body.dark-mode .site-header nav ul li a:focus {
-    color: var(--text-color-dark, #eee);
-    border-bottom-color: var(--border-color, #555); /* Subtle underline on hover */
-}
-
-body.dark-mode .site-header nav ul li a.active {
-    color: var(--primary-color-dark, #4dabf7); 
-    border-bottom-color: var(--primary-color-dark, #4dabf7); 
-}
-
-body.dark-mode .site-header .search-bar {
-    background-color: #333; /* Match input background from base */
-    border-color: #555;
-    color: var(--text-muted-dark, #aaa);
-}
-body.dark-mode .site-header .search-bar:focus {
-     background-color: #444; /* Slightly lighter on focus */
-     border-color: var(--primary-color-dark, #4dabf7);
-     color: var(--text-color-dark, #eee);
+/* --- Mobile-Specific Header Styles --- */
+@media (max-width: 768px) {
+    .site-header {
+        padding: 0 1rem; /* Reduced padding on mobile */
+        flex-wrap: nowrap; /* Prevent wrapping */
+        justify-content: space-between; /* Space between logo and search+hamburger */
+    }
+    
+    /* Hide main navigation on mobile - will be shown in drawer instead */
+    .site-header nav:not(.mobile-nav) {
+        display: none;
+    }
+    
+    /* Make the blog title appear properly on mobile */
+    .site-header h1 {
+        font-size: 1.5rem; /* Slightly smaller on mobile */
+        flex-shrink: 0; /* Prevent the title from shrinking */
+    }
+    
+    /* Adjust search bar to be smaller on mobile */
+    .site-header .search-bar {
+        min-width: 120px;
+        width: 120px;
+        margin-right: 0.75rem; /* Space between search and hamburger */
+    }
+    
+    /* Ensure header-right takes appropriate space */
+    .header-right {
+        flex-shrink: 1; /* Allow it to shrink if needed */
+        width: auto; /* Let it take natural width */
+    }
 }
 
