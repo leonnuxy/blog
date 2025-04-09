@@ -240,172 +240,224 @@ textarea {
     background-color: var(--primary-color);
 }
 
-/* Simple Search Component Styles */
+/* styles/components.css or styles/components/search.css */
 
-/* Search wrapper */
-.search-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-/* Search input */
-.search-bar {
-    padding: 8px 30px 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    width: 200px;
-    transition: width 0.3s ease, box-shadow 0.2s ease;
-}
-
-.search-bar:focus {
-    outline: none;
-    width: 220px;
-    border-color: #6c63ff;
-    box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
-}
-
-/* Clear button */
-.search-clear {
-    position: absolute;
-    right: 10px;
-    background: none;
-    border: none;
-    color: #888;
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 0;
-    height: 20px;
-    width: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-}
-
-.search-clear:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    color: #444;
-}
-
-/* Search indicator */
-.search-indicator {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 4px;
-    padding: 12px 16px;
-    margin: 20px auto; /* Center the object */
+/* Rule to hide cards filtered out by search */
+.blog-card.hidden-by-search {
+    display: none !important; /* Use !important to ensure override if necessary */
+  }
+  
+  /* --- Search Component Styles --- */
+  
+  /* Search wrapper */
+  .search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+  }
+  
+  /* Search input */
+  .search-bar { /* Assuming this class is on the input in the header */
+      padding: 0.5rem 2rem 0.5rem 1rem; /* Adjusted padding for clear button space */
+      border: 1px solid var(--border-color, #ddd);
+      border-radius: 20px; /* Pill shape */
+      font-size: 0.9rem;
+      width: 200px; /* Initial width */
+      background-color: var(--surface-alt, #f9f9f9);
+      color: var(--text-muted, #666);
+      transition: width 0.3s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+  
+  .search-bar:focus {
+      outline: none;
+      width: 220px; /* Expand slightly on focus */
+      border-color: var(--primary-color, #3498db);
+      box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb, 52, 152, 219), 0.2); /* Use primary color */
+      background-color: var(--surface-color, #fff);
+      color: var(--text-color, #333);
+  }
+  
+  /* Clear button (Optional - Requires JS to add button/functionality) */
+  /* Add this button inside .search-wrapper via JS if desired */
+  .search-clear {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted, #888);
+      cursor: pointer;
+      font-size: 1.1rem; /* Slightly larger */
+      padding: 0;
+      height: 24px; /* Size */
+      width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      opacity: 0.7;
+      transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  }
+  .search-clear:hover {
+      background-color: var(--surface-hover, rgba(0, 0, 0, 0.1));
+      color: var(--text-color, #444);
+      opacity: 1;
+  }
+  /* Hide clear button initially or when input is empty via JS */
+  .search-clear.hidden {
+      display: none;
+  }
+  
+  
+  /* Search indicator (Shows results count) */
+  .search-indicator {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem; /* Adjusted padding */
+    background-color: var(--surface-alt, #f0f0f0);
+    border: 1px solid var(--border-color-light, #eee);
+    border-radius: var(--border-radius-medium, 6px);
+    color: var(--text-muted, #555);
+    max-width: 800px; /* Match content width */
+    margin-left: auto;
+    margin-right: auto;
     font-size: 0.95rem;
-    text-align: center;
-    color: #495057;
-    width: 80%; /* Modest width */
-    max-width: 400px; /* Ensure it doesn't get too wide */
-}
-
-/* No results message */
-.empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    margin: 20px 0;
-}
-
-.empty-state i {
-    color: #6c757d;
-    margin-bottom: 15px;
-}
-
-.empty-state h3 {
-    margin: 10px 0;
-    color: #495057;
-    font-size: 1.2rem;
-}
-
-.empty-state p {
-    color: #6c757d;
-    margin-bottom: 15px;
-}
-
-.clear-search-btn {
-    background: none;
-    border: none;
-    color: #0d6efd;
-    cursor: pointer;
-    padding: 0;
-    font-size: inherit;
-    text-decoration: underline;
-}
-
-.clear-search-btn:hover {
-    color: #0a58ca;
-    text-decoration: none;
-}
-
-/* Dark mode */
-body.dark-mode .search-bar {
-    background-color: #2a2a2a;
-    border-color: #444;
-    color: #f0f0f0;
-}
-
-body.dark-mode .search-bar:focus {
-    border-color: #6c63ff;
-    box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.3);
-}
-
-body.dark-mode .search-clear {
-    color: #aaa;
-}
-
-body.dark-mode .search-clear:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #ddd;
-}
-
-body.dark-mode .search-indicator {
-    background-color: #2a2a2a;
-    border-color: #444;
-    color: #e9ecef;
-}
-
-body.dark-mode .empty-state {
-    background-color: #2a2a2a;
-}
-
-body.dark-mode .empty-state i {
-    color: #adb5bd;
-}
-
-body.dark-mode .empty-state h3 {
-    color: #e9ecef;
-}
-
-body.dark-mode .empty-state p {
-    color: #adb5bd;
-}
-
-body.dark-mode .clear-search-btn {
-    color: #6ea8fe;
-}
-
-body.dark-mode .clear-search-btn:hover {
-    color: #9ec5fe;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-    .search-bar {
-        width: 140px;
+  }
+  
+  /* --- Empty State / No Results Message --- */
+  /* General empty state styling (used for no posts or no search results) */
+  .empty-state {
+      text-align: center;
+      padding: 3rem 1rem; /* More padding */
+      background-color: var(--surface-alt, #f8f9fa);
+      border-radius: var(--border-radius-large, 8px);
+      margin: 2rem auto; /* Center and add vertical margin */
+      max-width: 600px; /* Limit width */
+      color: var(--text-muted, #6c757d);
+  }
+  
+  .empty-state i {
+      /* Using Font Awesome classes directly is fine */
+      color: var(--text-muted, #6c757d);
+      margin-bottom: 1rem; /* Adjusted margin */
+      display: block; /* Make icon block for margin */
+  }
+  
+  .empty-state h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem; /* Adjusted margin */
+      color: var(--text-color, #495057);
+      font-size: 1.3rem; /* Slightly larger */
+      font-weight: 600;
+  }
+  
+  .empty-state p {
+      color: var(--text-muted, #6c757d);
+      margin-bottom: 1rem; /* Adjusted margin */
+      font-size: 1rem;
+  }
+  
+  /* Clear search button within the empty state */
+  .clear-search-btn {
+      background: none;
+      border: none;
+      color: var(--link-color, #0d6efd);
+      cursor: pointer;
+      padding: 0;
+      font-size: inherit; /* Inherit from surrounding paragraph */
+      text-decoration: underline;
+      transition: color 0.2s ease;
+  }
+  
+  .clear-search-btn:hover {
+      color: var(--link-hover-color, #0a58ca);
+      text-decoration: none;
+  }
+  
+  /* --- Dark Mode Overrides --- */
+  
+  body.dark-mode .search-bar {
+      background-color: var(--input-background-dark, #2a2a2a); /* Use dark input variable */
+      border-color: var(--border-color-dark, #444);
+      color: var(--text-color-dark, #f0f0f0);
+  }
+  
+  body.dark-mode .search-bar:focus {
+      border-color: var(--primary-color-dark, #4dabf7); /* Use dark primary */
+      box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb-dark, 77, 171, 247), 0.3); /* Use dark primary */
+  }
+  
+  body.dark-mode .search-clear {
+      color: var(--text-muted-dark, #aaa);
+  }
+  
+  body.dark-mode .search-clear:hover {
+      background-color: var(--surface-hover-dark, rgba(255, 255, 255, 0.1));
+      color: var(--text-color-dark, #ddd);
+  }
+  
+  body.dark-mode .search-indicator {
+      background-color: var(--surface-alt-dark, #2a2a2a);
+      border-color: var(--border-color-dark, #444);
+      color: var(--text-muted-dark, #aaa);
+  }
+  
+  body.dark-mode .empty-state {
+      background-color: var(--surface-alt-dark, #2a2a2a);
+      color: var(--text-muted-dark, #adb5bd);
+  }
+  
+  body.dark-mode .empty-state i {
+      color: var(--text-muted-dark, #adb5bd);
+  }
+  
+  body.dark-mode .empty-state h3 {
+      color: var(--heading-color-dark, #e9ecef);
+  }
+  
+  body.dark-mode .empty-state p {
+      color: var(--text-muted-dark, #adb5bd);
+  }
+  
+  body.dark-mode .clear-search-btn {
+      color: var(--link-color-dark, #6ea8fe);
+  }
+  
+  body.dark-mode .clear-search-btn:hover {
+      color: var(--link-hover-color-dark, #9ec5fe);
+  }
+  
+  /* --- Responsive Styles --- */
+  @media (max-width: 768px) {
+      .search-bar {
+          width: 140px; /* Keep responsive adjustment */
+      }
+      
+      .search-bar:focus {
+          width: 180px; /* Keep responsive adjustment */
+      }
+  }
+    @media (max-width: 480px) {
+        .search-bar {
+            width: 100%; /* Full width on small screens */
+            padding: 0.5rem; /* Adjust padding */
+        }
+        
+        .search-bar:focus {
+            width: 100%; /* Full width on focus */
+        }
+        
+        .site-header {
+            flex-direction: column; /* Stack header items */
+            align-items: flex-start; /* Align to start */
+        }
+        
+        .site-header nav ul {
+            flex-direction: column; /* Stack nav items */
+            gap: 0.5rem; /* Adjust gap */
+        }
     }
-    
-    .search-bar:focus {
-        width: 180px;
-    }
-}
-
-
 
 /* Tag Filter Styling */
 .tag-filter-indicator {
