@@ -1,133 +1,139 @@
-import { fetchBlogPosts } from '../services/api';
-import { createBlogCardElement } from './blogCards';
+// src/components/search.ts
+
+// Note: fetchBlogPosts and createBlogCardElement imports might not be needed 
+// if this script only filters already rendered cards. Removed them for now.
+// import { fetchBlogPosts } from '../services/api'; 
+// import { createBlogCardElement } from './blogCards';
 
 /**
- * Initializes a simple, in-page search functionality for blog posts.
- * Filters the existing blog cards on the page as the user types.
+ * Initializes a simple, client-side search functionality for blog posts.
+ * Filters currently visible blog cards on the page as the user types.
  */
 export function initializeSearch(): void {
     const searchBar = document.querySelector('.search-bar') as HTMLInputElement;
-    if (!searchBar) {
-        console.warn('Search bar not found in the DOM');
+    const blogCardsContainer = document.querySelector('#blog.blog-cards'); // Target the main container
+
+    if (!searchBar || !blogCardsContainer) {
+        console.warn('Search bar (.search-bar) or blog cards container (#blog.blog-cards) not found. Search not initialized.');
         return;
     }
 
-    // Create a search indicator element
+    // Create a search indicator element (optional)
     const searchIndicator = document.createElement('div');
-    searchIndicator.className = 'search-indicator';
-    searchIndicator.textContent = 'Filtering results...';
-    searchIndicator.style.display = 'none';
+    searchIndicator.className = 'search-indicator'; // Add class for styling
+    searchIndicator.setAttribute('aria-live', 'polite'); // Announce changes to screen readers
+    searchIndicator.style.display = 'none'; // Start hidden
+    // Insert the indicator before the blog cards container
+    blogCardsContainer.parentNode?.insertBefore(searchIndicator, blogCardsContainer);
     
-    // Insert the indicator before the blog cards
-    const blogContainer = document.querySelector('.blog-cards');
-    if (blogContainer && blogContainer.parentNode) {
-        blogContainer.parentNode.insertBefore(searchIndicator, blogContainer);
-    }
+    // Optional: Wrap search bar for styling or adding clear button (if not already done)
+    // This example assumes the search bar is already placed correctly in the header HTML
     
-    // Add a clear button to the search bar
-    const searchWrapper = document.createElement('div');
-    searchWrapper.className = 'search-wrapper';
-    searchBar.parentNode?.insertBefore(searchWrapper, searchBar);
-    searchWrapper.appendChild(searchBar);
-    
-
-    // Keep track of all blog cards
-    let allCards: HTMLElement[] = [];
-    
-    // Collect all blog cards once the page is loaded
-    setTimeout(() => {
-        allCards = Array.from(document.querySelectorAll('.blog-card'));
-        console.log(`Initialized search with ${allCards.length} blog cards`);
-    }, 100);
+    // Keep track of all blog cards - will be populated on first filter
+    let allCards: HTMLElement[] = []; 
     
     // Handle search input with debounce
     let debounceTimer: ReturnType<typeof setTimeout>;
     searchBar.addEventListener('input', () => {
         const searchTerm = searchBar.value.trim().toLowerCase();
         
-        
         // Debounce the filtering
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
             filterBlogCards(searchTerm);
-        }, 300);
+        }, 300); // 300ms delay
     });
     
-    // Filter blog cards based on search term
+    /**
+     * Filters blog cards based on search term by adding/removing a CSS class.
+     * @param term - The search term (lowercase).
+     */
     function filterBlogCards(term: string): void {
-        if (allCards.length === 0) {
-            allCards = Array.from(document.querySelectorAll('.blog-card'));
-            if (allCards.length === 0) return;
+        // Get all cards currently in the main container OR hidden container if they exist
+        // This ensures we filter everything, even paginated items if they are in the DOM
+        // If pagination removes items from DOM, this needs adjustment.
+        if (allCards.length === 0) { // Populate on first run or if cleared
+             allCards = Array.from(document.querySelectorAll('#blog.blog-cards .blog-card, #hidden-posts .blog-card'));
+             if (allCards.length === 0) {
+                 console.log("No blog cards found to filter.");
+                 return; // No cards rendered yet
+             }
+             console.log(`Search filtering initialized with ${allCards.length} cards.`);
         }
         
         let visibleCount = 0;
         
         allCards.forEach(card => {
+            let matchesSearch = false;
             if (!term) {
                 // If no search term, show all cards
-                card.style.display = '';
-                visibleCount++;
-                return;
+                matchesSearch = true;
+            } else {
+                // Get text content from important elements within the card
+                const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+                // Add other searchable fields if needed (e.g., excerpt, author)
+                // const excerpt = card.querySelector('.blog-card-excerpt')?.textContent?.toLowerCase() || ''; 
+                const tags = Array.from(card.querySelectorAll('.tag-badge')) // Assumes tags are rendered
+                    .map(tag => tag.textContent?.toLowerCase() || '');
+                
+                // Check if the card matches the search term
+                matchesSearch = 
+                    title.includes(term) || 
+                    // excerpt.includes(term) || 
+                    tags.some(tag => tag.includes(term));
             }
             
-            // Get text content from important elements within the card
-            const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
-            const description = card.querySelector('.card-description')?.textContent?.toLowerCase() || '';
-            const tags = Array.from(card.querySelectorAll('.tag-badge'))
-                .map(tag => tag.textContent?.toLowerCase() || '');
-            
-            // Check if the card matches the search term
-            const matchesSearch = 
-                title.includes(term) || 
-                description.includes(term) || 
-                tags.some(tag => tag.includes(term));
-            
-            // Show or hide the card based on the search match
-            card.style.display = matchesSearch ? '' : 'none';
-            if (matchesSearch) visibleCount++;
+            // Show or hide the card using CSS class
+            if (matchesSearch) {
+                card.classList.remove('hidden-by-search');
+                visibleCount++;
+            } else {
+                card.classList.add('hidden-by-search');
+            }
         });
         
-        // Show or hide the search indicator
-        searchIndicator.style.display = term ? 'block' : 'none';
-        
-        // Update the indicator text
+        // Show/Hide/Update the search indicator text
         if (term) {
             searchIndicator.textContent = visibleCount > 0
                 ? `Showing ${visibleCount} result${visibleCount > 1 ? 's' : ''} for "${term}"`
                 : `No results found for "${term}"`;
+            searchIndicator.style.display = 'block'; 
+        } else {
+             searchIndicator.style.display = 'none'; // Hide indicator if search is cleared
         }
         
-        // If there are no visible cards, show a message in the blog container
-        const noResultsMessage = document.getElementById('no-search-results');
+        // Handle "No results" message specifically within the container
+        const noResultsMessage = blogCardsContainer?.querySelector('.no-search-results-message');
         if (visibleCount === 0 && term) {
             if (!noResultsMessage) {
                 const message = document.createElement('div');
-                message.id = 'no-search-results';
-                message.className = 'empty-state';
+                message.className = 'empty-state no-search-results-message'; // Use existing empty-state styling
                 message.innerHTML = `
                     <i class="fas fa-search fa-3x"></i>
                     <h3>No matching posts found</h3>
-                    <p>Try different keywords or <button class="clear-search-btn">clear search</button></p>
-                `;
-                
-                // Find where to insert the message
-                const container = document.querySelector('.blog-cards') || document.body;
-                container.appendChild(message);
-                
+                    <p>Try different keywords.</p> 
+                `; // Removed clear button here, Escape key works
+                if (blogCardsContainer) {
+                    blogCardsContainer.appendChild(message);
+                }
             }
         } else if (noResultsMessage) {
             noResultsMessage.remove();
         }
+        
+        // Optional: Dispatch event for pagination to potentially reset/update
+        // document.dispatchEvent(new CustomEvent('searchApplied', { detail: { visibleCount } }));
     }
 
-    // Add keyboard navigation
+    // Add keyboard navigation (Escape key to clear)
     searchBar.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
-            searchBar.value = '';
-            filterBlogCards('');
-            searchBar.blur();
+            searchBar.value = ''; // Clear input
+            filterBlogCards(''); // Re-filter with empty term
+            searchBar.blur(); // Remove focus
         }
     });
 
-    console.log('Search functionality initialized');
+    console.log('Search functionality initialized.');
 }
+

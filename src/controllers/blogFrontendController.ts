@@ -1,30 +1,23 @@
 /**
  * Blog Frontend Controller
  * Client-side controller that handles all frontend functionality for the blog homepage.
- * Manages UI initialization, post rendering, and user interactions.
+ * Manages UI initialization, post rendering, filtering, and user interactions.
  */
-import { fetchBlogPosts } from '../services/api';
+import { fetchBlogPosts } from '../services/api'; // Uses static fetch now
 import { createBlogCardElement } from '../components/blogCards';
-// Assuming initializeComments is meant for the post detail page, 
-// it might not be needed here unless cards have comment previews/interactions.
-// import { initializeComments } from '../components/comments'; 
-import { initializeContactForm } from '../components/contact'; // Handles contact popup logic
-import { initializePagination } from '../components/pagination'; // Handles load more logic
-import { initializeSearch } from '../components/search'; // Handles search bar logic
-import { initializeAbout } from '../components/about'; // Handles about popup logic
-import { initializeNavigation } from '../components/navigation'; // Handles nav link active states
-
-// Note: Dark mode is initialized globally in client.ts, no need to import/call here typically
+import { initializeContactForm } from '../components/contact'; 
+import { initializePagination } from '../components/pagination'; 
+import { initializeSearch } from '../components/search'; 
+import { initializeAbout } from '../components/about'; 
+import { initializeNavigation } from '../components/navigation'; 
 
 /**
  * Initialize the blog frontend functionality (homepage)
- * Sets up all UI components and initializes the blog posts display.
- * Assumes header and dark mode are initialized globally before this runs.
  */
 export async function initializeBlogFrontend(): Promise<void> {
     console.log('Initializing Blog Frontend Controller...');
 
-    // Initialize navigation active states
+    // Initialize navigation first to ensure active states are set
     initializeNavigation();
 
     // Initialize interactive components specific to the main page
@@ -32,31 +25,28 @@ export async function initializeBlogFrontend(): Promise<void> {
     initializeAbout();     // Assumes #about-btn and #about-popup exist
     initializeSearch();    // Assumes .search-bar exists
 
-    // Initialize the blog posts display
-    await initializePosts();
+    // Initialize the blog posts display, including filtering
+    await initializePosts(); 
     
-    // Initialize pagination after posts are loaded and containers exist
+    // Initialize pagination after initial posts (possibly filtered) are loaded
     initializePagination();
     
-    // If comments preview/interaction needed on cards, initialize here
-    // initializeComments(); 
-
     // Set up event delegation for navigating when clicking blog cards
     setupBlogCardsDelegation();
 
-    // Add event listener for reloading posts (used by search)
-    // Consider adding an option to remove listener if controller is ever "destroyed"
+    // Listen for custom event to reload posts (e.g., after search or filter change)
     document.addEventListener('reloadPosts', handleReloadPosts);
 
     console.log('Blog Frontend Controller Initialized.');
 }
 
 /**
- * Handles the custom 'reloadPosts' event, typically triggered by search.
+ * Handles the custom 'reloadPosts' event. Refetches and re-renders posts.
  */
 async function handleReloadPosts(): Promise<void> {
     console.log('Reloading posts due to reloadPosts event...');
-    await initializePosts();
+    // Re-initialize posts, which will pick up any new URL parameters (like search query OR tag)
+    await initializePosts(); 
     initializePagination();
     // Re-setup delegation in case DOM elements were replaced
     setupBlogCardsDelegation();
@@ -68,23 +58,16 @@ async function handleReloadPosts(): Promise<void> {
  * Handles clicks for navigation, preventing clicks on interactive elements.
  */
 function setupBlogCardsDelegation(): void {
-    const blogCardsContainer = document.querySelector('.blog-cards');
-    // Note: Delegation on hidden-posts might be unnecessary if cards are moved on load more
-    // const hiddenPostsContainer = document.getElementById('hidden-posts');
-
+    // Target the main container for blog cards
+    const blogCardsContainer = document.querySelector('#blog.blog-cards'); 
     if (blogCardsContainer) {
-         // Remove listener first to prevent duplicates if called multiple times
-        blogCardsContainer.removeEventListener('click', handleBlogCardClick);
+        // Remove listener first to prevent duplicates if initializeBlogFrontend is called again
+        blogCardsContainer.removeEventListener('click', handleBlogCardClick); 
         blogCardsContainer.addEventListener('click', handleBlogCardClick);
-        console.log('Event delegation set up for .blog-cards');
+        console.log('Event delegation set up for #blog.blog-cards');
     } else {
-        console.warn('Could not find .blog-cards container for delegation.');
+        console.warn('Could not find #blog.blog-cards container for delegation.');
     }
-
-    // if (hiddenPostsContainer) {
-    //     hiddenPostsContainer.removeEventListener('click', handleBlogCardClick);
-    //     hiddenPostsContainer.addEventListener('click', handleBlogCardClick);
-    // }
 }
 
 /**
@@ -92,93 +75,125 @@ function setupBlogCardsDelegation(): void {
  */
 function handleBlogCardClick(event: Event): void {
     const target = event.target as Element;
-    const card = target.closest('.blog-card') as HTMLElement | null; // Type assertion
+    // Find the closest ancestor which is a blog card
+    const card = target.closest('.blog-card') as HTMLElement | null; 
     
     if (card) {
-        // Prevent navigation if the click originated on a button, link, or icon within the card
-        if (target.closest('button, a, i')) {
+        // Prevent navigation if the click originated on an interactive element within the card
+        if (target.closest('button, a, i')) { 
+            // Allow navigation specifically for tag links within the card
+            if (target.closest('a.tag-badge')) {
+                 console.log('Clicked tag link, allowing default navigation.');
+                 return; 
+            }
             console.log('Clicked interactive element inside card, preventing navigation.');
-            return;
+            return; 
         }
         
-        const postId = card.dataset.postId; // Use dataset property
-        
+        // Get post ID and navigate if the card itself (not an interactive element) was clicked
+        const postId = card.dataset.postId; 
         if (postId) {
             console.log(`Navigating to post ${postId}`);
-            // Use relative path for navigation
+            // Use relative path for navigation to post detail page
             window.location.href = `post.html?id=${postId}`; 
         }
     }
 }
 
 /**
- * Initialize blog posts from API
- * Fetches posts from the API and renders them in the UI
+ * Initialize blog posts: Fetch, filter (based on URL param), and render.
  */
 async function initializePosts(): Promise<void> {
-    // Use more specific selector if possible, e.g., #blog
     const blogCardsContainer = document.querySelector('#blog.blog-cards'); 
     if (!blogCardsContainer) {
         console.error('Blog cards container (#blog.blog-cards) not found in the DOM.');
         return;
     }
+    
+    // --- Check for Tag Filter ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const tagFilter = urlParams.get('tag'); 
+    const filterDisplay = document.getElementById('filter-display'); // Optional element to show filter
+    
+    // --- Determine Base Path (needed for Clear Filter link) ---
+    const currentHostname = window.location.hostname;
+    const isProduction = currentHostname === 'noelugwoke.com' || currentHostname.endsWith('.github.io'); 
+    // *** IMPORTANT: Change '/blog/' if your GitHub repo name/path is different ***
+    const basePath = isProduction ? '/blog/' : '/'; 
+    // --- End Base Path Logic ---
+
+    // Remove any existing filter indicator before potentially adding a new one
+    const existingFilterIndicator = document.querySelector('.tag-filter-indicator');
+    if (existingFilterIndicator) {
+        existingFilterIndicator.remove();
+    }
+
+    // Add filter indicator if tagFilter exists
+    if (tagFilter) { 
+        console.log(`Applying filter for tag: "${tagFilter}"`);
+        const filterContainer = document.createElement('div');
+        filterContainer.className = 'tag-filter-indicator';
+        // Use basePath for the Clear filter link's href
+        filterContainer.innerHTML = `
+            <p>Showing posts tagged with: <span class="filtered-tag">${tagFilter}</span></p>
+            <a href="${basePath}" class="clear-filter">Clear filter</a> 
+        `;
+        
+        // Insert filter indicator before the blog cards container
+        const blogSection = document.getElementById('blog'); // Target the section itself
+        if (blogSection?.parentNode) { // Ensure parent exists
+            blogSection.parentNode.insertBefore(filterContainer, blogSection);
+        }
+         // Also update separate filter display element if it exists
+         if (filterDisplay) {
+            filterDisplay.textContent = `Showing posts tagged with: "${tagFilter}"`;
+            filterDisplay.style.display = 'block';
+        }
+    } else if (filterDisplay) {
+         filterDisplay.style.display = 'none'; // Hide if no filter
+    }
+    // --- End Check for Tag Filter ---
+
     try {
-        // Show loading state
         blogCardsContainer.innerHTML = '<div class="loading-spinner"></div><p>Loading posts...</p>';
 
-        // Check for ?tag=... query parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const tagFilter = urlParams.get('tag');
+        // Fetch ALL posts from static JSON
+        let allPosts = await fetchBlogPosts(); 
+        console.log(`Fetched ${allPosts.length} total posts.`);
 
-        // Fetch posts using the function from api.ts (which fetches static json)
-        let posts = await fetchBlogPosts();
-        console.log(`Fetched ${posts.length} posts.`);
-
-        // Filter posts by tag if the query parameter is present
+        // --- Apply Tag Filter ---
+        let postsToDisplay = allPosts; // Start with all posts
         if (tagFilter) {
-            // Case-insensitive tag filtering
-            const normalizedTagFilter = tagFilter.toLowerCase();
-            posts = posts.filter(post => 
-                post.tags.some(tag => tag.toLowerCase() === normalizedTagFilter)
+            // Ensure tags array exists and perform case-insensitive comparison
+            postsToDisplay = allPosts.filter(post => 
+                post.tags && post.tags.some(tag => tag.toLowerCase() === tagFilter.toLowerCase())
             );
-            console.log(`Filtered posts by tag '${tagFilter}': ${posts.length} posts.`);
-            
-            // Add a filter indicator above the posts
-            const filterContainer = document.createElement('div');
-            filterContainer.className = 'tag-filter-indicator';
-            filterContainer.innerHTML = `
-                <p>Showing posts tagged with: <span class="filtered-tag">${tagFilter}</span></p>
-                <a href="/" class="clear-filter">Clear filter</a>
-            `;
-            
-            // Insert filter indicator before the blog cards
-            const blogContainer = blogCardsContainer.parentElement;
-            if (blogContainer) {
-                blogContainer.insertBefore(filterContainer, blogCardsContainer);
-            }
+            console.log(`Filtered down to ${postsToDisplay.length} posts for tag: "${tagFilter}"`);
         }
+        // --- End Apply Tag Filter ---
 
-        // Clear loading state
-        blogCardsContainer.innerHTML = ''; 
+        blogCardsContainer.innerHTML = ''; // Clear loading state
 
-        if (posts.length === 0) {
-            // Update empty state to reflect filtering if applicable
-            showEmptyState(blogCardsContainer, tagFilter);
+        if (postsToDisplay.length === 0) {
+            // Pass the tag filter to empty state message function
+            showEmptyState(blogCardsContainer, tagFilter ?? undefined); // Use nullish coalescing for undefined
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            if(loadMoreBtn) loadMoreBtn.style.display = 'none';
             return;
         }
 
-        // Display initial posts (e.g., first 3 or 6)
-        const initialPostCount = 6; // Or adjust as needed
-        const displayPosts = posts.slice(0, initialPostCount);
-        const hiddenPosts = posts.slice(initialPostCount);
+        // Pagination logic
+        const initialPostCount = 6; // Number of posts to show initially
+        const displayPosts = postsToDisplay.slice(0, initialPostCount);
+        const hiddenPosts = postsToDisplay.slice(initialPostCount);
 
-        // Add visible posts to main container
+        // Render initially visible posts
         displayPosts.forEach(post => {
             const blogCard = createBlogCardElement(post);
             blogCardsContainer.appendChild(blogCard);
         });
 
-        // Add remaining posts to hidden container for pagination
+        // Prepare hidden posts container for pagination
         const hiddenPostsContainer = document.getElementById('hidden-posts');
         if (hiddenPostsContainer) {
             hiddenPostsContainer.innerHTML = ''; // Clear previous hidden posts
@@ -186,7 +201,6 @@ async function initializePosts(): Promise<void> {
                 const blogCard = createBlogCardElement(post);
                 hiddenPostsContainer.appendChild(blogCard);
             });
-            console.log(`${hiddenPosts.length} posts added to hidden container.`);
         }
 
         // Update load more button visibility
@@ -202,23 +216,27 @@ async function initializePosts(): Promise<void> {
 
 /**
  * Show empty state when no posts are available
- * @param container The container element to show the empty state in
- * @param tagFilter Optional tag filter that was used (to explain why no posts were found)
+ * @param container - The container element
+ * @param tagFilter - Optional tag filter that was used
  */
-function showEmptyState(container: Element, tagFilter?: string | null): void {
-    container.innerHTML = ''; // Clear container
+function showEmptyState(container: Element, tagFilter?: string): void {
+    container.innerHTML = ''; 
     const emptyStateDiv = document.createElement('div');
-    emptyStateDiv.className = 'empty-state'; // Add class for styling
+    emptyStateDiv.className = 'empty-state'; 
     
-    // Customize message if filtering by tag
+    // Determine the correct base path for the "View all posts" link
+    const currentHostname = window.location.hostname;
+    const isProduction = currentHostname === 'noelugwoke.com' || currentHostname.endsWith('.github.io'); 
+    const basePath = isProduction ? '/blog/' : '/'; 
+
     const message = tagFilter 
-        ? `No posts found with the tag "${tagFilter}".`
-        : 'No posts found.';
+        ? `No posts found tagged with "${tagFilter}".`
+        : 'No posts yet!'; // Changed default message slightly
         
     emptyStateDiv.innerHTML = `
         <i class="fas fa-file-alt fa-3x"></i>
         <h3>${message}</h3>
-        ${tagFilter ? '<p><a href="/">View all posts</a></p>' : '<p>Check back later for new content!</p>'}
+        ${tagFilter ? `<p><a href="${basePath}">View all posts</a></p>` : '<p>Check back later for new content!</p>'}
     `; 
     
     container.appendChild(emptyStateDiv);
@@ -229,18 +247,14 @@ function showEmptyState(container: Element, tagFilter?: string | null): void {
  * Show error state when posts couldn't be loaded
  */
 function showErrorState(container: Element): void {
-    container.innerHTML = ''; // Clear container
+    container.innerHTML = ''; 
     const errorStateDiv = document.createElement('div');
-    errorStateDiv.className = 'error-state'; // Add class for styling
+    errorStateDiv.className = 'error-state'; 
     errorStateDiv.innerHTML = `
         <i class="fas fa-exclamation-triangle fa-3x"></i>
         <h3>Something went wrong</h3>
         <p>Failed to load blog posts. Please try refreshing the page.</p>
-    `; // Example content
+    `; 
     container.appendChild(errorStateDiv);
     console.log('Displayed error state for posts.');
 }
-
-// REMOVED: Local definitions and calls for setupSearch and setupPopupButtons
-// Functionality is now handled by the imported initializeSearch, initializeAbout, initializeContactForm
-
