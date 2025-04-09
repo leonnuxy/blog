@@ -14,18 +14,15 @@ import { checkSystemDarkModePreference, initializeDarkMode } from '../components
  * This is the main exported function that should be called by the entry point.
  */
 export async function initializePostDetailPageLogic(): Promise<void> {
-  console.log('Initializing post detail page...');
   try { 
     checkSystemDarkModePreference(); 
     initializeDarkMode(); 
-    console.log('Dark mode initialized.'); 
   } catch (e) { 
     console.error(e); 
   }
   
   try { 
     renderHeader(); 
-    console.log('Header rendered.'); 
   } catch (e) { 
     console.error(e); 
   }
@@ -39,7 +36,6 @@ export async function initializePostDetailPageLogic(): Promise<void> {
     console.error('No post ID provided in the URL');
     showErrorMessage('No post specified. Please check the URL.');
   }
-  console.log('Post detail page initialization complete.');
 }
 
 /**
@@ -47,10 +43,8 @@ export async function initializePostDetailPageLogic(): Promise<void> {
  */
 export async function loadPostContent(postId: string): Promise<void> {
   try {
-    console.log(`Fetching post with ID: ${postId}`);
     const post = await fetchPostById(postId);
     if (!post) throw new Error(`Post with ID ${postId} not found`);
-    console.log('Post data fetched:', post);
 
     updatePostUI(post);
     updatePageMetadata(post);
@@ -66,7 +60,6 @@ export async function loadPostContent(postId: string): Promise<void> {
  * Update the post UI with content from the loaded post
  */
 export function updatePostUI(post: BlogPostData): void {
-  console.log('Updating Post UI for:', post.title);
   const postArticleElement = document.getElementById('post-content');
   if (!postArticleElement) {
     console.error('Cannot update UI: #post-content element not found.');
@@ -103,7 +96,6 @@ export function updatePostUI(post: BlogPostData): void {
             </div>
         </div>
     `;
-  console.log('Post UI updated with like button and comments section structure.');
 }
 
 /**
@@ -111,7 +103,6 @@ export function updatePostUI(post: BlogPostData): void {
  */
 export function updatePageMetadata(post: BlogPostData): void {
   document.title = `${post.title} | Noel's Blog`;
-  console.log('Page metadata updated.');
 }
 
 /**
@@ -144,7 +135,6 @@ export function initializeSocialSharing(post: BlogPostData): void {
           }
       });
   }
-  console.log('Social sharing initialized.');
 }
 
 /**

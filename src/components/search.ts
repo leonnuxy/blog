@@ -133,7 +133,5 @@ export function initializeSearch(): void {
             searchBar.blur(); // Remove focus
         }
     });
-
-    console.log('Search functionality initialized.');
 }
 

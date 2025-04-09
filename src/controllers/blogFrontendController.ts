@@ -5,7 +5,6 @@
  */
 import { fetchBlogPosts } from '../services/api'; // Uses static fetch now
 import { createBlogCardElement } from '../components/blogCards';
-import { initializeContactForm } from '../components/contact'; 
 import { initializePagination } from '../components/pagination'; 
 import { initializeSearch } from '../components/search'; 
 import { initializeAbout } from '../components/about'; 
@@ -15,10 +14,7 @@ import { initializeNavigation } from '../components/navigation';
  * Initialize the blog frontend functionality (homepage)
  */
 export async function initializeBlogFrontend(): Promise<void> {
-    console.log('Initializing Blog Frontend Controller...');
-
     initializeNavigation();
-    initializeContactForm(); 
     initializeAbout();     
     initializeSearch();    
 
@@ -31,15 +27,12 @@ export async function initializeBlogFrontend(): Promise<void> {
 
     // Listen for custom event to reload posts (e.g., after search or filter change)
     document.addEventListener('reloadPosts', handleReloadPosts);
-
-    console.log('Blog Frontend Controller Initialized.');
 }
 
 /**
  * Handles the custom 'reloadPosts' event. Refetches and re-renders posts.
  */
 async function handleReloadPosts(): Promise<void> {
-    console.log('Reloading posts due to reloadPosts event...');
     // Re-initialize posts, which will pick up any new URL parameters (like search query OR tag)
     await initializePosts(); 
     initializePagination();
@@ -55,7 +48,6 @@ function setupBlogCardsDelegation(): void {
     if (blogCardsContainer) {
         blogCardsContainer.removeEventListener('click', handleBlogCardClick); // Prevent duplicates
         blogCardsContainer.addEventListener('click', handleBlogCardClick);
-        console.log('Event delegation set up for .blog-cards');
     } else {
         console.warn('Could not find #blog.blog-cards container for delegation.');
     }
@@ -71,16 +63,13 @@ function handleBlogCardClick(event: Event): void {
     if (card) {
         if (target.closest('button, a, i')) { 
             if (target.closest('a.tag-badge')) {
-                 console.log('Clicked tag link, allowing default navigation.');
                  return; 
             }
-            console.log('Clicked interactive element inside card, preventing navigation.');
             return; 
         }
         
         const postId = card.dataset.postId; 
         if (postId) {
-            console.log(`Navigating to post ${postId}`);
             // Use relative path for navigation
             window.location.href = `post.html?id=${postId}`; 
         }
@@ -107,9 +96,6 @@ async function initializePosts(): Promise<void> {
     const isProduction = currentHostname === 'noelugwoke.com' || currentHostname.endsWith('.github.io'); 
     // *** IMPORTANT: Change '/blog/' if your GitHub repo name/path is different ***
     const basePath = isProduction ? '/blog/' : '/'; 
-    // --- Add Logging ---
-    console.log(`[initializePosts] Hostname: ${currentHostname}, isProduction: ${isProduction}, basePath: ${basePath}`);
-    // --- End Logging ---
 
     // Remove any existing filter indicator before potentially adding a new one
     const existingFilterIndicator = document.querySelector('.tag-filter-indicator');
@@ -119,7 +105,6 @@ async function initializePosts(): Promise<void> {
 
     // Add filter indicator if tagFilter exists
     if (tagFilter) { 
-        console.log(`Applying filter for tag: "${tagFilter}"`);
         const filterContainer = document.createElement('div');
         filterContainer.className = 'tag-filter-indicator';
         // Use basePath for the Clear filter link's href
@@ -145,7 +130,6 @@ async function initializePosts(): Promise<void> {
         blogCardsContainer.innerHTML = '<div class="loading-spinner"></div><p>Loading posts...</p>';
 
         let allPosts = await fetchBlogPosts(); 
-        console.log(`Fetched ${allPosts.length} total posts.`);
 
         // --- Apply Tag Filter ---
         let postsToDisplay = allPosts; 
@@ -153,7 +137,6 @@ async function initializePosts(): Promise<void> {
             postsToDisplay = allPosts.filter(post => 
                 post.tags && post.tags.some(tag => tag.toLowerCase() === tagFilter.toLowerCase())
             );
-            console.log(`Filtered down to ${postsToDisplay.length} posts for tag: "${tagFilter}"`);
         }
         // --- End Apply Tag Filter ---
 
@@ -208,9 +191,6 @@ function showEmptyState(container: Element, tagFilter?: string): void {
     const isProduction = currentHostname === 'noelugwoke.com' || currentHostname.endsWith('.github.io'); 
     // *** IMPORTANT: Change '/blog/' if your GitHub repo name/path is different ***
     const basePath = isProduction ? '/blog/' : '/'; 
-    // --- Add Logging ---
-    console.log(`[showEmptyState] Hostname: ${currentHostname}, isProduction: ${isProduction}, basePath: ${basePath}`);
-    // --- End Logging ---
 
     const message = tagFilter 
         ? `No posts found tagged with "${tagFilter}".`
@@ -223,7 +203,6 @@ function showEmptyState(container: Element, tagFilter?: string): void {
     `; 
     
     container.appendChild(emptyStateDiv);
-    console.log('Displayed empty state for posts.');
 }
 
 /**
@@ -236,6 +215,5 @@ function showErrorState(container: Element): void {
     errorStateDiv.className = 'error-state'; 
     errorStateDiv.innerHTML = `...`; // Keep error message HTML
     container.appendChild(errorStateDiv);
-    console.log('Displayed error state for posts.');
 }
 

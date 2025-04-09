@@ -6,9 +6,7 @@
  */
 import { fetchBlogPosts } from '../services/api';
 import { createBlogCardElement } from '../components/blogCards';
-import { initializeComments, initializeCommentsFunctionality } from '../components/comments';
 import { initializeDarkMode, checkSystemDarkModePreference } from '../components/darkMode';
-import { initializeContactForm } from '../components/contact';
 import { initializePagination } from '../components/pagination';
 import { initializeSearch } from '../components/search';
 
@@ -22,11 +20,9 @@ export async function initializeBlog(): Promise<void> {
     
     // Initialize all UI components
     initializeDarkMode();
-    initializeContactForm();
     initializeSearch();
     await initializePosts();
     initializePagination();
-    initializeComments();
     
     // Add event listener for reloading posts (used by search)
     document.addEventListener('reloadPosts', async () => {

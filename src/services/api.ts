@@ -47,7 +47,6 @@ const STATIC_DATA_URL = 'data/posts.json'; // Define relative path once
  * Fetch all blog posts directly from the static JSON file.
  */
 export async function fetchBlogPosts(): Promise<BlogPostData[]> {
-    console.log(`Fetching static data from: ${STATIC_DATA_URL}`);
     try {
         // Fetch the JSON file using the relative path
         const response = await fetch(STATIC_DATA_URL); 

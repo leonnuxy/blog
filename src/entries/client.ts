@@ -40,15 +40,11 @@
 
             // Check for Main Page (using data-page or path ending in / or /index.html)
             if (pageType === 'main' || (!pageType && isRootOrIndex)) {
-                console.log('Initializing main blog page logic...');
-                await initializeBlogFrontend(); 
-                console.log('Main blog page logic initialized.');
+                await initializeBlogFrontend();
 
             // Check for Post Detail Page (using data-page or path ending in /post.html)
             } else if (pageType === 'post' || (!pageType && currentPage.endsWith('/post.html'))) {
-                 console.log('Initializing post detail page logic (from module)...');
                  await initializePostDetailPageLogic(); 
-                 console.log('Post detail page logic initialized.');
 
             // Check for Admin Page (using data-page or path ending in /admin.html)
             } else if (pageType === 'admin' || (!pageType && currentPage.endsWith('/admin.html'))) {

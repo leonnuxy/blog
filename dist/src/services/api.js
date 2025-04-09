@@ -68,7 +68,6 @@ const STATIC_DATA_URL = 'data/posts.json'; // Define relative path once
  */
 function fetchBlogPosts() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(`Fetching static data from: ${STATIC_DATA_URL}`);
         try {
             // Fetch the JSON file using the relative path
             const response = yield fetch(STATIC_DATA_URL);

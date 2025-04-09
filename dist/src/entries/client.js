@@ -48,15 +48,11 @@ function initializeClient() {
             console.log(`Detected pageType: ${pageType}, currentPage: ${currentPage}, pathEnd: ${pathEnd}, isRootOrIndex: ${isRootOrIndex}`);
             // Check for Main Page (using data-page or path ending in / or /index.html)
             if (pageType === 'main' || (!pageType && isRootOrIndex)) {
-                console.log('Initializing main blog page logic...');
                 yield (0, blogFrontendController_1.initializeBlogFrontend)();
-                console.log('Main blog page logic initialized.');
                 // Check for Post Detail Page (using data-page or path ending in /post.html)
             }
             else if (pageType === 'post' || (!pageType && currentPage.endsWith('/post.html'))) {
-                console.log('Initializing post detail page logic (from module)...');
                 yield (0, postDetail_1.initializePostDetailPageLogic)();
-                console.log('Post detail page logic initialized.');
                 // Check for Admin Page (using data-page or path ending in /admin.html)
             }
             else if (pageType === 'admin' || (!pageType && currentPage.endsWith('/admin.html'))) {

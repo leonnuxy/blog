@@ -14,7 +14,6 @@ export function renderHeader(containerId: string = 'header-placeholder'): void {
 
     const headerContainer = document.getElementById(containerId);
     if (!headerContainer) {
-        console.error(`Header container with ID '${containerId}' not found in the DOM.`);
         return;
     }
 
@@ -36,7 +35,7 @@ export function renderHeader(containerId: string = 'header-placeholder'): void {
                 <ul>
                     <li><a href="${basePath}">Home</a></li> 
                     <li><a href="${basePath}#about" id="about-btn">About</a></li>
-                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="https://noelugwoke.com/">Portfolio</a></li>
                 </ul>
             </nav>
             <input type="search" placeholder="Search for articles..." class="search-bar"> 

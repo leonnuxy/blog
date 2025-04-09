@@ -18,9 +18,7 @@ exports.initializeBlog = initializeBlog;
  */
 const api_1 = require("../services/api");
 const blogCards_1 = require("../components/blogCards");
-const comments_1 = require("../components/comments");
 const darkMode_1 = require("../components/darkMode");
-const contact_1 = require("../components/contact");
 const pagination_1 = require("../components/pagination");
 const search_1 = require("../components/search");
 /**
@@ -33,11 +31,9 @@ function initializeBlog() {
         (0, darkMode_1.checkSystemDarkModePreference)();
         // Initialize all UI components
         (0, darkMode_1.initializeDarkMode)();
-        (0, contact_1.initializeContactForm)();
         (0, search_1.initializeSearch)();
         yield initializePosts();
         (0, pagination_1.initializePagination)();
-        (0, comments_1.initializeComments)();
         // Add event listener for reloading posts (used by search)
         document.addEventListener('reloadPosts', () => __awaiter(this, void 0, void 0, function* () {
             yield initializePosts();

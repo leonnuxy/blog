@@ -35,17 +35,10 @@ function setupNavLinks(): void {
     
     // Handle special cases for popup links
     const aboutBtn = document.getElementById('about-btn');
-    const contactBtn = document.getElementById('contact-btn');
     
     if (aboutBtn) {
         aboutBtn.addEventListener('click', () => {
             updateActiveNavLink('#about');
-        });
-    }
-    
-    if (contactBtn) {
-        contactBtn.addEventListener('click', () => {
-            updateActiveNavLink('#contact');
         });
     }
 }

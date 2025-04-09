@@ -125,5 +125,4 @@ function initializeSearch() {
             searchBar.blur(); // Remove focus
         }
     });
-    console.log('Search functionality initialized.');
 }

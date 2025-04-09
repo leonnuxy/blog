@@ -3,10 +3,8 @@
 /* Component Styles - Main Import File */
 @import 'components/modals.css';       /* Base styles for popups and modals */
 @import 'components/buttons.css';      /* Button styles */
-@import 'components/contact.css';      /* Contact-specific styles */
 @import 'components/blog-cards.css';   /* Blog card styles */
 @import 'components/dark-mode.css';    /* Dark mode styles */
-@import 'components/comments.css';     /* Comment section styles */
 @import 'components/pagination.css';   /* Pagination styles */
 
 /* Global component adjustments */

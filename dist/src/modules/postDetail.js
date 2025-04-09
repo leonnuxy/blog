@@ -28,18 +28,15 @@ const darkMode_1 = require("../components/darkMode");
  */
 function initializePostDetailPageLogic() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('Initializing post detail page...');
         try {
             (0, darkMode_1.checkSystemDarkModePreference)();
             (0, darkMode_1.initializeDarkMode)();
-            console.log('Dark mode initialized.');
         }
         catch (e) {
             console.error(e);
         }
         try {
             (0, header_1.renderHeader)();
-            console.log('Header rendered.');
         }
         catch (e) {
             console.error(e);
@@ -53,7 +50,6 @@ function initializePostDetailPageLogic() {
             console.error('No post ID provided in the URL');
             showErrorMessage('No post specified. Please check the URL.');
         }
-        console.log('Post detail page initialization complete.');
     });
 }
 /**
@@ -62,11 +58,9 @@ function initializePostDetailPageLogic() {
 function loadPostContent(postId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log(`Fetching post with ID: ${postId}`);
             const post = yield (0, api_1.fetchPostById)(postId);
             if (!post)
                 throw new Error(`Post with ID ${postId} not found`);
-            console.log('Post data fetched:', post);
             updatePostUI(post);
             updatePageMetadata(post);
             initializeSocialSharing(post);
@@ -81,7 +75,6 @@ function loadPostContent(postId) {
  * Update the post UI with content from the loaded post
  */
 function updatePostUI(post) {
-    console.log('Updating Post UI for:', post.title);
     const postArticleElement = document.getElementById('post-content');
     if (!postArticleElement) {
         console.error('Cannot update UI: #post-content element not found.');
@@ -117,14 +110,12 @@ function updatePostUI(post) {
             </div>
         </div>
     `;
-    console.log('Post UI updated with like button and comments section structure.');
 }
 /**
  * Update page metadata like title and URL
  */
 function updatePageMetadata(post) {
     document.title = `${post.title} | Noel's Blog`;
-    console.log('Page metadata updated.');
 }
 /**
  * Initialize social sharing functionality
@@ -157,7 +148,6 @@ function initializeSocialSharing(post) {
             }
         });
     }
-    console.log('Social sharing initialized.');
 }
 /**
  * Display an error message to the user within the post content area
