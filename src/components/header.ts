@@ -36,7 +36,7 @@ export function renderHeader(containerId: string = 'header-placeholder'): void {
                 <ul>
                     <li><a href="${basePath}">Home</a></li> 
                     <li><a href="${basePath}#about" id="about-btn">About</a></li>
-                    <li><a href="${basePath}#portfolio">Portfolio</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
                 </ul>
             </nav>
             <input type="search" placeholder="Search for articles..." class="search-bar"> 

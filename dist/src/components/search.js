@@ -106,9 +106,9 @@ function initializeSearch() {
                     <h3>No matching posts found</h3>
                     <p>Try different keywords.</p> 
                 `; // Removed clear button here, Escape key works
-                if (blogCardsContainer) {
-                    blogCardsContainer.appendChild(message);
-                }
+                // if (blogCardsContainer) {
+                //     blogCardsContainer.appendChild(message);
+                // }
             }
         }
         else if (noResultsMessage) {
