@@ -2,7 +2,7 @@
 
 // --- Imports ---
 import { fetchPostById, likePost, unlikePost } from '../services/api';
-import { transformTagToUrlFormat } from '../../shared/utils';
+import { transformTagToUrlFormat } from '../utils/urlTransformer'
 import { BlogPostData } from '../../shared/types'; 
 import { renderHeader } from '../components/header';
 import { checkSystemDarkModePreference, initializeDarkMode } from '../components/darkMode';
