@@ -248,6 +248,91 @@ textarea {
 }
 
 
+/* Tag Filter Styling */
+.tag-filter-indicator {
+    background-color: var(--surface-alt, #f9f9f9); 
+    border: 1px solid var(--border-color-light, #eee); 
+    border-radius: var(--border-radius-medium, 6px); 
+    padding: 0.75rem 1rem; 
+    margin-bottom: 2rem; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    transition: background-color 0.3s, border-color 0.3s; 
+    max-width: 900px;
+    margin-left: auto; 
+    margin-right: auto;
+    /* --- End Added --- */
+  }
+  
+  .tag-filter-indicator p {
+    margin: 0; 
+    color: var(--text-muted, #666); 
+  }
+  
+  .tag-filter-indicator .filtered-tag {
+    background-color: var(--primary-color-light, #cfe2ff); 
+    color: var(--primary-color-dark, #0a58ca); 
+    border-radius: var(--border-radius-large, 16px); 
+    padding: 0.25rem 0.75rem; 
+    margin-left: 0.5rem; 
+    font-weight: 600; 
+    display: inline-block;
+    font-size: 0.9em; 
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .tag-filter-indicator .clear-filter {
+    color: var(--link-color, #3498db); 
+    text-decoration: none;
+    font-weight: 600; 
+    transition: color 0.2s ease;
+    display: inline-flex; 
+    align-items: center;
+    gap: 0.25rem; 
+    padding: 0.25rem; 
+    border-radius: var(--border-radius-small);
+  }
+  
+  .tag-filter-indicator .clear-filter i {
+      font-size: 0.8em;
+  }
+  
+  .tag-filter-indicator .clear-filter:hover,
+  .tag-filter-indicator .clear-filter:focus {
+    color: var(--link-hover-color, #2980b9); 
+    text-decoration: underline;
+    outline: none;
+    background-color: var(--surface-hover, #f0f0f0); 
+  }
+  
+  /* --- Dark Mode Support --- */
+  body.dark-mode .tag-filter-indicator {
+    background-color: var(--surface-alt-dark, #2a2a2a); 
+    border-color: var(--border-color-dark, #444); 
+  }
+  
+  body.dark-mode .tag-filter-indicator p {
+     color: var(--text-muted-dark, #aaa); 
+  }
+  
+  body.dark-mode .tag-filter-indicator .filtered-tag {
+    background-color: rgba(var(--primary-color-rgb, 77, 171, 247), 0.2); 
+    color: var(--primary-color-dark, #80d4ff); 
+  }
+  
+  body.dark-mode .tag-filter-indicator .clear-filter {
+    color: var(--link-color-dark, #4dabf7); 
+  }
+  
+  body.dark-mode .tag-filter-indicator .clear-filter:hover,
+  body.dark-mode .tag-filter-indicator .clear-filter:focus {
+    color: var(--link-hover-color-dark, #80d4ff); 
+    background-color: var(--surface-hover-dark, rgba(255, 255, 255, 0.1));
+  }
+  
+
 /* --- Keyframes --- */
 @keyframes fadeIn {
     from { opacity: 0; }

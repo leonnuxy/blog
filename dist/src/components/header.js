@@ -4,7 +4,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.renderHeader = renderHeader;
 /**
  * Header Component
- * Renders the header section into a target container.
+ * Renders the header HTML structure into a target container.
+ * Event listeners should be attached separately after calling this function.
  * @param containerId - The ID of the element to render the header into. Defaults to 'header-placeholder'.
  */
 function renderHeader(containerId = 'header-placeholder') {
@@ -26,11 +27,11 @@ function renderHeader(containerId = 'header-placeholder') {
                 <ul>
                     <li><a href="/">Home</a></li> 
                     <li><a href="/#about" id="about-btn">About</a></li>
-                    <li><a href="/#portfolio">Portfolio</a></li>
-                    <li><a href="/#contact" id="contact-btn">Contact</a></li>
+                    <li><a href="https://noelugwoke.com">Portfolio</a></li>
                 </ul>
             </nav>
             <input type="search" placeholder="Search for articles..." class="search-bar"> 
         </header>
     `;
+    // Event listeners should be called *after* renderHeader is executed.
 }

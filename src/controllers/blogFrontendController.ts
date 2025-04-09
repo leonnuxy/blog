@@ -136,15 +136,34 @@ async function initializePosts(): Promise<void> {
 
         // Filter posts by tag if the query parameter is present
         if (tagFilter) {
-            posts = posts.filter(post => post.tags.includes(tagFilter));
+            // Case-insensitive tag filtering
+            const normalizedTagFilter = tagFilter.toLowerCase();
+            posts = posts.filter(post => 
+                post.tags.some(tag => tag.toLowerCase() === normalizedTagFilter)
+            );
             console.log(`Filtered posts by tag '${tagFilter}': ${posts.length} posts.`);
+            
+            // Add a filter indicator above the posts
+            const filterContainer = document.createElement('div');
+            filterContainer.className = 'tag-filter-indicator';
+            filterContainer.innerHTML = `
+                <p>Showing posts tagged with: <span class="filtered-tag">${tagFilter}</span></p>
+                <a href="/" class="clear-filter">Clear filter</a>
+            `;
+            
+            // Insert filter indicator before the blog cards
+            const blogContainer = blogCardsContainer.parentElement;
+            if (blogContainer) {
+                blogContainer.insertBefore(filterContainer, blogCardsContainer);
+            }
         }
 
         // Clear loading state
         blogCardsContainer.innerHTML = ''; 
 
         if (posts.length === 0) {
-            showEmptyState(blogCardsContainer);
+            // Update empty state to reflect filtering if applicable
+            showEmptyState(blogCardsContainer, tagFilter);
             return;
         }
 
@@ -183,16 +202,25 @@ async function initializePosts(): Promise<void> {
 
 /**
  * Show empty state when no posts are available
+ * @param container The container element to show the empty state in
+ * @param tagFilter Optional tag filter that was used (to explain why no posts were found)
  */
-function showEmptyState(container: Element): void {
+function showEmptyState(container: Element, tagFilter?: string | null): void {
     container.innerHTML = ''; // Clear container
     const emptyStateDiv = document.createElement('div');
     emptyStateDiv.className = 'empty-state'; // Add class for styling
+    
+    // Customize message if filtering by tag
+    const message = tagFilter 
+        ? `No posts found with the tag "${tagFilter}".`
+        : 'No posts found.';
+        
     emptyStateDiv.innerHTML = `
         <i class="fas fa-file-alt fa-3x"></i>
-        <h3>No posts found</h3>
-        <p>Check back later for new content!</p> 
-    `; // Example content
+        <h3>${message}</h3>
+        ${tagFilter ? '<p><a href="/">View all posts</a></p>' : '<p>Check back later for new content!</p>'}
+    `; 
+    
     container.appendChild(emptyStateDiv);
     console.log('Displayed empty state for posts.');
 }

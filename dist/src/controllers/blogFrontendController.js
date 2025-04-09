@@ -123,13 +123,36 @@ function initializePosts() {
         try {
             // Show loading state
             blogCardsContainer.innerHTML = '<div class="loading-spinner"></div><p>Loading posts...</p>';
+            // Check for ?tag=... query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const tagFilter = urlParams.get('tag');
             // Fetch posts using the function from api.ts (which fetches static json)
-            const posts = yield (0, api_1.fetchBlogPosts)();
+            let posts = yield (0, api_1.fetchBlogPosts)();
             console.log(`Fetched ${posts.length} posts.`);
+            // Filter posts by tag if the query parameter is present
+            if (tagFilter) {
+                // Case-insensitive tag filtering
+                const normalizedTagFilter = tagFilter.toLowerCase();
+                posts = posts.filter(post => post.tags.some(tag => tag.toLowerCase() === normalizedTagFilter));
+                console.log(`Filtered posts by tag '${tagFilter}': ${posts.length} posts.`);
+                // Add a filter indicator above the posts
+                const filterContainer = document.createElement('div');
+                filterContainer.className = 'tag-filter-indicator';
+                filterContainer.innerHTML = `
+                <p>Showing posts tagged with: <span class="filtered-tag">${tagFilter}</span></p>
+                <a href="/" class="clear-filter">Clear filter</a>
+            `;
+                // Insert filter indicator before the blog cards
+                const blogContainer = blogCardsContainer.parentElement;
+                if (blogContainer) {
+                    blogContainer.insertBefore(filterContainer, blogCardsContainer);
+                }
+            }
             // Clear loading state
             blogCardsContainer.innerHTML = '';
             if (posts.length === 0) {
-                showEmptyState(blogCardsContainer);
+                // Update empty state to reflect filtering if applicable
+                showEmptyState(blogCardsContainer, tagFilter);
                 return;
             }
             // Display initial posts (e.g., first 3 or 6)
@@ -165,16 +188,22 @@ function initializePosts() {
 }
 /**
  * Show empty state when no posts are available
+ * @param container The container element to show the empty state in
+ * @param tagFilter Optional tag filter that was used (to explain why no posts were found)
  */
-function showEmptyState(container) {
+function showEmptyState(container, tagFilter) {
     container.innerHTML = ''; // Clear container
     const emptyStateDiv = document.createElement('div');
     emptyStateDiv.className = 'empty-state'; // Add class for styling
+    // Customize message if filtering by tag
+    const message = tagFilter
+        ? `No posts found with the tag "${tagFilter}".`
+        : 'No posts found.';
     emptyStateDiv.innerHTML = `
         <i class="fas fa-file-alt fa-3x"></i>
-        <h3>No posts found</h3>
-        <p>Check back later for new content!</p> 
-    `; // Example content
+        <h3>${message}</h3>
+        ${tagFilter ? '<p><a href="/">View all posts</a></p>' : '<p>Check back later for new content!</p>'}
+    `;
     container.appendChild(emptyStateDiv);
     console.log('Displayed empty state for posts.');
 }

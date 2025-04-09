@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBlogCardElement = createBlogCardElement;
+const urlTransformer_1 = require("../utils/urlTransformer"); // Import the URL generator
 /**
  * Creates a DOM element for a blog card from post data (display only for actions)
  */
@@ -15,22 +16,22 @@ function createBlogCardElement(post) {
         year: 'numeric', month: 'long', day: 'numeric'
     });
     // --- Dynamic URL and Text Generation for Sharing ---
-    // Use a relative path for sharing as well
     const postUrl = `post.html?id=${String(post.id)}`;
-    const encodedUrl = encodeURIComponent(postUrl); // Note: Sharing services might resolve this relative to the current page
-    // Alternative: Construct full URL carefully if needed by specific sharing services
-    // const postFullUrl = `${window.location.origin}${window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))}/post.html?id=${String(post.id)}`;
-    // const encodedFullUrl = encodeURIComponent(postFullUrl);
+    const encodedUrl = encodeURIComponent(postUrl);
     const shareText = `Check out this article: ${post.title}`;
     const encodedShareText = encodeURIComponent(shareText);
     // --- End Dynamic URL Generation ---
+    // Generate HTML for tag badges/links using the utility function
     let tagsHTML = '';
     if (post.tags && post.tags.length > 0) {
         tagsHTML = '<div class="post-tags">' +
-            post.tags.map(tag => `<span class="tag-badge" data-tag="${tag}">${tag}</span>`).join('') +
+            post.tags.map(tag => 
+            // Use generateTagFilterUrl for href in an <a> tag
+            `<a href="${(0, urlTransformer_1.generateTagFilterUrl)(tag)}" class="tag-badge">${tag}</a>`).join('') +
             '</div>';
     }
     const fallbackImageUrl = 'images/blog_image_3.jpeg'; // Relative path
+    // Create HTML for blog card
     blogCard.innerHTML = `
         <img src="${post.imageUrl || fallbackImageUrl}" alt="${post.title}"> 
         <div class="blog-card-content">
@@ -38,15 +39,7 @@ function createBlogCardElement(post) {
             <h3 class="blog-card-title">${post.title}</h3>
             ${tagsHTML}
             <div class="post-actions">
-                <span class="like-button-display" aria-label="${post.likes || 0} likes">
-                    <i class="far fa-heart"></i> <span class="like-count">${post.likes || 0}</span>
-                </span>
-                <span class="comments-toggle-display" aria-label="${commentCount} comments">
-                    <i class="fas fa-comment"></i>
-                    <span class="comment-count">${commentCount}</span>
-                </span>
                 <div class="social-sharing">
-                    <!-- Use encodedUrl which is now relative -->
                     <button class="share-button twitter" aria-label="Share on Twitter" data-url="${encodedUrl}" data-text="${encodedShareText}"><i class="fab fa-twitter"></i></button>
                     <button class="share-button facebook" aria-label="Share on Facebook" data-url="${encodedUrl}"><i class="fab fa-facebook-f"></i></button>
                     <button class="share-button linkedin" aria-label="Share on LinkedIn" data-url="${encodedUrl}"><i class="fab fa-linkedin-in"></i></button>
@@ -54,48 +47,36 @@ function createBlogCardElement(post) {
             </div>
         </div>
     `;
-    // Add event listeners for tag clicks
-    const tagBadges = blogCard.querySelectorAll('.tag-badge');
-    tagBadges.forEach(badge => {
-        badge.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent the blog card click
-            const tag = event.target.dataset.tag;
-            if (tag) {
-                // Use client-side navigation instead of direct links
-                // This uses the index.html page with a query parameter instead of a /tag/ path
-                window.location.href = `index.html?tag=${encodeURIComponent(tag)}`;
-            }
-        });
-    });
+    // Setup social sharing listeners (as before)
     const socialSharingDiv = blogCard.querySelector('.social-sharing');
     if (socialSharingDiv) {
         socialSharingDiv.addEventListener('click', (event) => {
+            // ... existing social sharing click logic ...
             const button = event.target.closest('.share-button');
             if (!button)
                 return;
             event.stopPropagation();
-            // For sharing, we might need the FULL URL. Let's reconstruct it here.
-            // Get the base path (e.g., '/blog/')
             const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-            const relativeUrl = button.dataset.url ? decodeURIComponent(button.dataset.url) : `post.html?id=${post.id}`; // Use relative path from data attribute
-            const fullUrl = `${window.location.origin}${basePath}${relativeUrl}`; // Construct full URL
-            const encodedFullUrl = encodeURIComponent(fullUrl); // Encode the full URL
+            const relativeUrl = button.dataset.url ? decodeURIComponent(button.dataset.url) : `post.html?id=${post.id}`;
+            const fullUrl = `${window.location.origin}${basePath}${relativeUrl}`;
+            const encodedFullUrl = encodeURIComponent(fullUrl);
             const text = button.dataset.text ? decodeURIComponent(button.dataset.text) : document.title;
             const encodedText = encodeURIComponent(text);
             let shareWindowUrl = '';
             if (button.classList.contains('twitter')) {
-                shareWindowUrl = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedFullUrl}`; // Use encodedFullUrl
+                shareWindowUrl = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedFullUrl}`;
                 window.open(shareWindowUrl, 'twitter-share', 'width=550,height=235');
             }
             else if (button.classList.contains('facebook')) {
-                shareWindowUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedFullUrl}`; // Use encodedFullUrl
+                shareWindowUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedFullUrl}`;
                 window.open(shareWindowUrl, 'facebook-share', 'width=550,height=435');
             }
             else if (button.classList.contains('linkedin')) {
-                shareWindowUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedFullUrl}`; // Use encodedFullUrl
+                shareWindowUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedFullUrl}`;
                 window.open(shareWindowUrl, 'linkedin-share', 'width=550,height=435');
             }
         });
     }
+    // REMOVED: Separate event listener loop for tag badges (now handled by standard <a> tags)
     return blogCard;
 }
