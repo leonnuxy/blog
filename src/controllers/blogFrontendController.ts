@@ -126,9 +126,19 @@ async function initializePosts(): Promise<void> {
         // Show loading state
         blogCardsContainer.innerHTML = '<div class="loading-spinner"></div><p>Loading posts...</p>';
 
+        // Check for ?tag=... query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const tagFilter = urlParams.get('tag');
+
         // Fetch posts using the function from api.ts (which fetches static json)
-        const posts = await fetchBlogPosts();
+        let posts = await fetchBlogPosts();
         console.log(`Fetched ${posts.length} posts.`);
+
+        // Filter posts by tag if the query parameter is present
+        if (tagFilter) {
+            posts = posts.filter(post => post.tags.includes(tagFilter));
+            console.log(`Filtered posts by tag '${tagFilter}': ${posts.length} posts.`);
+        }
 
         // Clear loading state
         blogCardsContainer.innerHTML = ''; 

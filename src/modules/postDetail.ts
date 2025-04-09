@@ -1,7 +1,8 @@
 // src/modules/postDetail.ts
 
 // --- Imports ---
-import { fetchPostById, likePost, unlikePost } from '../services/api'; 
+import { fetchPostById, likePost, unlikePost } from '../services/api';
+import { transformTagToUrlFormat } from '../../shared/utils';
 import { BlogPostData } from '../../shared/types'; 
 import { renderHeader } from '../components/header';
 import { checkSystemDarkModePreference, initializeDarkMode } from '../components/darkMode';
@@ -145,7 +146,7 @@ export function updatePostUI(post: BlogPostData): void {
 
         <div class="post-footer">
             <div class="tags">
-                ${post.tags && post.tags.length > 0 ? `<span>Tags:</span> ${post.tags.map(tag => `<a href="/tag/${tag.toLowerCase().replace(/\s+/g, '-')}">${tag}</a>`).join('')}` : ''}
+                ${post.tags && post.tags.length > 0 ? `<span>Tags:</span> ${post.tags.map(tag => `<a href="/index.html?tag=${encodeURIComponent(transformTagToUrlFormat(tag))}">${tag}</a>`).join('')}` : ''}
             </div>
             <div class="social-sharing">
                 <span>Share:</span>

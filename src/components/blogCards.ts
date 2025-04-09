@@ -32,7 +32,7 @@ export function createBlogCardElement(post: BlogPostData): HTMLElement {
     let tagsHTML = '';
     if (post.tags && post.tags.length > 0) {
         tagsHTML = '<div class="post-tags">' +
-            post.tags.map(tag => `<span class="tag-badge" data-tag="${tag}">${tag}</span>`).join('') +
+            post.tags.map(tag => `<span class="tag-badge" data-tag="${tag}" onclick="window.location.href='/index.html?tag=${encodeURIComponent(tag)}'">${tag}</span>`).join('') +
             '</div>';
     }
 
