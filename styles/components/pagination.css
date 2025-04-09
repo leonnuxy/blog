@@ -19,8 +19,4 @@
 
 /* Removed redundant @keyframes spin */
 
-/* Dark Mode Overrides */
-body.dark-mode .spinner {
-    border-color: rgba(255, 255, 255, 0.1);
-    border-top-color: #6c63ff;
-}
+/* Dark mode styles moved to dark-mode.css */

@@ -1,0 +1,112 @@
+/* filepath: /Users/noel/Library/CloudStorage/OneDrive-Personal/Projects/Git/blog/styles/components/mobile-nav.css */
+/* ===================================================
+   MOBILE NAVIGATION COMPONENT
+   Contains styles for mobile navigation drawer and overlay
+   =================================================== */
+
+/* --- Mobile Nav Drawer --- */
+.mobile-nav-drawer {
+    position: fixed;
+    top: 0;
+    right: -300px; /* Start off-screen */
+    width: 280px; /* Drawer width */
+    height: 100%;
+    background-color: var(--surface-color);
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 1100; /* Above overlay */
+    transition: right 0.3s ease-in-out;
+    padding: 2rem 1.5rem;
+    padding-top: calc(var(--header-height) + 1rem); /* Space for close button */
+    overflow-y: auto;
+}
+
+/* Drawer open state */
+.mobile-nav-drawer.open {
+    right: 0; /* Slide in */
+}
+
+/* Close button styling */
+.close-drawer-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none !important;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-color);
+    padding: 0.25rem 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.close-drawer-btn:hover {
+    color: var(--primary-color);
+}
+
+/* Mobile navigation links */
+.mobile-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border-color-light);
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.mobile-nav a:hover,
+.mobile-nav a:focus,
+.mobile-nav a.active {
+    color: var(--primary-color);
+}
+
+/* Background overlay when drawer is open */
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050; /* Below drawer, above content */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.drawer-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Hamburger menu toggle button */
+.mobile-nav-toggle {
+    display: none;
+    background: none !important;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.mobile-nav-toggle:hover,
+.mobile-nav-toggle:focus {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* Show toggle button only on mobile */
+@media (max-width: 768px) {
+    .mobile-nav-toggle {
+        display: block;
+    }
+}
+
+/* Dark mode styles moved to dark-mode.css */
