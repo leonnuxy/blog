@@ -41,47 +41,43 @@ export async function addTagToPost(id: number, tag: string): Promise<BlogPostDat
 
 
 // --- Functions modified for static data ---
+const STATIC_DATA_URL = 'data/posts.json'; // Define relative path once
 
 /**
  * Fetch all blog posts directly from the static JSON file.
  */
 export async function fetchBlogPosts(): Promise<BlogPostData[]> {
-    // Construct the path relative to the HTML file loading the script.
-    // Assumes posts.json is copied to 'docs/data/posts.json' by the workflow.
-    // And HTML files are at the root of 'docs'.
-    const dataUrl = 'data/posts.json'; 
-    console.log(`Fetching static data from: ${dataUrl}`);
+    console.log(`Fetching static data from: ${STATIC_DATA_URL}`);
     try {
-        const response = await fetch(dataUrl); 
+        // Fetch the JSON file using the relative path
+        const response = await fetch(STATIC_DATA_URL); 
         if (!response.ok) {
-            throw new Error(`Failed to fetch ${dataUrl}: ${response.status} ${response.statusText}`);
+            throw new Error(`Failed to fetch ${STATIC_DATA_URL}: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
         // Assuming the JSON structure is { posts: [...] } 
-        // or maybe just an array [...] directly? Adjust based on your posts.json structure.
-        // If posts.json is just an array: return data || [];
-        return data.posts || []; // Use this if posts.json has { "posts": [...] }
+        return data.posts || []; 
     } catch (error) {
-        console.error('Error fetching static posts.json:', error);
+        console.error(`Error fetching static ${STATIC_DATA_URL}:`, error);
         return []; // Return empty array on error
     }
 }
 
 /**
  * Get a single post by ID by filtering the static JSON data.
- * Note: This loads ALL posts just to find one - less efficient than an API.
  * @param id - The post ID (string or number)
  */
 export async function fetchPostById(id: string | number): Promise<BlogPostData | null> {
     try {
-        const allPosts = await fetchBlogPosts(); // Fetch all posts from JSON
-        // Ensure consistent ID comparison (e.g., comparing numbers)
+        // Fetch all posts first
+        const allPosts = await fetchBlogPosts(); 
         const postIdNumber = typeof id === 'string' ? parseInt(id, 10) : id; 
         if (isNaN(postIdNumber)) {
             console.error(`Invalid post ID provided: ${id}`);
             return null;
         }
         
+        // Find the specific post
         const post = allPosts.find(p => Number(p.id) === postIdNumber);
         
         if (!post) {
@@ -96,17 +92,12 @@ export async function fetchPostById(id: string | number): Promise<BlogPostData |
     }
 }
 
-// --- Comment API Placeholders (Need separate service or backend) ---
-// These would need to be implemented using a third-party service (like Disqus)
-// or a serverless backend if you want comments on a static site.
-
+// --- Comment API Placeholders ---
 export async function fetchCommentsApi(postId: string): Promise<any[]> {
     console.warn("Comments cannot be fetched on static site without external service/backend.");
-    return []; // Return empty array
+    return []; 
 }
-
 export async function submitCommentApi(postId: string, name: string, comment: string): Promise<any> {
      console.error("Cannot submit comment on static site without external service/backend.");
      throw new Error("Comment submission not available.");
 }
-

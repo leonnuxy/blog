@@ -1,32 +1,39 @@
-const fs = require('fs');
+// scripts/copy-json.js
+const fs = require('fs-extra'); // Use fs-extra for easier directory handling
 const path = require('path');
 
-// Source and destination paths
-const dataDir = path.join(__dirname, '../data');
-const destDir = path.join(__dirname, '../dist');
+const dataDir = path.join(__dirname, '..', 'data');
+const publicDataDir = path.join(__dirname, '..', 'public', 'data'); // Target public/data
+const distDataDir = path.join(__dirname, '..', 'dist', 'data'); // Also copy to dist/data if backend needs it there
 
-// Function to create destination directory if it doesn't exist
-function ensureDirExists(dir) {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+async function copyJsonFiles() {
+    try {
+        // Ensure target directories exist
+        await fs.ensureDir(publicDataDir);
+        await fs.ensureDir(distDataDir);
+
+        // Copy posts.json to public/data/posts.json
+        const sourcePostsPath = path.join(dataDir, 'posts.json');
+        const publicDestPath = path.join(publicDataDir, 'posts.json');
+         if (await fs.pathExists(sourcePostsPath)) {
+             await fs.copy(sourcePostsPath, publicDestPath);
+             console.log(`✅ Copied: posts.json to ${publicDestPath}`);
+         } else {
+             console.warn(`Source file not found: ${sourcePostsPath}`);
+         }
+
+        // Copy posts.json to dist/data/posts.json (if backend reads from dist)
+         const distDestPath = path.join(distDataDir, 'posts.json');
+          if (await fs.pathExists(sourcePostsPath)) {
+             await fs.copy(sourcePostsPath, distDestPath);
+             console.log(`✅ Copied: posts.json to ${distDestPath}`);
+         }
+
+        console.log('📄 JSON files copying complete');
+    } catch (err) {
+        console.error('❌ Error copying JSON files:', err);
+        process.exit(1); 
+    }
 }
 
-// Function to copy a file
-function copyFile(src, dest) {
-  try {
-    const data = fs.readFileSync(src);
-    ensureDirExists(path.dirname(dest));
-    fs.writeFileSync(dest, data);
-    console.log(`✅ Copied: ${path.basename(src)} to ${dest}`);
-  } catch (err) {
-    console.error(`❌ Error copying ${src}:`, err);
-  }
-}
-
-// Copy posts.json from data directory to dist
-const postsJsonSrc = path.join(dataDir, 'posts.json');
-const postsJsonDest = path.join(destDir, 'posts.json');
-copyFile(postsJsonSrc, postsJsonDest);
-
-console.log('📄 JSON files copying complete');
+copyJsonFiles();

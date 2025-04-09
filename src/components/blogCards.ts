@@ -53,7 +53,6 @@ export function createBlogCardElement(post: BlogPostData): HTMLElement {
                     <span class="comment-count">${commentCount}</span>
                 </span>
                 <div class="social-sharing">
-                    {/* Use encodedUrl which is now relative */}
                     <button class="share-button twitter" aria-label="Share on Twitter" data-url="${encodedUrl}" data-text="${encodedShareText}"><i class="fab fa-twitter"></i></button>
                     <button class="share-button facebook" aria-label="Share on Facebook" data-url="${encodedUrl}"><i class="fab fa-facebook-f"></i></button>
                     <button class="share-button linkedin" aria-label="Share on LinkedIn" data-url="${encodedUrl}"><i class="fab fa-linkedin-in"></i></button>
