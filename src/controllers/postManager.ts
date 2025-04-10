@@ -1,10 +1,29 @@
-import { fetchBlogPosts, deleteBlogPost, fetchPostById } from '../services/api';
+// postManager.ts
+// src/controllers/postManager.ts
+import { fetchBlogPosts } from '../services/api';
 import { BlogPostData } from '../../shared/types';
 import { state } from './state';
 import { showToast, showConfirmDialog } from '../utils/notifications';
 import { escapeHtml } from '../utils/utils';
-import { updatePaginationState } from './pagination';
-import { openPostModal } from './modalEvents';
+
+
+export function updatePaginationState(): void {
+    state.totalPages = Math.ceil(filterAndSortPosts().length / state.postsPerPage);
+    updatePaginationControls();
+}
+
+export function updatePaginationControls(): void {
+    const prevBtn = document.getElementById('prev-page') as HTMLButtonElement;
+    const nextBtn = document.getElementById('next-page') as HTMLButtonElement;
+    const pageIndicator = document.getElementById('page-indicator');
+
+    if (prevBtn && nextBtn && pageIndicator) {
+        prevBtn.disabled = state.currentPage === 1;
+        nextBtn.disabled = state.currentPage === state.totalPages;
+        pageIndicator.textContent = `Page ${state.currentPage} of ${state.totalPages}`;
+    }
+}
+
 
 export function filterAndSortPosts(): BlogPostData[] {
     let filtered = [...state.posts];
@@ -29,8 +48,6 @@ export function filterAndSortPosts(): BlogPostData[] {
                 return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
             case 'title':
                 return a.title.localeCompare(b.title);
-            case 'likes':
-                return b.likes - a.likes;
             default:
                 return 0;
         }
@@ -85,7 +102,6 @@ export function renderCurrentPage(): void {
             <td>${escapeHtml(post.author)}</td>
             <td>${formattedDate}</td>
             <td>${post.tags.map((tag: string) => `<span class="tag-badge">${escapeHtml(tag)}</span>`).join('')}</td>
-            <td>${post.likes}</td>
             <td class="action-buttons">
                 <button class="btn-icon btn-edit" title="Edit post">
                     <i class="fas fa-edit"></i>
@@ -99,74 +115,6 @@ export function renderCurrentPage(): void {
     });
 
     updatePaginationState();
-}
-
-export async function handleTableActions(event: Event): Promise<void> {
-
-    const target = event.target as HTMLElement;
-    const actionButton = target.closest('.btn-edit, .btn-delete') as HTMLButtonElement;
-
-    if (!actionButton) {
-        return;
-    }
-
-    const row = actionButton.closest('tr');
-    if (!row) return;
-
-    const postId = row.dataset.postId;
-    if (!postId) return;
-
-    if (actionButton.classList.contains('btn-delete')) {
-        await handleDeletePost(Number(postId), row);
-    } else if (actionButton.classList.contains('btn-edit')) {
-        await handleEditPost(Number(postId));
-    }
-}
-
-async function handleDeletePost(postId: number, row: HTMLElement): Promise<void> {
-    const confirmDelete = await showConfirmDialog('Are you sure you want to delete this post?');
-    if (!confirmDelete) return;
-
-    try {
-        const success = await deleteBlogPost(postId.toString());
-        if (success) {
-            row.remove();
-            const previousCount = state.posts.length;
-            state.posts = state.posts.filter(post => Number(post.id) !== postId);
-            console.log(`Posts filtered: from ${previousCount} to ${state.posts.length}`);
-            
-            showToast('Post deleted successfully', 'success');
-            updatePaginationState();
-            
-            // Check if we need to render the page again (e.g., if we deleted the last item on a page)
-            if (state.posts.length === 0 || 
-                (state.currentPage > 1 && 
-                 (state.currentPage - 1) * state.postsPerPage >= state.posts.length)) {
-                state.currentPage = Math.max(1, state.currentPage - 1);
-                renderCurrentPage();
-            }
-        } else {
-            console.error('Delete operation returned false/unsuccessful');
-            throw new Error('Server returned unsuccessful response when deleting post');
-        }
-    } catch (error) {
-        console.error('Error deleting post:', error);
-        showToast(`Failed to delete post: ${error instanceof Error ? error.message : 'Unknown error'}`, 'error');
-    }
-}
-
-async function handleEditPost(postId: number): Promise<void> {
-    try {
-        const post = await fetchPostById(postId);
-        if (post) {
-            openPostModal(post);
-        } else {
-            throw new Error('Post not found');
-        }
-    } catch (error) {
-        showToast('Failed to load post for editing', 'error');
-        console.error('Error loading post:', error);
-    }
 }
 
 function showEmptyState(): void {

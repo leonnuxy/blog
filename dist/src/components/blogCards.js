@@ -10,7 +10,6 @@ function createBlogCardElement(post) {
     blogCard.className = 'blog-card';
     blogCard.dataset.postId = String(post.id);
     blogCard.style.cursor = 'pointer';
-    const commentCount = post.comments ? post.comments.length : 0;
     const createdDate = new Date(post.createdAt);
     const dateStr = createdDate.toLocaleDateString('en-US', {
         year: 'numeric', month: 'long', day: 'numeric'

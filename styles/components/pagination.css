@@ -4,19 +4,71 @@
 .pagination-container {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin: 30px 0 50px;
+    gap: 0.5rem;
+}
+
+.pagination-button {
+    padding: 0.5rem 1rem;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: var(--surface-hover);
+    border-color: var(--border-color-light);
+}
+
+.pagination-button.active {
+    background-color: var(--primary-color);
+    color: var(--surface-color);
+    border-color: var(--primary-color);
+}
+
+.pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .spinner {
     display: inline-block;
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-top-color: #6c63ff;
+    border: 2px solid var(--border-color-light);
+    border-top-color: var(--primary-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
 
-/* Removed redundant @keyframes spin */
+/* Dark mode adjustments */
+body.dark-mode .pagination-button {
+    background-color: var(--surface-color);
+    border-color: var(--border-color);
+}
 
-/* Dark mode styles moved to dark-mode.css */
+body.dark-mode .pagination-button:hover:not(:disabled) {
+    background-color: var(--surface-hover);
+    border-color: var(--border-color-light);
+}
+
+body.dark-mode .pagination-button.active {
+    background-color: var(--primary-color);
+    color: var(--surface-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .pagination-container {
+        flex-wrap: wrap;
+    }
+    
+    .pagination-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}

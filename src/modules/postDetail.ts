@@ -1,10 +1,9 @@
 // src/modules/postDetail.ts
 
 // --- Imports ---
-import { fetchPostById, likePost, unlikePost } from '../services/api';
+import { fetchPostById } from '../services/api';
 import { generateTagFilterUrl } from '../utils/urlTransformer'
 import { BlogPostData } from '../../shared/types'; 
-import { renderHeader } from '../components/header';
 import { checkSystemDarkModePreference, initializeDarkMode } from '../components/darkMode';
 
 // --- Core Initialization Function ---
@@ -21,11 +20,6 @@ export async function initializePostDetailPageLogic(): Promise<void> {
     console.error(e); 
   }
   
-  try { 
-    renderHeader(); 
-  } catch (e) { 
-    console.error(e); 
-  }
 
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get('id');
@@ -143,9 +137,7 @@ export function initializeSocialSharing(post: BlogPostData): void {
 export function showErrorMessage(message: string): void {
   const contentElement = document.getElementById('post-content');
   if (contentElement) {
-    const commentsSection = document.getElementById('comments-section');
-    const targetElement = commentsSection ? commentsSection : contentElement;
-    targetElement.innerHTML = `<div class="error-message">${message}</div>`;
+    contentElement.innerHTML = `<div class="error-message">${message}</div>`;
   } else {
     alert(message); // Fallback
   }

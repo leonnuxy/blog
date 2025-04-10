@@ -41,10 +41,14 @@ function initializeClient() {
             if (document.getElementById('header-placeholder')) {
                 (0, header_1.renderHeader)();
                 console.log('Header rendered globally.');
-                // Initialize components dependent on header *after* rendering
-                (0, mobileNav_1.initializeMobileNav)(); // Initialize mobile nav using header elements
-                (0, search_1.initializeSearch)(); // Initialize search bar in header
-                (0, navigation_1.initializeNavigation)(); // Initialize nav link active states
+                // Wait a moment for DOM to update before initializing components dependent on header
+                setTimeout(() => {
+                    // Initialize components dependent on header *after* rendering
+                    (0, mobileNav_1.initializeMobileNav)(); // Initialize mobile nav using header elements
+                    (0, search_1.initializeSearch)(); // Initialize search bar in header
+                    (0, navigation_1.initializeNavigation)(); // Initialize nav link active states
+                    console.log('Header-dependent components initialized.');
+                }, 0);
             }
             else {
                 console.warn('Header placeholder not found on this page. Skipping header-dependent initializations.');

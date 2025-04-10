@@ -1,8 +1,7 @@
 "use strict";
+// Pagination functionality
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializePagination = initializePagination;
-// Pagination functionality
-const comments_1 = require("./comments");
 /**
  * Initialize pagination functionality with Load More button
  */
@@ -51,8 +50,6 @@ function loadMorePosts(loadMoreBtn, hiddenPosts, blogCardsContainer, currentPage
                 blogCardsContainer.appendChild(clonedPost);
                 hiddenPosts.removeChild(postToAdd);
                 postsLoaded++;
-                // Initialize comments functionality for the new posts
-                (0, comments_1.initializeCommentsFunctionality)(clonedPost);
             }
         }
         // Check if we've loaded all posts

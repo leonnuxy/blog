@@ -19,7 +19,6 @@ exports.showErrorMessage = showErrorMessage;
 // --- Imports ---
 const api_1 = require("../services/api");
 const urlTransformer_1 = require("../utils/urlTransformer");
-const header_1 = require("../components/header");
 const darkMode_1 = require("../components/darkMode");
 // --- Core Initialization Function ---
 /**
@@ -31,12 +30,6 @@ function initializePostDetailPageLogic() {
         try {
             (0, darkMode_1.checkSystemDarkModePreference)();
             (0, darkMode_1.initializeDarkMode)();
-        }
-        catch (e) {
-            console.error(e);
-        }
-        try {
-            (0, header_1.renderHeader)();
         }
         catch (e) {
             console.error(e);
@@ -155,9 +148,7 @@ function initializeSocialSharing(post) {
 function showErrorMessage(message) {
     const contentElement = document.getElementById('post-content');
     if (contentElement) {
-        const commentsSection = document.getElementById('comments-section');
-        const targetElement = commentsSection ? commentsSection : contentElement;
-        targetElement.innerHTML = `<div class="error-message">${message}</div>`;
+        contentElement.innerHTML = `<div class="error-message">${message}</div>`;
     }
     else {
         alert(message); // Fallback

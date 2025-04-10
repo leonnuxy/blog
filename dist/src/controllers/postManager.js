@@ -9,16 +9,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.updatePaginationState = updatePaginationState;
+exports.updatePaginationControls = updatePaginationControls;
 exports.filterAndSortPosts = filterAndSortPosts;
 exports.loadPosts = loadPosts;
 exports.renderCurrentPage = renderCurrentPage;
-exports.handleTableActions = handleTableActions;
+// postManager.ts
+// src/controllers/postManager.ts
 const api_1 = require("../services/api");
 const state_1 = require("./state");
 const notifications_1 = require("../utils/notifications");
 const utils_1 = require("../utils/utils");
-const pagination_1 = require("./pagination");
-const modalEvents_1 = require("./modalEvents");
+function updatePaginationState() {
+    state_1.state.totalPages = Math.ceil(filterAndSortPosts().length / state_1.state.postsPerPage);
+    updatePaginationControls();
+}
+function updatePaginationControls() {
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    const pageIndicator = document.getElementById('page-indicator');
+    if (prevBtn && nextBtn && pageIndicator) {
+        prevBtn.disabled = state_1.state.currentPage === 1;
+        nextBtn.disabled = state_1.state.currentPage === state_1.state.totalPages;
+        pageIndicator.textContent = `Page ${state_1.state.currentPage} of ${state_1.state.totalPages}`;
+    }
+}
 function filterAndSortPosts() {
     let filtered = [...state_1.state.posts];
     // Apply search filter
@@ -38,8 +53,6 @@ function filterAndSortPosts() {
                 return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
             case 'title':
                 return a.title.localeCompare(b.title);
-            case 'likes':
-                return b.likes - a.likes;
             default:
                 return 0;
         }
@@ -55,7 +68,7 @@ function loadPosts() {
         }
         try {
             state_1.state.posts = yield (0, api_1.fetchBlogPosts)();
-            (0, pagination_1.updatePaginationState)();
+            updatePaginationState();
             renderCurrentPage();
         }
         catch (error) {
@@ -88,7 +101,6 @@ function renderCurrentPage() {
             <td>${(0, utils_1.escapeHtml)(post.author)}</td>
             <td>${formattedDate}</td>
             <td>${post.tags.map((tag) => `<span class="tag-badge">${(0, utils_1.escapeHtml)(tag)}</span>`).join('')}</td>
-            <td>${post.likes}</td>
             <td class="action-buttons">
                 <button class="btn-icon btn-edit" title="Edit post">
                     <i class="fas fa-edit"></i>
@@ -100,78 +112,7 @@ function renderCurrentPage() {
         `;
         tableBody.appendChild(row);
     });
-    (0, pagination_1.updatePaginationState)();
-}
-function handleTableActions(event) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const target = event.target;
-        const actionButton = target.closest('.btn-edit, .btn-delete');
-        if (!actionButton) {
-            return;
-        }
-        const row = actionButton.closest('tr');
-        if (!row)
-            return;
-        const postId = row.dataset.postId;
-        if (!postId)
-            return;
-        if (actionButton.classList.contains('btn-delete')) {
-            yield handleDeletePost(Number(postId), row);
-        }
-        else if (actionButton.classList.contains('btn-edit')) {
-            yield handleEditPost(Number(postId));
-        }
-    });
-}
-function handleDeletePost(postId, row) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const confirmDelete = yield (0, notifications_1.showConfirmDialog)('Are you sure you want to delete this post?');
-        if (!confirmDelete)
-            return;
-        try {
-            const success = yield (0, api_1.deleteBlogPost)(postId.toString());
-            if (success) {
-                row.remove();
-                const previousCount = state_1.state.posts.length;
-                state_1.state.posts = state_1.state.posts.filter(post => Number(post.id) !== postId);
-                console.log(`Posts filtered: from ${previousCount} to ${state_1.state.posts.length}`);
-                (0, notifications_1.showToast)('Post deleted successfully', 'success');
-                (0, pagination_1.updatePaginationState)();
-                // Check if we need to render the page again (e.g., if we deleted the last item on a page)
-                if (state_1.state.posts.length === 0 ||
-                    (state_1.state.currentPage > 1 &&
-                        (state_1.state.currentPage - 1) * state_1.state.postsPerPage >= state_1.state.posts.length)) {
-                    state_1.state.currentPage = Math.max(1, state_1.state.currentPage - 1);
-                    renderCurrentPage();
-                }
-            }
-            else {
-                console.error('Delete operation returned false/unsuccessful');
-                throw new Error('Server returned unsuccessful response when deleting post');
-            }
-        }
-        catch (error) {
-            console.error('Error deleting post:', error);
-            (0, notifications_1.showToast)(`Failed to delete post: ${error instanceof Error ? error.message : 'Unknown error'}`, 'error');
-        }
-    });
-}
-function handleEditPost(postId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const post = yield (0, api_1.fetchPostById)(postId);
-            if (post) {
-                (0, modalEvents_1.openPostModal)(post);
-            }
-            else {
-                throw new Error('Post not found');
-            }
-        }
-        catch (error) {
-            (0, notifications_1.showToast)('Failed to load post for editing', 'error');
-            console.error('Error loading post:', error);
-        }
-    });
+    updatePaginationState();
 }
 function showEmptyState() {
     const tableBody = document.getElementById('posts-table-body');

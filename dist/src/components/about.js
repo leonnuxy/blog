@@ -1,54 +1,55 @@
 "use strict";
-// About popup functionality
+// src/components/about.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializeAbout = initializeAbout;
+// About popup functionality
 /**
  * Initialize the About section popup
  */
 function initializeAbout() {
+    // Get DOM elements
     const aboutBtn = document.getElementById('about-btn');
     const aboutPopup = document.getElementById('about-popup');
     const closePopup = document.querySelector('#about-popup .close-popup');
+    // Exit if required elements don't exist
     if (!aboutBtn || !aboutPopup || !closePopup) {
         console.warn('About popup elements not found in the DOM');
         return;
     }
+    /**
+     * Close popup and reset state
+     */
+    const closeAboutPopup = () => {
+        aboutPopup.classList.remove('open');
+        document.body.style.overflow = ''; // Restore scrolling
+        setDefaultActiveLink(); // Reset navigation highlighting
+    };
+    // --- Event Listeners ---
     // Open popup when about button is clicked
     aboutBtn.addEventListener('click', (e) => {
         e.preventDefault(); // Prevent default anchor behavior
         aboutPopup.classList.add('open');
         document.body.style.overflow = 'hidden'; // Prevent scrolling while popup is open
-        // Add active class to about link
-        aboutBtn.classList.add('active');
+        aboutBtn.classList.add('active'); // Highlight nav item
     });
     // Close popup when close button is clicked
-    closePopup.addEventListener('click', () => {
-        aboutPopup.classList.remove('open');
-        document.body.style.overflow = '';
-        // Revert to home active state when closing popup
-        setDefaultActiveLink();
-    });
+    closePopup.addEventListener('click', closeAboutPopup);
     // Close when clicking outside the popup content
     aboutPopup.addEventListener('click', (e) => {
         if (e.target === aboutPopup) {
-            aboutPopup.classList.remove('open');
-            document.body.style.overflow = '';
-            // Revert to home active state when closing popup
-            setDefaultActiveLink();
+            closeAboutPopup();
         }
     });
     // Close on escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && aboutPopup.classList.contains('open')) {
-            aboutPopup.classList.remove('open');
-            document.body.style.overflow = '';
-            // Revert to home active state when closing popup
-            setDefaultActiveLink();
+            closeAboutPopup();
         }
     });
 }
 /**
  * Helper function to set the default active link state
+ * in the navigation based on the current URL hash
  */
 function setDefaultActiveLink() {
     // Get current hash or default to home

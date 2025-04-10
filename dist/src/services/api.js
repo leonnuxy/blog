@@ -9,8 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.likePost = likePost;
-exports.unlikePost = unlikePost;
 exports.deleteBlogPost = deleteBlogPost;
 exports.createPost = createPost;
 exports.updatePost = updatePost;
@@ -23,20 +21,6 @@ exports.submitCommentApi = submitCommentApi;
 // const API_URL = '/api'; 
 // --- Functions relying on backend API (Will NOT work on GitHub Pages) ---
 // These functions will fail silently or log errors in the console on the static site.
-function likePost(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        console.error(`Like functionality requires a backend. Cannot LIKE post ${id} on static site.`);
-        // Return null or a default structure if your calling code expects it
-        return null;
-    });
-}
-function unlikePost(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        console.error(`Unlike functionality requires a backend. Cannot UNLIKE post ${id} on static site.`);
-        // Return null or a default structure
-        return null;
-    });
-}
 function deleteBlogPost(postId) {
     return __awaiter(this, void 0, void 0, function* () {
         console.error("Cannot delete post on static site. Backend API required.");

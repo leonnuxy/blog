@@ -1,23 +1,11 @@
 // src/services/api.ts
-import { BlogPostData, LikeResponse } from '../../shared/types'; // Assuming types are still relevant
+import { BlogPostData } from '../../shared/types'; // Assuming types are still relevant
 
 // API_URL constant is not needed when fetching static file directly
 // const API_URL = '/api'; 
 
 // --- Functions relying on backend API (Will NOT work on GitHub Pages) ---
 // These functions will fail silently or log errors in the console on the static site.
-
-export async function likePost(id: number): Promise<LikeResponse | null> {
-    console.error(`Like functionality requires a backend. Cannot LIKE post ${id} on static site.`);
-    // Return null or a default structure if your calling code expects it
-    return null; 
-}
-
-export async function unlikePost(id: number): Promise<LikeResponse | null> {
-    console.error(`Unlike functionality requires a backend. Cannot UNLIKE post ${id} on static site.`);
-     // Return null or a default structure
-    return null;
-}
 
 export async function deleteBlogPost(postId: string): Promise<boolean> {
     console.error("Cannot delete post on static site. Backend API required.");

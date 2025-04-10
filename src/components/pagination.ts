@@ -1,5 +1,4 @@
 // Pagination functionality
-import { initializeCommentsFunctionality } from './comments';
 
 /**
  * Initialize pagination functionality with Load More button
@@ -64,8 +63,6 @@ function loadMorePosts(
                 hiddenPosts.removeChild(postToAdd);
                 postsLoaded++;
                 
-                // Initialize comments functionality for the new posts
-                initializeCommentsFunctionality(clonedPost);
             }
         }
         

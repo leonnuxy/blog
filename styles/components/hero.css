@@ -1,0 +1,132 @@
+.hero {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    text-align: left;
+    flex-direction: row-reverse;
+    padding: var(--spacing-2);
+    margin: var(--spacing-2) auto;
+    max-width: 50%;
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border-radius: var(--border-radius-small);
+    box-shadow: var(--box-shadow-small);
+    transition: all var(--transition-base);
+    animation: fadeIn 0.3s ease-out forwards;
+    overflow: hidden;
+    min-height: unset;
+}
+
+.hero:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--box-shadow-small);
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 60%;
+}
+
+.hero-title {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-bottom: var(--spacing-2);
+    color: var(--heading-color);
+    line-height: 1.2;
+}
+
+.hero-description {
+    color: var(--text-muted);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-base);
+    margin-bottom: var(--spacing-2);
+}
+
+.hero-image {
+    flex: 1;
+    max-width: 50%;
+    height: auto;
+    border-radius: var(--border-radius-medium);
+    object-fit: cover;
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-4);
+}
+
+/* Hero Variants */
+.hero-centered {
+    text-align: center;
+    flex-direction: column;
+}
+
+.hero-centered .hero-content,
+.hero-centered .hero-image {
+    max-width: 100%;
+}
+
+.hero-dark {
+    background-color: var(--surface-alt);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .hero {
+        padding: var(--spacing-5);
+        margin: var(--spacing-5) auto;
+    }
+
+    .hero-title {
+        font-size: var(--font-size-3xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        padding: var(--spacing-4);
+        margin: var(--spacing-4) auto;
+        text-align: center;
+        gap: var(--spacing-4);
+    }
+
+    .hero-content,
+    .hero-image {
+        max-width: 100%;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: var(--spacing-3);
+        margin: var(--spacing-3) auto;
+    }
+
+    .hero-title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .hero-description {
+        font-size: var(--font-size-base);
+    }
+
+    .hero-actions {
+        flex-direction: column;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Dark Mode Adjustments */
+body.dark-mode .hero {
+    background-color: var(--surface-color);
+}

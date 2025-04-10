@@ -1,21 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setupEventListeners = setupEventListeners;
-const modalEvents_1 = require("./modalEvents");
 const postManager_1 = require("./postManager");
 const state_1 = require("./state");
 const formHandlers_1 = require("./formHandlers");
 function setupEventListeners() {
-    // Table actions
-    const tableBody = document.getElementById('posts-table-body');
-    if (tableBody) {
-        tableBody.addEventListener('click', postManager_1.handleTableActions);
-    }
-    // Add new post button
-    const addPostBtn = document.getElementById('add-post-btn');
-    if (addPostBtn) {
-        addPostBtn.addEventListener('click', () => (0, modalEvents_1.openPostModal)());
-    }
     // Pagination controls
     const prevBtn = document.getElementById('prev-page');
     const nextBtn = document.getElementById('next-page');
@@ -35,6 +24,5 @@ function setupEventListeners() {
             }
         });
     }
-    (0, modalEvents_1.setupModalEvents)();
     (0, formHandlers_1.setupSearchAndFilters)();
 }

@@ -1,11 +1,10 @@
-/* filepath: /Users/noel/Library/CloudStorage/OneDrive-Personal/Projects/Git/blog/styles/components/mobile-nav.css */
 /* ===================================================
    MOBILE NAVIGATION COMPONENT
    Contains styles for mobile navigation drawer and overlay
    =================================================== */
 
 /* --- Mobile Nav Drawer --- */
-.mobile-nav-drawer {
+.mobile-drawer {
     position: fixed;
     top: 0;
     right: -300px; /* Start off-screen */
@@ -21,12 +20,25 @@
 }
 
 /* Drawer open state */
-.mobile-nav-drawer.open {
+.mobile-drawer.open {
     right: 0; /* Slide in */
 }
 
+/* Drawer header styling */
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.drawer-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
 /* Close button styling */
-.close-drawer-btn {
+#close-drawer-btn {
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -85,27 +97,50 @@
 }
 
 /* Hamburger menu toggle button */
-.mobile-nav-toggle {
-    display: none;
-    background: none !important;
+.mobile-menu-button {
+    display: none; /* Hidden by default */
+    background: none;
     border: none;
     cursor: pointer;
     padding: 0.5rem;
-    color: var(--text-color);
-    font-size: 1.5rem;
-    transition: color 0.2s ease, transform 0.2s ease;
+    margin-left: 0.5rem;
 }
 
-.mobile-nav-toggle:hover,
-.mobile-nav-toggle:focus {
+.mobile-menu-button:hover,
+.mobile-menu-button:focus {
     color: var(--primary-color);
+}
+
+/* Hamburger button spans (lines) */
+.mobile-menu-button span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 4px 0;
+    background-color: var(--text-color);
+    border-radius: 3px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.mobile-menu-button:hover span,
+.mobile-menu-button:focus span {
     transform: scale(1.1);
 }
 
 /* Show toggle button only on mobile */
 @media (max-width: 768px) {
-    .mobile-nav-toggle {
-        display: block;
+    .mobile-menu-button {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        height: 24px;
+        width: 24px;
+    }
+
+    /* Hide desktop navigation on mobile */
+    .site-header nav > ul {
+        display: none;
     }
 }
 

@@ -1,899 +1,261 @@
-/* File: base.css (Refactored) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* --- Font Import --- */
-/* Using 'Inter' consistently as linked in HTML */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-/* --- CSS Variables --- */
 :root {
-    /* Light Theme Defaults */
+    /* Typography */
     --font-primary: 'Inter', sans-serif;
+    --font-size-base: 16px;
+    --line-height-base: 1.7;
+    --font-size-sm: 0.875rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
 
+    /* Colors - Light Theme */
     --surface-color: #ffffff;
     --surface-alt: #f9f9f9;
-    /* Slightly off-white for contrast */
     --text-color: #333333;
     --text-muted: #666666;
     --heading-color: #222222;
     --primary-color: #3498db;
-    /* Example blue */
     --primary-color-dark: #2980b9;
-    /* Darker shade for hover */
     --danger-color: #e74c3c;
+    --danger-color-dark: #c0392b;
     --success-color: #28a745;
+    --success-color-dark: #1e7e34;
+    --warning-color: #f1c40f;
+    --warning-color-dark: #f39c12;
     --like-color: #e74c3c;
-    /* Color for liked heart */
+    
+    /* Borders & Dividers */
     --border-color-light: #eeeeee;
     --border-color: #dddddd;
+    
+    /* Backgrounds & Surfaces */
     --surface-hover: #f0f0f0;
-    /* Hover background */
     --input-background: #ffffff;
+    
+    /* Links */
     --link-color: var(--primary-color);
     --link-hover-color: var(--primary-color-dark);
 
+    /* Layout */
     --header-height: 70px;
-    /* Define header height as variable */
+    --container-width: 1200px;
+    --sidebar-width: 280px;
+    
+    /* Border Radius */
     --border-radius-small: 4px;
     --border-radius-medium: 6px;
     --border-radius-large: 8px;
+    --border-radius-full: 9999px;
+    
+    /* Shadows */
     --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.08);
     --box-shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --box-shadow-large: 0 8px 16px rgba(0, 0, 0, 0.12);
+    
+    /* Z-index Layers */
+    --z-index-dropdown: 100;
+    --z-index-sticky: 200;
+    --z-index-fixed: 300;
+    --z-index-modal-backdrop: 400;
+    --z-index-modal: 500;
+    --z-index-popover: 600;
+    --z-index-toast: 700;
+    
+    /* Header Specific */
+    --header-background: var(--surface-color);
+    --header-text: var(--text-color);
+    --header-border: var(--border-color-light);
+    --header-active-indicator: var(--primary-color);
+    --header-shadow: var(--box-shadow-light);
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.4s ease;
+    
+    /* Spacing */
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 1rem;
+    --spacing-4: 2rem;
+    --spacing-5: 3rem;
+    --spacing-6: 4rem;
 }
 
+/* Dark Theme Variables */
 body.dark-mode {
-    /* Dark Theme Variable Overrides */
     --surface-color: #1e1e1e;
     --surface-alt: #2a2a2a;
     --text-color: #f5f5f5;
     --text-muted: #aaaaaa;
     --heading-color: #ffffff;
     --primary-color: #4dabf7;
-    /* Lighter blue for dark mode */
     --primary-color-dark: #80d4ff;
-    /* Lighter hover for dark mode */
     --danger-color: #ff6b6b;
+    --danger-color-dark: #ff4444;
     --success-color: #2ecc71;
+    --success-color-dark: #27ae60;
+    --warning-color: #f1c40f;
+    --warning-color-dark: #f39c12;
     --like-color: #ff6b6b;
-    /* Brighter red for dark mode */
     --border-color-light: #333333;
     --border-color: #444444;
     --surface-hover: rgba(255, 255, 255, 0.1);
     --input-background: #333333;
-    --link-color: var(--primary-color);
-    --link-hover-color: var(--primary-color-dark);
-
-    --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.3);
-    --box-shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.4);
-
-    /* Base dark mode styles applied directly */
-    background-color: #121212;
-    color: var(--text-color);
-    /* Use variable */
+    
+    /* Header Dark Theme Overrides */
+    --header-background: #252525;
+    --header-border: #333333;
+    --header-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* --- Base Styles & Resets --- */
-*,
-*::before,
-*::after {
+/* Reset & Global Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    /* Use border-box globally */
 }
 
 html {
-    scroll-behavior: smooth;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 body {
     font-family: var(--font-primary);
-    background-color: var(--surface-alt);
-    /* Use alt surface for body bg */
     color: var(--text-color);
-    line-height: 1.7;
-    /* Slightly adjusted line-height */
-    transition: background-color 0.3s, color 0.3s;
-    padding-top: var(--header-height);
-    /* Account for fixed header */
-    font-size: 16px;
-    /* Base font size */
+    background-color: var(--surface-color);
+    transition: background-color var(--transition-base), color var(--transition-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- Base Typography --- */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    margin-bottom: 1rem;
-    line-height: 1.3;
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 var(--spacing-3);
     font-weight: 600;
-    /* Default weight for headings */
+    line-height: 1.2;
     color: var(--heading-color);
 }
 
-/* Example specific heading sizes */
-h1 {
-    font-size: 2.5rem;
-}
-
-h2 {
-    font-size: 2rem;
-}
-
-h3 {
-    font-size: 1.5rem;
-}
-
-h4 {
-    font-size: 1.25rem;
-}
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-base); }
 
 p {
-    margin-bottom: 1.25rem;
-    /* Slightly more spacing */
-    color: var(--text-color);
-    font-size: 1rem;
-    /* Explicitly set base paragraph size */
+    margin: 0 0 var(--spacing-3);
 }
 
 a {
     color: var(--link-color);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color var(--transition-fast);
 }
 
-a:hover,
-a:focus {
+a:hover {
     color: var(--link-hover-color);
-    text-decoration: underline;
-    /* Add underline on hover/focus */
 }
 
-ul,
-ol {
-    margin-bottom: 1rem;
-    padding-left: 1.5rem;
+/* Lists */
+ul, ol {
+    margin: 0 0 var(--spacing-3) var(--spacing-4);
 }
 
-/* --- Base Form Element Styles --- */
-button {
-    margin: 0;
-    padding: 0.5rem 1rem;
-    /* Base padding */
-    border: none;
-    background: none;
-    /* Remove default background */
-    cursor: pointer;
-    font-family: inherit;
-    /* Inherit font */
-    font-size: inherit;
-    /* Inherit font size */
-    line-height: inherit;
-    /* Inherit line height */
-    color: inherit;
-    /* Inherit text color */
-    text-align: center;
-    border-radius: var(--border-radius-medium);
-    /* Consistent border radius */
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
 }
 
-input,
-textarea,
-select {
-    margin: 0;
-    padding: 0.75rem;
-    /* Consistent padding */
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-small);
-    font-family: inherit;
-    font-size: 1rem;
-    background-color: var(--input-background);
-    color: var(--text-color);
+/* Tables */
+table {
     width: 100%;
-    /* Default to full width */
-    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    margin-bottom: var(--spacing-3);
+    border-collapse: collapse;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(var(--primary-color), 0.2);
-    /* Focus ring */
-}
-
-textarea {
-    min-height: 80px;
-    resize: vertical;
-}
-
-/* --- Fixed Header Styles --- */
-/* Assuming a single header structure - adjust if needed */
-.site-header {
-    /* Use a class instead of just 'header' for specificity */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2rem;
-    /* Adjust padding */
-    height: var(--header-height);
-    /* Use variable */
-    background-color: var(--surface-color);
+th, td {
+    padding: var(--spacing-2);
     border-bottom: 1px solid var(--border-color-light);
-    box-shadow: var(--box-shadow-light);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1000;
-    /* Ensure header stays on top */
-    transition: background-color 0.3s, border-color 0.3s;
 }
 
-.site-header h1 {
-    font-family: var(--font-primary);
-    /* Consistent font */
-    font-size: 1.5rem;
-    font-weight: 700;
-    /* Bolder for logo/title */
-    margin: 0;
-    color: var(--heading-color);
-}
-
-.site-header h1 a {
-    color: inherit;
-    /* Inherit color */
-    text-decoration: none;
-    /* Remove underline */
-}
-
-.site-header h1 a:hover,
-.site-header h1 a:focus {
-    text-decoration: none;
-    /* Keep underline removed */
-}
-
-
-.site-header nav ul {
-    list-style: none;
-    display: flex;
-    gap: 1.5rem;
-    /* Adjust gap */
-    margin: 0;
-    padding: 0;
-}
-
-.site-header nav ul li a {
-    text-decoration: none;
-    color: var(--text-muted);
-    /* Use muted color for nav links */
-    font-family: var(--font-primary);
-    /* Consistent font */
-    font-size: 1rem;
-    font-weight: 600;
-    /* Semi-bold for nav */
-    transition: color 0.2s ease;
-    padding-bottom: 5px;
-    /* For underline effect */
-    position: relative;
-}
-
-.site-header nav ul li a:hover,
-.site-header nav ul li a:focus {
-    color: var(--text-color);
-    text-decoration: none;
-    /* Remove underline on hover */
-}
-
-/* Style for active nav link */
-.site-header nav ul li a.active {
-    color: var(--primary-color);
-    /* Use primary color for active */
-    font-weight: 700;
-    /* Bolder active link */
-}
-
-.site-header nav ul li a.active::after {
-    /* Use ::after for underline */
-    content: '';
-    position: absolute;
-    bottom: 0px;
-    /* Adjust position */
-    left: 0;
-    width: 100%;
-    height: 2px;
+/* Selection */
+::selection {
     background-color: var(--primary-color);
+    color: var(--surface-color);
 }
 
-/* styles/components.css or styles/components/search.css */
-
-/* Rule to hide cards filtered out by search */
-.blog-card.hidden-by-search {
-    display: none !important;
-    /* Use !important to ensure override if necessary */
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
 }
 
-/* --- Search Component Styles --- */
-
-/* Search wrapper */
-.search-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
+::-webkit-scrollbar-track {
+    background: var(--surface-alt);
 }
 
-/* Search input */
-.search-bar {
-    /* Assuming this class is on the input in the header */
-    padding: 0.5rem 2rem 0.5rem 1rem;
-    /* Adjusted padding for clear button space */
-    border: 1px solid var(--border-color, #ddd);
-    border-radius: 20px;
-    /* Pill shape */
-    font-size: 0.9rem;
-    width: 200px;
-    /* Initial width */
-    background-color: var(--surface-alt, #f9f9f9);
-    color: var(--text-muted, #666);
-    transition: width 0.3s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: var(--border-radius-full);
 }
 
-.search-bar:focus {
-    outline: none;
-    width: 220px;
-    /* Expand slightly on focus */
-    border-color: var(--primary-color, #3498db);
-    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb, 52, 152, 219), 0.2);
-    /* Use primary color */
-    background-color: var(--surface-color, #fff);
-    color: var(--text-color, #333);
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
 }
 
-/* Clear button (Optional - Requires JS to add button/functionality) */
-/* Add this button inside .search-wrapper via JS if desired */
-.search-clear {
+/* Focus Outline */
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Screen Reader Only */
+.sr-only {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--text-muted, #888);
-    cursor: pointer;
-    font-size: 1.1rem;
-    /* Slightly larger */
+    width: 1px;
+    height: 1px;
     padding: 0;
-    height: 24px;
-    /* Size */
-    width: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    opacity: 0.7;
-    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
-.search-clear:hover {
-    background-color: var(--surface-hover, rgba(0, 0, 0, 0.1));
-    color: var(--text-color, #444);
-    opacity: 1;
-}
-
-/* Hide clear button initially or when input is empty via JS */
-.search-clear.hidden {
-    display: none;
-}
-
-
-/* Search indicator (Shows results count) */
-.search-indicator {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    padding: 0.75rem 1rem;
-    /* Adjusted padding */
-    background-color: var(--surface-alt, #f0f0f0);
-    border: 1px solid var(--border-color-light, #eee);
-    border-radius: var(--border-radius-medium, 6px);
-    color: var(--text-muted, #555);
-    max-width: 800px;
-    /* Match content width */
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 0.95rem;
-}
-
-/* --- Empty State / No Results Message --- */
-/* General empty state styling (used for no posts or no search results) */
-.empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    /* More padding */
-    background-color: var(--surface-alt, #f8f9fa);
-    border-radius: var(--border-radius-large, 8px);
-    margin: 2rem auto;
-    /* Center and add vertical margin */
-    max-width: 600px;
-    /* Limit width */
-    color: var(--text-muted, #6c757d);
-}
-
-.empty-state i {
-    /* Using Font Awesome classes directly is fine */
-    color: var(--text-muted, #6c757d);
-    margin-bottom: 1rem;
-    /* Adjusted margin */
-    display: block;
-    /* Make icon block for margin */
-}
-
-.empty-state h3 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    /* Adjusted margin */
-    color: var(--text-color, #495057);
-    font-size: 1.3rem;
-    /* Slightly larger */
-    font-weight: 600;
-}
-
-.empty-state p {
-    color: var(--text-muted, #6c757d);
-    margin-bottom: 1rem;
-    /* Adjusted margin */
-    font-size: 1rem;
-}
-
-/* Clear search button within the empty state */
-.clear-search-btn {
-    background: none;
-    border: none;
-    color: var(--link-color, #0d6efd);
-    cursor: pointer;
-    padding: 0;
-    font-size: inherit;
-    /* Inherit from surrounding paragraph */
-    text-decoration: underline;
-    transition: color 0.2s ease;
-}
-
-.clear-search-btn:hover {
-    color: var(--link-hover-color, #0a58ca);
-    text-decoration: none;
-}
-
-/* --- Dark Mode Overrides --- */
-
-body.dark-mode .search-bar {
-    background-color: var(--input-background-dark, #2a2a2a);
-    /* Use dark input variable */
-    border-color: var(--border-color-dark, #444);
-    color: var(--text-color-dark, #f0f0f0);
-}
-
-body.dark-mode .search-bar:focus {
-    border-color: var(--primary-color-dark, #4dabf7);
-    /* Use dark primary */
-    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb-dark, 77, 171, 247), 0.3);
-    /* Use dark primary */
-}
-
-body.dark-mode .search-clear {
-    color: var(--text-muted-dark, #aaa);
-}
-
-body.dark-mode .search-clear:hover {
-    background-color: var(--surface-hover-dark, rgba(255, 255, 255, 0.1));
-    color: var(--text-color-dark, #ddd);
-}
-
-body.dark-mode .search-indicator {
-    background-color: var(--surface-alt-dark, #2a2a2a);
-    border-color: var(--border-color-dark, #444);
-    color: var(--text-muted-dark, #aaa);
-}
-
-body.dark-mode .empty-state {
-    background-color: var(--surface-alt-dark, #2a2a2a);
-    color: var(--text-muted-dark, #adb5bd);
-}
-
-body.dark-mode .empty-state i {
-    color: var(--text-muted-dark, #adb5bd);
-}
-
-body.dark-mode .empty-state h3 {
-    color: var(--heading-color-dark, #e9ecef);
-}
-
-body.dark-mode .empty-state p {
-    color: var(--text-muted-dark, #adb5bd);
-}
-
-body.dark-mode .clear-search-btn {
-    color: var(--link-color-dark, #6ea8fe);
-}
-
-body.dark-mode .clear-search-btn:hover {
-    color: var(--link-hover-color-dark, #9ec5fe);
-}
-
-/* --- Responsive Styles --- */
-@media (max-width: 768px) {
-    .search-bar {
-        width: 140px;
-        /* Keep responsive adjustment */
-    }
-
-    .search-bar:focus {
-        width: 180px;
-        /* Keep responsive adjustment */
-    }
-
+/* Print Styles */
+@media print {
     body {
-        font-size: 14px;
-        /* Adjust base font size for smaller screens */
+        background: none !important;
+        color: #000 !important;
     }
 
-    h1 {
-        font-size: 2em;
-        /* Adjust heading sizes */
+    a {
+        color: #000 !important;
+        text-decoration: underline;
     }
 
-    h2 {
-        font-size: 1.5em;
-    }
-}
-
-@media (max-width: 480px) {
-    .search-bar {
-        width: 100%;
-        padding: 0.5rem;
-        height: fit-content;
-        margin-top: 0.7rem;
-        /* Adjust padding */
+    pre, blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
     }
 
-    .search-bar:focus {
-        width: 100%;
-        /* Full width on focus */
+    img {
+        max-width: 100% !important;
+        page-break-inside: avoid;
     }
 
-    .header-right {
-        display: flex;
-        column-gap: 1rem;
-        /* Hide right header items */
-    }
-
-    .site-header {
-        flex-direction: row;
-        /* Stack header items */
-        align-items: flex-start;
-        /* Align to start */
-    }
-
-    .site-header nav ul {
-        flex-direction: column;
-        /* Stack nav items */
-        gap: 0.5rem;
-        /* Adjust gap */
-    }
-
-    body {
-        font-size: 13px;
-        /* Further adjust for very small screens */
+    @page {
+        margin: 0.5cm;
     }
 }
-
-/* Tag Filter Styling */
-.tag-filter-indicator {
-    background-color: var(--surface-alt, #f9f9f9);
-    border: 1px solid var(--border-color-light, #eee);
-    border-radius: var(--border-radius-medium, 6px);
-    padding: 0.75rem 1rem;
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.95rem;
-    transition: background-color 0.3s, border-color 0.3s;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    /* --- End Added --- */
-}
-
-.tag-filter-indicator p {
-    margin: 0;
-    color: var(--text-muted, #666);
-}
-
-.tag-filter-indicator .filtered-tag {
-    background-color: var(--primary-color-light, #cfe2ff);
-    color: var(--primary-color-dark, #0a58ca);
-    border-radius: var(--border-radius-large, 16px);
-    padding: 0.25rem 0.75rem;
-    margin-left: 0.5rem;
-    font-weight: 600;
-    display: inline-block;
-    font-size: 0.9em;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.tag-filter-indicator .clear-filter {
-    color: var(--link-color, #3498db);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem;
-    border-radius: var(--border-radius-small);
-}
-
-.tag-filter-indicator .clear-filter i {
-    font-size: 0.8em;
-}
-
-.tag-filter-indicator .clear-filter:hover,
-.tag-filter-indicator .clear-filter:focus {
-    color: var(--link-hover-color, #2980b9);
-    text-decoration: underline;
-    outline: none;
-    background-color: var(--surface-hover, #f0f0f0);
-}
-
-/* --- Dark Mode Support --- */
-body.dark-mode .tag-filter-indicator {
-    background-color: var(--surface-alt-dark, #2a2a2a);
-    border-color: var(--border-color-dark, #444);
-}
-
-body.dark-mode .tag-filter-indicator p {
-    color: var(--text-muted-dark, #aaa);
-}
-
-body.dark-mode .tag-filter-indicator .filtered-tag {
-    background-color: rgba(var(--primary-color-rgb, 77, 171, 247), 0.2);
-    color: var(--primary-color-dark, #80d4ff);
-}
-
-body.dark-mode .tag-filter-indicator .clear-filter {
-    color: var(--link-color-dark, #4dabf7);
-}
-
-body.dark-mode .tag-filter-indicator .clear-filter:hover,
-body.dark-mode .tag-filter-indicator .clear-filter:focus {
-    color: var(--link-hover-color-dark, #80d4ff);
-    background-color: var(--surface-hover-dark, rgba(255, 255, 255, 0.1));
-}
-
-
-/* --- Keyframes --- */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(-100%);
-    }
-
-    to {
-        transform: translateX(0);
-    }
-}
-
-/* --- Mobile Navigation Drawer Styles --- */
-.hamburger-btn {
-    display: none;
-    /* Hidden by default */
-    background: none;
-    border: none;
-    color: var(--text-color);
-    font-size: 1.8rem;
-    /* Larger icon */
-    cursor: pointer;
-    padding: 0.5rem;
-    margin-left: auto;
-    /* Push to the right */
-    z-index: 1101;
-    /* Above header, below drawer */
-}
-
-.mobile-nav-drawer {
-    position: fixed;
-    top: 0;
-    right: -300px;
-    /* Start off-screen */
-    width: 280px;
-    /* Drawer width */
-    height: 100%;
-    background-color: var(--surface-color);
-    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
-    z-index: 1100;
-    /* Above overlay */
-    transition: right 0.3s ease-in-out;
-    padding: 2rem 1.5rem;
-    padding-top: calc(var(--header-height) + 1rem);
-    /* Space for close button */
-    overflow-y: auto;
-}
-
-.mobile-nav-drawer.open {
-    right: 0;
-    /* Slide in */
-}
-
-.mobile-nav {
-    display: flex;
-    flex-direction: column;
-}
-
-.mobile-nav a {
-    color: var(--text-color);
-    text-decoration: none;
-    font-size: 1.1rem;
-    padding: 0.8rem 0;
-    border-bottom: 1px solid var(--border-color-light);
-    transition: background-color 0.2s ease;
-}
-
-.mobile-nav a:hover,
-.mobile-nav a.active {
-    color: var(--primary-color);
-    background-color: var(--surface-hover);
-}
-
-.mobile-nav a:last-child {
-    border-bottom: none;
-}
-
-
-.close-drawer-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 5px;
-    line-height: 1;
-}
-
-.close-drawer-btn:hover {
-    color: var(--danger-color);
-}
-
-.drawer-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1099;
-    /* Below drawer, above content */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s linear;
-}
-
-.drawer-overlay.visible {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.3s ease-in-out;
-}
-
-/* --- Dark Mode Overrides for Drawer --- */
-body.dark-mode .mobile-nav-drawer {
-    background-color: var(--surface-alt-dark, #2a2a2a);
-    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.5);
-}
-
-body.dark-mode .mobile-nav a {
-    color: var(--text-color-dark, #f0f0f0);
-    border-bottom-color: var(--border-color-dark, #444);
-}
-
-body.dark-mode .mobile-nav a:hover,
-body.dark-mode .mobile-nav a.active {
-    color: var(--primary-color-dark, #4dabf7);
-    background-color: var(--surface-hover-dark, rgba(255, 255, 255, 0.1));
-}
-
-body.dark-mode .close-drawer-btn {
-    color: var(--text-muted-dark, #aaa);
-}
-
-body.dark-mode .close-drawer-btn:hover {
-    color: var(--danger-color, #ff6b6b);
-    /* Use danger color from variables */
-}
-
-body.dark-mode .hamburger-btn {
-    color: var(--text-color-dark, #f0f0f0);
-}
-
-
-/* --- Responsive Styles --- */
-@media (max-width: 768px) {
-    .site-header {
-        padding: 0 1rem;
-        /* Reduce padding on mobile */
-    }
-
-    .site-header nav {
-        /* Hide desktop nav */
-        display: none;
-    }
-
-    .hamburger-btn {
-        /* Show hamburger */
-        display: block;
-    }
-
-    /* ... other existing 768px styles ... */
-    body {
-        font-size: 14px;
-        /* Adjust base font size for smaller screens */
-    }
-
-    /* ... */
-}
-
-@media (max-width: 480px) {
-    .mobile-nav-drawer {
-        width: 250px;
-        /* Slightly narrower drawer on very small screens */
-        right: -270px;
-        /* Adjust initial position */
-    }
-
-    /* ... other existing 480px styles ... */
-    .site-header {
-        /* Remove flex-direction: column; if added previously, keep header inline */
-        align-items: center;
-        /* Vertically center items */
-        height: calc(var(--header-height) - 10px);
-        /* Slightly shorter header */
-    }
-
-    .site-header h1 {
-        font-size: 1.3rem;
-        /* Adjust logo size */
-    }
-
-    /* Remove .site-header nav ul styles from here if they exist */
-
-    body {
-        padding-top: calc(var(--header-height) - 10px);
-        /* Adjust body padding */
-        font-size: 13px;
-        /* Further adjust for very small screens */
-    }
-}
-
-/* --- REMOVED Styles (Move to appropriate files) --- */
-/* - .search-bar
-  - .featured-image
-  - article styles (use .post-article from post.css instead)
-  - #about, #contact styles (move to layout.css or components.css)
-  - .table styles (move to components.css)
-  - .button, .button-primary, .button-secondary (move to components/buttons.css)
-  - .post-meta, .blog-card-title, .blog-card-excerpt (move to components/blog-cards.css or post.css)
-  - Redundant typography section
-*/

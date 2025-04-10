@@ -1,89 +1,85 @@
 // src/components/search.ts
 
-// Note: fetchBlogPosts and createBlogCardElement imports might not be needed 
-// if this script only filters already rendered cards. Removed them for now.
-// import { fetchBlogPosts } from '../services/api'; 
-// import { createBlogCardElement } from './blogCards';
+import { fetchBlogPosts } from '../services/api'; // Import if not already there
 
 /**
  * Initializes a simple, client-side search functionality for blog posts.
- * Filters currently visible blog cards on the page as the user types.
+ * Filters currently visible blog cards on the page as the user types or redirects to the homepage for search on post detail pages.
  */
 export function initializeSearch(): void {
-    const searchBar = document.querySelector('.search-bar') as HTMLInputElement;
+    const searchBar = document.querySelector('#search-input') as HTMLInputElement;
     const blogCardsContainer = document.querySelector('#blog.blog-cards'); // Target the main container
-
-    if (!searchBar || !blogCardsContainer) {
-        console.warn('Search bar (.search-bar) or blog cards container (#blog.blog-cards) not found. Search not initialized.');
-        return;
-    }
-
-    // Create a search indicator element (optional)
+    const heroSection = document.querySelector('.hero') as HTMLElement | null; // Get hero section (can be null)
     const searchIndicator = document.createElement('div');
-    searchIndicator.className = 'search-indicator'; // Add class for styling
-    searchIndicator.setAttribute('aria-live', 'polite'); // Announce changes to screen readers
-    searchIndicator.style.display = 'none'; // Start hidden
-    // Insert the indicator before the blog cards container
-    blogCardsContainer.parentNode?.insertBefore(searchIndicator, blogCardsContainer);
-    
-    // Optional: Wrap search bar for styling or adding clear button (if not already done)
-    // This example assumes the search bar is already placed correctly in the header HTML
-    
-    // Keep track of all blog cards - will be populated on first filter
-    let allCards: HTMLElement[] = []; 
-    
-    // Handle search input with debounce
+
+    searchIndicator.className = 'search-indicator';
+    searchIndicator.setAttribute('aria-live', 'polite');
+    searchIndicator.style.display = 'none';
+    const clearFilterBtn = document.createElement('button');
+    clearFilterBtn.className = 'clear-filter-btn';
+    clearFilterBtn.innerHTML = '<i class="fas fa-times"></i> Clear Filter';
+    clearFilterBtn.setAttribute('aria-label', 'Clear search filter and return to homepage');
+    clearFilterBtn.addEventListener('click', () => {
+        searchBar.value = '';
+        filterBlogCards('');
+        searchBar.focus();
+    });
+    searchIndicator.appendChild(document.createElement('span'));
+    searchIndicator.appendChild(clearFilterBtn);
+    const headerRight = document.querySelector('.header-right');
+    headerRight?.insertBefore(searchIndicator, headerRight.firstChild);
+
+    let allCards: HTMLElement[] = [];
     let debounceTimer: ReturnType<typeof setTimeout>;
+
     searchBar.addEventListener('input', () => {
         const searchTerm = searchBar.value.trim().toLowerCase();
-        
-        // Debounce the filtering
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
             filterBlogCards(searchTerm);
-        }, 300); // 300ms delay
+        }, 300);
     });
-    
-    /**
-     * Filters blog cards based on search term by adding/removing a CSS class.
-     * @param term - The search term (lowercase).
-     */
+
     function filterBlogCards(term: string): void {
-        // Get all cards currently in the main container OR hidden container if they exist
-        // This ensures we filter everything, even paginated items if they are in the DOM
-        // If pagination removes items from DOM, this needs adjustment.
-        if (allCards.length === 0) { // Populate on first run or if cleared
-             allCards = Array.from(document.querySelectorAll('#blog.blog-cards .blog-card, #hidden-posts .blog-card'));
-             if (allCards.length === 0) {
-                 console.log("No blog cards found to filter.");
-                 return; // No cards rendered yet
-             }
-             console.log(`Search filtering initialized with ${allCards.length} cards.`);
+        if (window.location.pathname.includes('post.html')) {
+            if (term) {
+                window.location.href = `/?search=${encodeURIComponent(term)}`;
+            } else {
+                window.location.href = `/`; // Redirect to homepage if search is cleared
+            }
+            return; // Exit the function as we've redirected
         }
-        
+
+        // if (heroSection) {
+        //     heroSection.style.display = term ? 'none' : '';
+        // }
+
+        if (!blogCardsContainer) {
+            return; // If no blog cards container (not on main page), do nothing more
+        }
+
+        if (allCards.length === 0) {
+            allCards = Array.from(document.querySelectorAll('#blog.blog-cards .blog-card, #hidden-posts .blog-card'));
+            if (allCards.length === 0) {
+                console.log("No blog cards found to filter.");
+                return;
+            }
+            console.log(`Search filtering initialized with ${allCards.length} cards.`);
+        }
+
         let visibleCount = 0;
-        
         allCards.forEach(card => {
             let matchesSearch = false;
             if (!term) {
-                // If no search term, show all cards
                 matchesSearch = true;
             } else {
-                // Get text content from important elements within the card
                 const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
-                // Add other searchable fields if needed (e.g., excerpt, author)
-                // const excerpt = card.querySelector('.blog-card-excerpt')?.textContent?.toLowerCase() || ''; 
-                const tags = Array.from(card.querySelectorAll('.tag-badge')) // Assumes tags are rendered
+                const tags = Array.from(card.querySelectorAll('.tag-badge'))
                     .map(tag => tag.textContent?.toLowerCase() || '');
-                
-                // Check if the card matches the search term
-                matchesSearch = 
-                    title.includes(term) || 
-                    // excerpt.includes(term) || 
+                matchesSearch =
+                    title.includes(term) ||
                     tags.some(tag => tag.includes(term));
             }
-            
-            // Show or hide the card using CSS class
             if (matchesSearch) {
                 card.classList.remove('hidden-by-search');
                 visibleCount++;
@@ -91,47 +87,47 @@ export function initializeSearch(): void {
                 card.classList.add('hidden-by-search');
             }
         });
-        
-        // Show/Hide/Update the search indicator text
-        if (term) {
-            searchIndicator.textContent = visibleCount > 0
-                ? `Showing ${visibleCount} result${visibleCount > 1 ? 's' : ''} for "${term}"`
-                : `No results found for "${term}"`;
-            searchIndicator.style.display = 'block'; 
-        } else {
-             searchIndicator.style.display = 'none'; // Hide indicator if search is cleared
+
+        const textSpan = searchIndicator.querySelector('span');
+        if (textSpan) {
+            textSpan.textContent = term
+                ? (visibleCount > 0
+                    ? `Showing ${visibleCount} result${visibleCount > 1 ? 's' : ''} for "${term}"`
+                    : `No results found for "${term}"`)
+                : '';
         }
-        
-        // Handle "No results" message specifically within the container
-        const noResultsMessage = blogCardsContainer?.querySelector('.no-search-results-message');
+        searchIndicator.style.display = term ? 'block' : 'none';
+
+        const noResultsMessage = blogCardsContainer.querySelector('.no-search-results-message');
         if (visibleCount === 0 && term) {
             if (!noResultsMessage) {
                 const message = document.createElement('div');
-                message.className = 'empty-state no-search-results-message'; // Use existing empty-state styling
+                message.className = 'empty-state no-search-results-message';
                 message.innerHTML = `
                     <i class="fas fa-search fa-3x"></i>
                     <h3>No matching posts found</h3>
-                    <p>Try different keywords.</p> 
-                `; // Removed clear button here, Escape key works
-                // if (blogCardsContainer) {
-                //     blogCardsContainer.appendChild(message);
-                // }
+                    <p>Try different keywords.</p>
+                `;
+                blogCardsContainer.appendChild(message);
             }
         } else if (noResultsMessage) {
             noResultsMessage.remove();
         }
-        
-        // Optional: Dispatch event for pagination to potentially reset/update
-        // document.dispatchEvent(new CustomEvent('searchApplied', { detail: { visibleCount } }));
     }
 
-    // Add keyboard navigation (Escape key to clear)
     searchBar.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
-            searchBar.value = ''; // Clear input
-            filterBlogCards(''); // Re-filter with empty term
-            searchBar.blur(); // Remove focus
+            searchBar.value = '';
+            filterBlogCards('');
+            searchBar.blur();
         }
     });
-}
 
+    const searchButton = document.querySelector('#search-button');
+    if (searchButton) {
+        searchButton.addEventListener('click', () => {
+            const searchTerm = searchBar.value.trim().toLowerCase();
+            filterBlogCards(searchTerm);
+        });
+    }
+}

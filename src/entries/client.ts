@@ -32,14 +32,19 @@ async function initializeClient(): Promise<void> {
         
         // Render Header only if placeholder exists
         if (document.getElementById('header-placeholder')) {
-             renderHeader(); 
-             console.log('Header rendered globally.');
-             // Initialize components dependent on header *after* rendering
-             initializeMobileNav(); // Initialize mobile nav using header elements
-             initializeSearch();    // Initialize search bar in header
-             initializeNavigation(); // Initialize nav link active states
+            renderHeader(); 
+            console.log('Header rendered globally.');
+            
+            // Wait a moment for DOM to update before initializing components dependent on header
+            setTimeout(() => {
+                // Initialize components dependent on header *after* rendering
+                initializeMobileNav(); // Initialize mobile nav using header elements
+                initializeSearch();    // Initialize search bar in header
+                initializeNavigation(); // Initialize nav link active states
+                console.log('Header-dependent components initialized.');
+            }, 0);
         } else {
-             console.warn('Header placeholder not found on this page. Skipping header-dependent initializations.');
+            console.warn('Header placeholder not found on this page. Skipping header-dependent initializations.');
         }
 
         // Initialize other common UI elements like popups

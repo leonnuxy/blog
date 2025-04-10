@@ -11,8 +11,6 @@ export function createBlogCardElement(post: BlogPostData): HTMLElement {
 
     blogCard.style.cursor = 'pointer';
 
-    const commentCount = post.comments ? post.comments.length : 0;
-
     const createdDate = new Date(post.createdAt);
     const dateStr = createdDate.toLocaleDateString('en-US', {
         year: 'numeric', month: 'long', day: 'numeric'
