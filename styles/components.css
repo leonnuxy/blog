@@ -1,54 +1,35 @@
 /* File: styles/components.css */
 
 /*
- * Component Imports
- * -----------------
- * This file imports all individual component stylesheets.
- * In production, consider using a build tool to combine these
- * files instead of using @import for better performance.
+ * Component Imports and Organization
+ * --------------------------------
+ * This file serves as the central import point for all component styles.
+ * Components are organized by their role in the application.
  */
 
-/* Layout Components */
-@import 'components/header.css';                    /* Header and navigation */
-@import 'components/mobile-nav.css';                /* Mobile navigation drawer */
+/* Base Imports */
+@import 'components/animations.css';
 
-/* Interactive Elements */
-@import 'components/buttons.css';                   /* Button styles */
-@import 'components/forms.css';                     /* Form styles */
-@import 'components/modals.css';                    /* Dialogs and popups */
+/* Core Layout Components */
+@import 'components/header.css';
+@import 'components/mobile-nav.css';
+@import 'components/hero.css';
+
+/* Interactive UI Elements */
+@import 'components/buttons.css';
+@import 'components/forms.css';
+@import 'components/modals.css';
+@import 'components/search.css';
 
 /* Content Components */
-@import 'components/blog-cards.css';                /* Blog card styles */
-@import 'components/pagination.css';                /* Pagination styles */
+@import 'components/blog-cards.css';
+@import 'components/pagination.css';
+@import 'components/post-navigation.css';
 
-/* Utility Components */
-@import 'components/notifications.css';             /* Toast notification styles */
-@import 'components/status-indicators.css';         /* Status indicator styles */
-@import 'components/dark-mode.css';                 /* Dark mode specific styles */
+/* Feedback Components */
+@import 'components/notifications.css';
+@import 'components/status-indicators.css';
 
-
-/* REMOVED: Global body font-size overrides. Control base size in base.css */
-/* body { */
-/* font-size: 80%; /* Reduce base font size by 20% */
-/* } */
-
-/* REMOVED: Duplicate keyframes (defined in base.css) */
-/* @keyframes fadeInUp { ... } */
-
-/* --- Component-Specific Responsive Adjustments --- */
-/* Only include adjustments specific to MULTIPLE components here, */
-
-@media (max-width: 768px) {
-    /* Keep pagination adjustments if they belong here */
-    .pagination-container {
-        padding: 15px 0; /* Adjust padding */
-    }
-
-    .load-more-button {
-        padding: 8px 16px; /* Adjust button padding */
-        font-size: 0.9em; /* Adjust button font size */
-    }
-}
-
-/* Add any other general component styles below */
+/* Theme Components */
+@import 'components/dark-mode.css';
 

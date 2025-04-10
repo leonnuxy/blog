@@ -1,239 +1,41 @@
-/* File: dark-mode.css */
-
-/* Dark Mode Toggle Button */
 .dark-mode-toggle {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
+    bottom: var(--spacing-4);
+    left: var(--spacing-4);
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #6c63ff;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--surface-color);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--box-shadow-medium);
     border: none;
-    transition: all 0.3s ease;
-    z-index: 100;
+    transition: all var(--transition-base);
+    z-index: var(--z-index-fixed);
 }
 
 .dark-mode-toggle:hover {
     transform: scale(1.1);
-    background-color: #5145cd;
-}
-
-body.dark-mode .dark-mode-toggle {
-    background-color: #f7c52b;
-    color: #333;
-}
-
-body.dark-mode .dark-mode-toggle:hover {
-    background-color: #ffdb70;
-}
-
-/* ===================================================
-   HEADER DARK MODE STYLES
-   =================================================== */
-body.dark-mode .site-header {
-    background-color: var(--surface-color);
-    border-bottom-color: var(--border-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .site-header h1 a {
-    color: var(--heading-color);
-}
-
-body.dark-mode .site-header h1 a:hover {
-    color: var(--primary-color);
-}
-
-body.dark-mode .site-header nav ul li a {
-    color: var(--text-muted);
-}
-
-body.dark-mode .site-header nav ul li a:hover,
-body.dark-mode .site-header nav ul li a:focus {
-    color: var(--text-color);
-    border-bottom-color: var(--border-color);
-}
-
-body.dark-mode .site-header nav ul li a.active {
-    color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
-}
-
-body.dark-mode .site-header .search-bar {
-    background-color: var(--surface-alt-dark);
-    border-color: var(--border-color-dark);
-    color: var(--text-muted);
-}
-
-body.dark-mode .site-header .search-bar:focus {
-    background-color: var(--surface-color-dark);
-    border-color: var(--primary-color);
-    color: var(--text-color);
-}
-
-/* ===================================================
-   NOTIFICATIONS DARK MODE STYLES
-   =================================================== */
-body.dark-mode .notification {
-    background-color: var(--surface-color-dark);
-    color: var(--text-color);
-}
-
-body.dark-mode .notification-close:hover {
-    color: var(--text-color-bright);
-}
-
-body.dark-mode .post-navigation {
-    border-color: var(--border-color-dark);
-}
-
-/* ===================================================
-   BLOG CARDS DARK MODE STYLES
-   =================================================== */
-body.dark-mode .blog-card {
-    background-color: var(--surface-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .blog-card-title {
-    color: var(--heading-color);
-}
-
-body.dark-mode .blog-card-date-author {
-    color: var(--text-muted);
-}
-
-body.dark-mode .social-sharing span {
-    color: var(--text-muted);
-}
-
-body.dark-mode .share-button {
-    border-color: var(--border-color);
-    color: var(--text-muted);
-}
-
-body.dark-mode .share-button:hover,
-body.dark-mode .share-button:focus {
-    color: var(--text-color-bright);
-}
-
-/* Social media brand colors - kept distinct for brand recognition */
-body.dark-mode .share-button.twitter:hover,
-body.dark-mode .share-button.twitter:focus {
-    background-color: #1A91DA;
-    border-color: #1A91DA;
-}
-
-body.dark-mode .share-button.facebook:hover,
-body.dark-mode .share-button.facebook:focus {
-    background-color: #176CDA;
-    border-color: #176CDA;
-}
-
-body.dark-mode .share-button.linkedin:hover,
-body.dark-mode .share-button.linkedin:focus {
-    background-color: #0959A9;
-    border-color: #0959A9;
-}
-
-/* ===================================================
-   FORMS DARK MODE STYLES
-   =================================================== */
-body.dark-mode input, 
-body.dark-mode textarea,
-body.dark-mode select {
-    background-color: var(--surface-alt);
-    color: var(--text-color);
-    border-color: var(--border-color);
-}
-
-body.dark-mode input:focus, 
-body.dark-mode textarea:focus,
-body.dark-mode select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(77, 171, 247, 0.2);
-}
-
-body.dark-mode button[type="submit"] {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-body.dark-mode button[type="submit"]:hover {
     background-color: var(--primary-color-dark);
 }
 
-/* ===================================================
-   MOBILE NAVIGATION DARK MODE STYLES
-   =================================================== */
-body.dark-mode .mobile-nav-drawer {
-    background-color: var(--surface-color);
-    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.4);
+.dark-mode-toggle i {
+    font-size: 1.2rem;
+    transition: transform var(--transition-base);
 }
 
-body.dark-mode .mobile-nav a {
-    border-bottom-color: var(--border-color);
+.dark-mode-toggle:hover i {
+    transform: rotate(360deg);
 }
 
-body.dark-mode .close-drawer-btn {
-    color: var(--text-color);
-}
-
-body.dark-mode .close-drawer-btn:hover {
-    color: var(--primary-color);
-}
-
-/* ===================================================
-   PAGINATION DARK MODE STYLES
-   =================================================== */
-body.dark-mode .spinner {
-    border-color: rgba(255, 255, 255, 0.1);
-    border-top-color: var(--primary-color);
-}
-
-/* ===================================================
-   MODALS DARK MODE STYLES
-   =================================================== */
-body.dark-mode .popup-content,
-body.dark-mode .modal-content {
-    background-color: var(--surface-color-dark);
-    color: var(--text-color);
-}
-
-body.dark-mode .popup-content h2,
-body.dark-mode .modal-content h2 {
-    color: var(--heading-color);
-}
-
-body.dark-mode .popup-content p,
-body.dark-mode .modal-content p {
-    color: var(--text-muted);
-}
-
-body.dark-mode form label {
-    color: var(--text-color);
-}
-
-body.dark-mode form input,
-body.dark-mode form textarea {
+body.dark-mode .dark-mode-toggle {
     background-color: var(--surface-alt);
     color: var(--text-color);
-    border-color: var(--border-color-dark);
 }
 
-body.dark-mode .close-popup:hover,
-body.dark-mode .close-modal:hover {
-    background-color: var(--surface-hover-dark);
-    color: var(--text-color);
-}
-
-body.dark-mode #image-preview {
-    background-color: var(--surface-alt);
+body.dark-mode .dark-mode-toggle:hover {
+    background-color: var(--surface-hover);
 }

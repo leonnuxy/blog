@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +19,7 @@
 </head>
 
 <body data-page="main">
-    <div id="header-placeholder"></div> <!-- This will be populated by header.js -->
+    <div id="header-placeholder"></div>
 
     <!-- Mobile Navigation Drawer -->
     <div id="mobile-nav-drawer" class="mobile-nav-drawer">
@@ -38,7 +39,8 @@
             </div>
         </section>
         <section class="blog-intro">
-            <h2>Latest Posts</h2>
+            <h2></h2>
+
         </section>
         <section id="blog" class="blog-cards">
             <div class="loading-spinner"></div>
@@ -52,17 +54,6 @@
             </button>
         </div>
     </main>
-
-    <div id="about-popup" class="popup modal">
-        <div class="popup-content modal-content">
-            <button class="close-popup close-modal" aria-label="Close About Popup">&times;</button>
-            <h2>About Me</h2>
-            <p>Hi there, I'm Noel! With a background in computer science and experience across the full software
-                lifecycle, I love diving into complex problems, especially in full-stack development and cloud
-                solutions. But this blog isn't just about code – it's my space for sharing insights, exploring new ideas
-                in tech and life, and learning together. Thanks for stopping by!</p>
-        </div>
-    </div>
 
     <script src="dist/client/client.bundle.js" defer></script>
 </body>

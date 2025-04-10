@@ -1,138 +1,212 @@
-/* filepath: /Users/noel/Library/CloudStorage/OneDrive-Personal/Projects/Git/blog/styles/components/header.css */
-/* ===================================================
+/* 
    HEADER COMPONENT
    Contains styles for site header, navigation and search
-   =================================================== */
+*/
 
 /* --- Header Container --- */
 .site-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2rem; /* Horizontal padding */
-    height: var(--header-height); 
-    background-color: var(--surface-color);
-    border-bottom: 1px solid var(--border-color-light);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-    position: fixed; /* Keep fixed positioning */
-    top: 0;
-    left: 0;
-    right: 0;
+    padding: 0 var(--spacing-3);
+    height: var(--header-height);
     width: 100%;
-    z-index: 1000; 
-    transition: background-color 0.3s, border-color 0.3s;
+    background-color: var(--header-background);
+    box-shadow: var(--header-shadow);
+    border-bottom: 1px solid var(--header-border);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-index-sticky);
+    transition: background-color var(--transition-base), border-color var(--transition-base);
 }
 
-/* --- Site Logo/Title --- */
+.site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+}
+
 .site-header h1 {
-    margin: 0; /* Reset margin */
-    font-size: 1.75rem; /* Slightly larger title */
+    font-size: var(--font-size-2xl);
+    margin: 0;
     font-weight: 700;
 }
 
 .site-header h1 a {
-    color: var(--heading-color);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.site-header h1 a:hover {
     color: var(--primary-color);
     text-decoration: none;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Navigation --- */
+.site-header h1 a:hover,
+.site-header h1 a:focus {
+    color: var(--primary-color-dark);
+    transform: translateY(-1px);
+}
+
 .site-header nav ul {
-    list-style: none;
     display: flex;
-    align-items: center; /* Vertically align nav items */
-    gap: 2rem; /* Increase gap between nav items */
+    list-style: none;
     margin: 0;
     padding: 0;
+    gap: var(--spacing-2);
 }
 
 .site-header nav ul li a {
+    display: inline-block;
+    padding: var(--spacing-2) var(--spacing-3);
+    color: var(--text-color);
     text-decoration: none;
-    color: var(--text-muted); 
-    font-family: var(--font-primary); 
-    font-size: 1rem;
-    font-weight: 600; 
-    padding: 0.5rem 0; /* Add vertical padding for larger click area */
-    border-bottom: 2px solid transparent; /* Prepare for active state underline */
-    transition: color 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    transition: color var(--transition-fast);
+    font-weight: 500;
+    border-radius: var(--border-radius-small);
 }
 
 .site-header nav ul li a:hover,
 .site-header nav ul li a:focus {
-    color: var(--text-color);
-    border-bottom-color: var(--border-color); /* Subtle underline on hover */
+    color: var(--primary-color);
+    background-color: var(--surface-hover);
 }
 
-/* Active nav link style */
 .site-header nav ul li a.active {
-    color: var(--primary-color); 
-    font-weight: 700; 
-    border-bottom-color: var(--primary-color); /* Solid underline for active */
+    color: var(--primary-color);
 }
 
-/* --- Search Bar --- */
-.site-header .search-bar {
-    padding: 0.5rem 1rem; /* Adjust padding */
-    font-size: 0.9rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-medium);
-    background-color: var(--surface-alt);
-    color: var(--text-muted);
-    min-width: 200px; /* Default width */
-    width: auto; /* Allow resizing */
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+.site-header nav ul li a.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: var(--spacing-3);
+    right: var(--spacing-3);
+    height: 3px;
+    background-color: var(--header-active-indicator);
 }
 
-.site-header .search-bar:focus {
-    background-color: var(--surface-color);
-    border-color: var(--primary-color);
-    color: var(--text-color);
-}
-
-/* --- Header Right Section (Search + Hamburger) --- */
 .header-right {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Ensure right alignment */
-    gap: 1rem; /* Space between search bar and hamburger */
-    margin-left: auto; /* Push to the right edge */
+    gap: var(--spacing-3);
+}
+
+.header-right button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition-fast);
+}
+
+.header-right button:hover {
+    color: var(--primary-color);
+}
+
+/* --- Search Bar --- */
+.search-container,
+.search-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-right: var(--spacing-3);
+}
+
+.search-container input,
+.search-bar input {
+    height: 36px;
+    padding: 0 var(--spacing-3) 0 var(--spacing-2);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-full);
+    background-color: var(--input-background);
+    color: var(--text-color);
+    font-size: var(--font-size-sm);
+    width: 200px;
+    transition: width var(--transition-base), background-color var(--transition-base);
+}
+
+.search-container input:focus,
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    width: 220px;
+}
+
+.search-container button,
+.search-bar button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-container button:hover,
+.search-container button:focus,
+.search-bar button:hover,
+.search-bar button:focus {
+    color: var(--primary-color);
 }
 
 /* --- Mobile-Specific Header Styles --- */
 @media (max-width: 768px) {
     .site-header {
-        padding: 0 1rem; /* Reduced padding on mobile */
-        flex-wrap: nowrap; /* Prevent wrapping */
-        justify-content: space-between; /* Space between logo and search+hamburger */
+        padding: 0 var(--spacing-2);
     }
     
-    /* Hide main navigation on mobile - will be shown in drawer instead */
-    .site-header nav:not(.mobile-nav) {
-        display: none;
+    .site-header nav {
+        display: none; /* Hidden on mobile, shown via mobile menu */
     }
     
-    /* Make the blog title appear properly on mobile */
     .site-header h1 {
-        font-size: 1.5rem; /* Slightly smaller on mobile */
-        flex-shrink: 0; /* Prevent the title from shrinking */
+        font-size: var(--font-size-lg);
     }
     
-    /* Adjust search bar to be smaller on mobile */
-    .site-header .search-bar {
-        min-width: 120px;
-        width: 120px;
-        margin-right: 0.75rem; /* Space between search and hamburger */
+    .mobile-menu-button {
+        display: block;
+        width: 24px;
+        height: 24px;
+        position: relative;
     }
     
-    /* Ensure header-right takes appropriate space */
-    .header-right {
-        flex-shrink: 1; /* Allow it to shrink if needed */
-        width: auto; /* Let it take natural width */
+    .mobile-menu-button span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: var(--text-color);
+        margin: 5px 0;
+        transition: transform var(--transition-fast), opacity var(--transition-fast);
+    }
+    
+    .search-container,
+    .search-bar {
+        display: none; /* Hide search on mobile */
+    }
+}
+
+/* --- Tablet-Specific Styles --- */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .search-container input,
+    .search-bar input {
+        width: 160px;
+    }
+    
+    .search-container input:focus,
+    .search-bar input:focus {
+        width: 180px;
     }
 }
 

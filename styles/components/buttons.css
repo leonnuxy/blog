@@ -1,96 +1,179 @@
-/* filepath: /Users/noel/Library/CloudStorage/OneDrive-Personal/Projects/Git/blog/styles/components/buttons.css */
 /* ===================================================
    BUTTON COMPONENTS
    Contains styles for various button types used throughout the site
    =================================================== */
 
 /* --- Base Button Styles --- */
-button {
+.btn {
     font-family: var(--font-primary);
     font-size: 1rem;
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius-small);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius-medium);
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-button:hover {
-    transform: scale(1.05);
-}
-
-/* --- Load More Button --- */
-.load-more-button {
-    padding: 10px 20px;
-    background-color: var(--surface-hover);
-    color: var(--text-color);
     border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-    display: flex;
+    font-weight: 500;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: var(--spacing-1);
+    transition: all var(--transition-fast);
 }
 
-.load-more-button:hover {
-    background-color: var(--border-color-light);
-    transform: translateY(-2px);
-}
-
-.load-more-button.loading {
+.btn:disabled {
+    opacity: 0.6;
     cursor: not-allowed;
-    opacity: 0.7;
 }
 
-/* --- Primary Button --- */
+/* --- Button Variants --- */
 .btn-primary {
     background-color: var(--primary-color);
-    color: white;
-    border: none;
-    font-weight: 600;
+    color: var(--surface-color);
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     background-color: var(--primary-color-dark);
 }
 
-/* --- Secondary Button --- */
 .btn-secondary {
-    background-color: var(--surface-hover);
+    background-color: var(--surface-alt);
     color: var(--text-color);
-    border: 1px solid var(--border-color);
 }
 
-.btn-secondary:hover {
-    background-color: var(--border-color-light);
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--surface-hover);
 }
 
-/* --- Danger Button --- */
 .btn-danger {
     background-color: var(--danger-color);
-    color: white;
+    color: var(--surface-color);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: var(--danger-color-dark);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: var(--surface-color);
+}
+
+.btn-success:hover:not(:disabled) {
+    background-color: var(--success-color-dark);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.btn-outline:hover:not(:disabled) {
+    background-color: var(--surface-hover);
+    border-color: var(--text-color);
+}
+
+.btn-outline.btn-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline.btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: var(--surface-color);
+}
+
+.btn-outline.btn-danger {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.btn-outline.btn-danger:hover:not(:disabled) {
+    background-color: var(--danger-color);
+    color: var(--surface-color);
+}
+
+/* --- Button Sizes --- */
+.btn-sm {
+    font-size: 0.875rem;
+    padding: var(--spacing-1) var(--spacing-2);
+}
+
+.btn-lg {
+    font-size: 1.125rem;
+    padding: var(--spacing-3) var(--spacing-4);
+}
+
+/* --- Icon Buttons --- */
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: var(--border-radius-full);
+}
+
+.btn-icon.btn-sm {
+    width: 32px;
+    height: 32px;
+}
+
+.btn-icon.btn-lg {
+    width: 48px;
+    height: 48px;
+}
+
+/* --- Loading State --- */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-right-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+/* --- Link Button --- */
+.btn-link {
+    background: none;
     border: none;
+    color: var(--link-color);
+    padding: 0;
+    font-weight: normal;
+    text-decoration: none;
 }
 
-.btn-danger:hover {
-    background-color: #c0392b; /* Darker red */
+.btn-link:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
 }
 
-/* --- Disabled State --- */
-button:disabled,
-button[disabled],
-.btn-disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
+/* --- Button Groups --- */
+.btn-group {
+    display: inline-flex;
+    gap: var(--spacing-1);
 }
 
-button:disabled:hover,
-button[disabled]:hover,
-.btn-disabled:hover {
-    transform: none;
-    background-color: inherit;
+.btn-group-vertical {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+/* --- Block Button --- */
+.btn-block {
+    display: flex;
+    width: 100%;
 }
 
 /* ===================================================
@@ -99,43 +182,22 @@ button[disabled]:hover,
    =================================================== */
 
 /* Base dark mode button styles */
-body.dark-mode button {
-    background-color: var(--surface-alt);
-    color: var(--text-color);
+body.dark-mode .btn-secondary {
+    background-color: var(--surface-hover);
 }
 
-body.dark-mode button:hover {
-    background-color: var(--border-color);
-}
-
-/* Load more button in dark mode */
-body.dark-mode .load-more-button {
-    background-color: var(--surface-alt);
-    color: var(--text-color);
-}
-
-body.dark-mode .load-more-button:hover {
-    background-color: var(--border-color);
-}
-
-/* Other button types in dark mode */
-body.dark-mode .btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-body.dark-mode .btn-primary:hover {
-    background-color: var(--primary-color-dark);
+body.dark-mode .btn-outline {
+    border-color: var(--border-color);
 }
 
 /* Responsive button adjustments */
 @media (max-width: 768px) {
-    button {
-        padding: 0.5rem 0.75rem; /* Slightly smaller padding on mobile */
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
     }
     
-    .load-more-button {
-        width: 100%; /* Full width on mobile */
-        justify-content: center;
+    .btn-group .btn {
+        width: 100%;
     }
 }

@@ -1,142 +1,118 @@
 /* File: notifications.css */
 
 /* Notification System Styling */
-.notification-container {
+.notifications-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    width: 300px;
+    top: var(--spacing-4);
+    right: var(--spacing-4);
+    z-index: var(--z-notifications, 1100);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    max-width: 400px;
+    width: calc(100% - var(--spacing-8));
 }
 
 .notification {
-    background-color: #fff;
-    border-left: 4px solid #6c63ff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
-    padding: 12px 15px;
-    margin-bottom: 10px;
-    position: relative;
-    animation: slideIn 0.3s ease-in-out;
-    transition: opacity 0.3s, transform 0.3s;
+    padding: var(--spacing-4);
+    border-radius: var(--border-radius-medium);
+    background-color: var(--surface-color);
+    box-shadow: var(--box-shadow-medium);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    transform: translateX(120%);
+    opacity: 0;
+    animation: slideInRight var(--transition-base) ease forwards;
 }
 
-.notification.error {
-    border-left-color: #ff5252;
+.notification.exiting {
+    animation: slideOutRight var(--transition-base) ease forwards;
 }
 
-.notification.success {
-    border-left-color: #4caf50;
+/* Notification Types */
+.notification-success {
+    background-color: var(--success-light);
+    border-left: 4px solid var(--success);
+    color: var(--success-dark);
 }
 
+.notification-error {
+    background-color: var(--error-light);
+    border-left: 4px solid var(--error);
+    color: var(--error-dark);
+}
+
+.notification-warning {
+    background-color: var(--warning-light);
+    border-left: 4px solid var(--warning);
+    color: var(--warning-dark);
+}
+
+.notification-info {
+    background-color: var(--info-light);
+    border-left: 4px solid var(--info);
+    color: var(--info-dark);
+}
+
+/* Notification Content */
+.notification-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+}
+
+.notification-content {
+    flex-grow: 1;
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: var(--spacing-1);
+    font-size: var(--font-size-sm);
+}
+
+.notification-message {
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+}
+
+/* Close Button */
 .notification-close {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    font-size: 18px;
-    color: #999;
+    background: transparent;
+    border: none;
+    padding: var(--spacing-1);
     cursor: pointer;
-    transition: color 0.2s;
+    color: currentColor;
+    opacity: 0.7;
+    transition: opacity var(--transition-base) ease;
 }
 
 .notification-close:hover {
-    color: #333;
+    opacity: 1;
 }
 
-.notification.hide {
-    opacity: 0;
-    transform: translateX(100%);
+/* Progress Bar */
+.notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: currentColor;
+    opacity: 0.3;
+    animation: shrink var(--notification-duration, 5000ms) linear forwards;
 }
 
-/* Animation for new comments */
-.comment.new-comment {
-    background-color: rgba(108, 99, 255, 0.05);
-    transition: background-color 0.5s;
-}
-
-.comment.highlight {
-    background-color: rgba(108, 99, 255, 0.1);
-}
-
-/* Like button animation */
-.post-actions button.liked {
-    animation: pulse 0.5s;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(100%);
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+    .notifications-container {
+        top: auto;
+        bottom: var(--spacing-4);
+        left: var(--spacing-4);
     }
-    to {
-        opacity: 1;
-        transform: translateX(0);
+
+    .notification {
+        padding: var(--spacing-3);
     }
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-/* Post navigation styling */
-.post-navigation {
-    display: flex;
-    justify-content: space-between;
-    margin: 30px 0;
-    padding: 15px 0;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-}
-
-.nav-link {
-    color: #6c63ff;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
-}
-
-.nav-link:hover {
-    color: #5145cd;
-}
-
-.nav-link i {
-    margin: 0 5px;
-}
-
-/* Loading indicator */
-.loading-indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 0;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-left-color: #6c63ff;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-}
-
-/* Dark mode styles moved to dark-mode.css */
