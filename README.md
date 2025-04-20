@@ -1,27 +1,32 @@
-# Blog Project
+# Duolingo-Style Blog Project
 
-This project is a simple blog application built with TypeScript and Express. It allows users to create, retrieve, and delete blog posts.
+This project is a modern blog application with a Duolingo-inspired design, built with TypeScript and Webpack. It features both client and admin interfaces for managing blog posts.
 
 ## Project Structure
 
 ```
 blog-project
 ├── src
-│   ├── app.ts                  # Entry point of the application
-│   ├── controllers
-│   │   ├── blogController.ts   # Handles blog post operations
-│   │   └── index.ts            # Aggregates controllers
-│   ├── models
-│   │   └── blogPost.ts         # Defines the BlogPost model
-│   ├── routes
-│   │   └── blogRoutes.ts       # Sets up blog-related routes
-│   └── types
-│       └── index.ts            # TypeScript types and interfaces
-├── Dockerfile                   # Docker image instructions
-├── docker-compose.yml           # Docker orchestration file
-├── package.json                 # npm configuration file
-├── tsconfig.json                # TypeScript configuration file
-└── README.md                    # Project documentation
+│   ├── client                 # Client-side code
+│   ├── components             # UI components
+│   ├── controllers            # Application controllers
+│   ├── entries                # Entry points for client and admin
+│   ├── models                 # Data models
+│   ├── services               # API services
+│   ├── types                  # TypeScript types and interfaces
+│   └── utils                  # Utility functions
+├── public                     # Static HTML files
+│   ├── admin.html            # Admin interface
+│   ├── index.html            # Main blog page
+│   └── post.html             # Individual post page
+├── styles                     # CSS styles
+├── data                       # JSON data files
+├── Dockerfile                 # Docker image instructions
+├── docker-compose.yml         # Docker orchestration file
+├── package.json               # npm configuration file
+├── tsconfig.json              # TypeScript configuration file
+├── webpack.config.js          # Webpack configuration
+└── README.md                  # Project documentation
 ```
 
 ## Setup Instructions
@@ -37,12 +42,27 @@ blog-project
    npm install
    ```
 
-3. Run the application:
+3. Run the application in development mode:
+   ```
+   npm run dev -- src/entries/client.ts
+   ```
+   
+   For the admin interface:
+   ```
+   npm run dev -- src/entries/admin.ts
+   ```
+
+4. Build the application for production:
+   ```
+   npm run build
+   ```
+   
+5. Start the production build:
    ```
    npm start
    ```
 
-4. To run the application using Docker, use:
+6. To run the application using Docker:
    ```
    docker-compose up
    ```
