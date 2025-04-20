@@ -1,7 +1,6 @@
-
-import { renderCurrentPage } from './postManager';
-import { state } from './state';
-import { setupSearchAndFilters } from './formHandlers';
+import { renderCurrentPage } from '../postManager';
+import { state } from '../state';
+import { setupSearchAndFilters } from '../formHandlers';
 
 export function setupEventListeners(): void {
 

@@ -10,7 +10,12 @@
     "rootDir": "./", // Adjust rootDir to include the shared directory
     "baseUrl": "./",
     "paths": {
-      "*": ["node_modules/*", "src/*", "shared/*"] // Add shared directory to paths
+      "@components/*": ["src/components/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@models/*": ["src/models/*"],
+      "@services/*": ["src/services/*"],
+      "@utils/*": ["src/utils/*"],
+      "@styles/*": ["styles/*"]
     }
   },
   "include": [

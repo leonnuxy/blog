@@ -76,6 +76,5 @@ function createBlogCardElement(post) {
             }
         });
     }
-    // REMOVED: Separate event listener loop for tag badges (now handled by standard <a> tags)
     return blogCard;
 }

@@ -2,7 +2,7 @@
  * Admin Controller for managing blog posts and dashboard functionality
  */
 import { state } from './state';
-import { setupEventListeners } from './eventListeners';
+import { setupEventListeners } from './events/eventListeners';
 import { loadPosts } from './postManager';
 import { showToast } from '../utils/notifications';
 

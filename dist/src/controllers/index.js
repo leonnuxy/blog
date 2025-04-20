@@ -16,7 +16,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./adminController"), exports);
 __exportStar(require("./blogFrontendController"), exports);
-__exportStar(require("./eventListeners"), exports);
+__exportStar(require("./events/eventListeners"), exports);
 __exportStar(require("./postController"), exports); // New consolidated post controller
 __exportStar(require("./uiController"), exports); // New consolidated UI controller
 __exportStar(require("./state"), exports);

@@ -18,7 +18,7 @@ exports.initializeBlogFrontend = initializeBlogFrontend;
  */
 const api_1 = require("../services/api"); // Uses static fetch now
 const blogCards_1 = require("../components/blogCards");
-const navigation_1 = require("../components/navigation");
+const navigation_1 = require("../components/navigation/navigation");
 const state_1 = require("./state");
 /**
  * Initialize the blog frontend functionality (homepage)

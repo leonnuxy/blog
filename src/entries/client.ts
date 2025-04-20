@@ -6,11 +6,11 @@ import { initializeBlogFrontend } from '../controllers/blogFrontendController';
 import { initializePostDetailPageLogic } from '../modules/postDetail'; 
 
 // Common Components & Utilities
-import { renderHeader } from '../components/header'; 
+import { renderHeader } from '../components/navigation/header';
 import { checkSystemDarkModePreference, initializeDarkMode } from '../components/darkMode'; 
-import { initializeMobileNav } from '../components/mobileNav'; // Assuming path is correct
+import { initializeMobileNav } from '../components/navigation/mobileNav';
 import { initializeSearch } from '../components/search'; // Assuming path is correct
-import { initializeNavigation } from '../components/navigation'; // Assuming path is correct
+import { initializeNavigation } from '../components/navigation/navigation';
 import { initializeAbout } from '../components/about'; // Assuming path is correct
 // Import tag filtering if it sets up global listeners or needs to run early
 // import { initializeTagFiltering } from '../components/tagFilter'; // Assuming path is correct

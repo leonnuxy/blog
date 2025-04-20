@@ -19,15 +19,32 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      // Updated CSS loaders to reflect new folder structure
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+        include: [
+          path.resolve(__dirname, 'styles/global'),
+          path.resolve(__dirname, 'styles/components'),
+          path.resolve(__dirname, 'styles/views')
+        ]
+      }
     ],
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    fallback: {
-      fs: false, // Prevent Webpack from polyfilling fs for the browser
-      path: false, // Prevent Webpack from polyfilling path for the browser
-      // Add other Node.js core modules here if needed by dependencies, e.g., crypto: false
+    alias: {
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@controllers': path.resolve(__dirname, 'src/controllers'),
+      '@models': path.resolve(__dirname, 'src/models'),
+      '@services': path.resolve(__dirname, 'src/services'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
+      '@styles': path.resolve(__dirname, 'styles')
     },
+    fallback: {
+      fs: false,
+      path: false
+    }
   },
   output: {
     // Outputs client.bundle.js, admin.bundle.js, and postDetail.bundle.js

@@ -6,7 +6,7 @@
  */
 import { fetchBlogPosts } from '../services/api'; // Uses static fetch now
 import { createBlogCardElement } from '../components/blogCards';
-import { initializeNavigation } from '../components/navigation';
+import { initializeNavigation } from '../components/navigation/navigation';
 import { frontendState, dispatchStateChange } from './state';
 
 /**

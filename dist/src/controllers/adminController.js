@@ -14,7 +14,7 @@ exports.initializeAdminDashboard = initializeAdminDashboard;
  * Admin Controller for managing blog posts and dashboard functionality
  */
 const state_1 = require("./state");
-const eventListeners_1 = require("./eventListeners");
+const eventListeners_1 = require("./events/eventListeners");
 const postManager_1 = require("./postManager");
 const notifications_1 = require("../utils/notifications");
 function initializeAdminDashboard() {

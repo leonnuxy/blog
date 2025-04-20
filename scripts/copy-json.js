@@ -12,9 +12,12 @@ async function copyJsonFiles() {
         await fs.ensureDir(publicDataDir);
         await fs.ensureDir(distDataDir);
 
-        // Copy posts.json to public/data/posts.json
+        // Ensure all references to 'data/posts.json' are correct
         const sourcePostsPath = path.join(dataDir, 'posts.json');
         const publicDestPath = path.join(publicDataDir, 'posts.json');
+        const distDestPath = path.join(distDataDir, 'posts.json');
+
+        // Copy posts.json to public/data/posts.json
          if (await fs.pathExists(sourcePostsPath)) {
              await fs.copy(sourcePostsPath, publicDestPath);
              console.log(`✅ Copied: posts.json to ${publicDestPath}`);
@@ -23,7 +26,6 @@ async function copyJsonFiles() {
          }
 
         // Copy posts.json to dist/data/posts.json (if backend reads from dist)
-         const distDestPath = path.join(distDataDir, 'posts.json');
           if (await fs.pathExists(sourcePostsPath)) {
              await fs.copy(sourcePostsPath, distDestPath);
              console.log(`✅ Copied: posts.json to ${distDestPath}`);

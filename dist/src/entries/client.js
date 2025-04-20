@@ -15,11 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const blogFrontendController_1 = require("../controllers/blogFrontendController");
 const postDetail_1 = require("../modules/postDetail");
 // Common Components & Utilities
-const header_1 = require("../components/header");
+const header_1 = require("../components/navigation/header");
 const darkMode_1 = require("../components/darkMode");
-const mobileNav_1 = require("../components/mobileNav"); // Assuming path is correct
+const mobileNav_1 = require("../components/navigation/mobileNav");
 const search_1 = require("../components/search"); // Assuming path is correct
-const navigation_1 = require("../components/navigation"); // Assuming path is correct
+const navigation_1 = require("../components/navigation/navigation");
 const about_1 = require("../components/about"); // Assuming path is correct
 // Import tag filtering if it sets up global listeners or needs to run early
 // import { initializeTagFiltering } from '../components/tagFilter'; // Assuming path is correct
