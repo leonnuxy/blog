@@ -12,6 +12,7 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-base), visibility var(--transition-base);
+  border-radius: 40px;
 }
 
 .drawer-overlay.open {
@@ -31,7 +32,7 @@
   transition: transform var(--transition-base);
   overflow-y: auto;
   border-radius: var(--border-radius-large);
-  padding: var(--spacing-4);
+  padding: var(--spacing-3);
   transform: translateX(100%);
 }
 
@@ -54,9 +55,37 @@ body {
   font-size: 1.25rem;
   color: var(--text-color);
   cursor: pointer;
-  margin: 0 0 var(--spacing-4) auto;
+  margin: 0 0 var(--spacing-2) auto;
   display: block;
 }
+
+/* --------------------------------------------------------------------------
+   MOBILE SEARCH INSIDE DRAWER
+   -------------------------------------------------------------------------- */
+.drawer-search-container {
+  margin-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-3);
+
+
+}
+.drawer-search-container input {
+  width: 100%;
+  padding: 0 var(--spacing-3);
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  background: var(--input-background);
+  color: var(--text-color);
+  font-size: var(--font-size-base);
+  transition: border-color var(--transition-base);
+}
+.drawer-search-container input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+
 
 /* --------------------------------------------------------------------------
    NAV LINKS
@@ -87,6 +116,8 @@ body {
   font-weight: 600;
   color: var(--primary-color);
 }
+
+
 
 /* --------------------------------------------------------------------------
    Ensure desktop doesn’t show these
