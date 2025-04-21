@@ -4,7 +4,6 @@
     max-width: var(--container-width);
     margin-left: auto;
     margin-right: auto;
-    padding: 0 var(--spacing-3);
 }
 
 .container-sm { max-width: 640px; }
