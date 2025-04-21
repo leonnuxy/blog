@@ -239,3 +239,23 @@
     white-space: nowrap;
     border: 0;
 }
+
+/* hide filtered cards */
+.hidden-by-search {
+  display: none !important;
+}
+
+/* style the indicator in header-right */
+.search-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  margin-left: var(--spacing-2);
+}
+.clear-filter-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}

@@ -3,16 +3,17 @@
     {
       "id": 8,
       "title": "Test",
-      "content": "Test",
+      "content": "This is a test post used to verify that our blog infrastructure is working correctly. It demonstrates dynamic rendering, image support, and layout consistency across pages.",
       "author": "Test",
       "createdAt": "2025-04-05T07:19:31.736Z",
       "updatedAt": "2025-04-08T05:00:23.838Z",
-      "tags": []
+      "tags": ["test"],
+      "imageUrl": "images/blog_image_test.jpeg"
     },
     {
       "id": 7,
       "title": "Building RESTful APIs",
-      "content": "REST (Representational State Transfer) is an architectural style for designing networked applications. This guide covers the core principles of REST and demonstrates how to build a clean RESTful API using modern tools and best practices.",
+      "content": "REST (Representational State Transfer) is an architectural style for designing networked applications. This guide covers the core principles of REST and demonstrates how to build a clean RESTful API using modern tools and best practices.\n\n### Understanding REST Principles\nREST is built on six core constraints that ensure scalability, simplicity, and reliability:\n1. **Client-Server Architecture**: Separates frontend and backend concerns, enabling independent evolution.\n2. **Statelessness**: Each request contains all necessary context, eliminating server-side session storage.\n3. **Cacheability**: Responses define whether they can be cached to improve performance.\n4. **Uniform Interface**: Standardizes resource identification (via URIs), manipulation (via HTTP methods), and self-descriptive messages.\n5. **Layered System**: Proxies or gateways can intermediate without clients knowing.\n6. **Code-on-Demand (Optional)**: Servers can extend client functionality by transferring executable code.\n\n### Designing RESTful APIs: Best Practices\n#### Resource Naming & URIs\nUse nouns (not verbs) for resources and hierarchical URIs. For example:\n- `/users` for user collections\n- `/users/{id}` for a specific user\n- `/users/{id}/orders` for a user’s orders\n\n#### HTTP Methods & Status Codes\nAlign actions with HTTP verbs:\n- `GET`: Retrieve data\n- `POST`: Create a resource\n- `PUT/PATCH`: Update (replace or modify)\n- `DELETE`: Remove a resource\n\nUse appropriate status codes:\n- `200 OK`: Successful GET\n- `201 Created`: Resource created via POST\n- `400 Bad Request`: Invalid input\n- `404 Not Found`: Resource doesn’t exist\n- `500 Internal Server Error`: Server-side failure\n\n#### Versioning\nInclude API versions in URIs (`/api/v1/users`) or headers to manage backward compatibility.\n\n#### Pagination & Filtering\nFor large datasets, use `limit` and `offset` parameters or cursor-based pagination. Enable filtering via query params like `?status=active`.\n\n#### Authentication & Security\nUse OAuth2, JWT, or API keys for auth. Always enforce HTTPS and validate inputs rigorously to prevent SQL injection or XSS attacks.\n\n### Building a RESTful API: Step-by-Step\nLet’s create a simple book management API using Node.js/Express.js:\n1. **Initialize Project**\n   ```bash\n   npm init -y\n   npm install express mongoose\n   ```\n\n2. **Define Model**\n   ```javascript\n   const mongoose = require('mongoose');\n   const bookSchema = new mongoose.Schema({\n     title: String,\n     author: String,\n     year: Number\n   });\n   module.exports = mongoose.model('Book', bookSchema);\n   ```\n\n3. **Create Routes**\n   ```javascript\n   const express = require('express');\n   const router = express.Router();\n   const Book = require('./models/book');\n\n   // GET all books\n   router.get('/books', async (req, res) => {\n     try {\n       const books = await Book.find();\n       res.status(200).json(books);\n     } catch (err) {\n       res.status(500).json({ message: err.message });\n     }\n   });\n\n   // POST a new book\n   router.post('/books', async (req, res) => {\n     const book = new Book({\n       title: req.body.title,\n       author: req.body.author,\n       year: req.body.year\n     });\n     try {\n       const newBook = await book.save();\n       res.status(201).json(newBook);\n     } catch (err) {\n       res.status(400).json({ message: err.message });\n     }\n   });\n   ```\n\n4. **Add Middleware & Error Handling**\n   Use middleware like `express.json()` for parsing requests and centralize error handling.\n\n5. **Document with OpenAPI/Swagger**\n   Generate interactive docs to describe endpoints, parameters, and responses.\n\n### Testing & Validation\n- **Unit Tests**: Use Jest or Mocha to test individual functions.\n- **Integration Tests**: Validate API endpoints with Postman or Supertest.\n- **Load Testing**: Assess performance under traffic using tools like Artillery.\n\n### Common Pitfalls to Avoid\n- **Overfetching/Underfetching**: Design precise responses or use GraphQL if needed.\n- **Ignoring Caching**: Leverage `Cache-Control` headers to reduce server load.\n- **Poor Error Messages**: Return clear, actionable errors (e.g., `{\"error\": \"Invalid ISBN format\"}`).\n\n### Conclusion\nBuilding RESTful APIs requires adherence to principles, thoughtful design, and rigorous testing. By leveraging modern tools like Express.js, Swagger, and JWT, you can create scalable, secure, and developer-friendly APIs that stand the test of time. Start small, iterate often, and always prioritize consistency and clarity.\n",
       "author": "Noel",
       "createdAt": "2023-10-07T00:00:00.000Z",
       "updatedAt": "2025-04-08T05:00:23.838Z",
@@ -20,7 +21,22 @@
         "api",
         "rest",
         "backend"
-      ]
+      ],
+      "imageUrl": "images/blog_post_7.png"
+    },
+    {
+      "id": 9,
+      "title": "Understanding JavaScript Promises",
+      "content": "JavaScript promises are a powerful way to handle asynchronous operations. They have three states—pending, fulfilled, and rejected—and let you chain sequential tasks with `.then()` and catch errors with `.catch()`. Using `async/await` syntax can make your code more readable by allowing you to write asynchronous logic in a synchronous style. In this post, we’ll cover best practices for error handling, promise chaining, and performance considerations in modern JavaScript.",
+      "author": "Noel",
+      "createdAt": "2023-10-08T00:00:00.000Z",
+      "updatedAt": "2025-04-08T05:00:23.838Z",
+      "tags": [
+        "javascript",
+        "async",
+        "programming"
+      ],
+      "imageUrl": "images/blog_post_6.png"
     },
     {
       "id": 6,
@@ -33,12 +49,13 @@
         "react",
         "javascript",
         "frontend"
-      ]
+      ],
+      "imageUrl": "images/blog_image_5.jpeg"
     },
     {
       "id": 5,
       "title": "CSS Grid vs Flexbox",
-      "content": "Modern CSS layouts often use either Grid or Flexbox. While they share some similarities, they're designed for different use cases. Grid is best for two-dimensional layouts, while Flexbox excels at one-dimensional arrangements. This post compares their strengths and when to use each.",
+      "content": "Modern CSS layouts often use either Grid or Flexbox. While they share some similarities, they’re designed for different use cases. Grid is best for two-dimensional layouts, while Flexbox excels at one-dimensional arrangements. This post compares their strengths and shows when you should reach for one over the other.",
       "author": "Noel",
       "createdAt": "2023-10-05T00:00:00.000Z",
       "updatedAt": "2025-04-08T05:00:23.838Z",
@@ -46,12 +63,13 @@
         "css",
         "frontend",
         "design"
-      ]
+      ],
+      "imageUrl": "images/blog_image_4.jpeg"
     },
     {
       "id": 4,
       "title": "Express.js Best Practices",
-      "content": "Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. In this article, we'll cover some best practices for structuring your Express applications and handling common patterns.",
+      "content": "Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. In this article, we’ll cover best practices for organizing routes, middleware usage, error handling, and security considerations to keep your Express code clean and maintainable.",
       "author": "Noel",
       "createdAt": "2023-10-04T00:00:00.000Z",
       "updatedAt": "2025-04-08T05:00:23.838Z",
@@ -59,12 +77,13 @@
         "express",
         "nodejs",
         "backend"
-      ]
+      ],
+      "imageUrl": "images/blog_image_3.jpeg"
     },
     {
       "id": 3,
       "title": "Getting Started with TypeScript",
-      "content": "TypeScript is a powerful superset of JavaScript that adds static typing and other features to enhance developer productivity. In this post, we'll explore the basics of setting up a TypeScript project and some key features that make it worth learning.",
+      "content": "TypeScript is a powerful superset of JavaScript that adds static typing and other features to enhance developer productivity. In this post, we’ll explore setting up a TypeScript project, defining interfaces, using generics, and integrating with popular build tools like Webpack and Babel.",
       "author": "Noel",
       "createdAt": "2023-10-03T00:00:00.000Z",
       "updatedAt": "2025-04-08T05:00:23.838Z",
@@ -72,31 +91,34 @@
         "typescript",
         "javascript",
         "programming"
-      ]
+      ],
+      "imageUrl": "images/blog_image_2.jpeg"
     },
     {
       "id": 2,
       "title": "Why I Love Coding",
-      "content": "Coding allows me to create amazing things and solve complex problems. In this post, I share my journey into programming.",
+      "content": "Coding allows me to create amazing things and solve complex problems. In this post, I share my journey into programming: what first inspired me to write my first lines of code, the challenges I overcame when learning new languages, and tips for anyone starting their own coding adventure.",
       "author": "Noel",
       "createdAt": "2023-10-02T00:00:00.000Z",
       "updatedAt": "2025-04-08T05:00:23.838Z",
       "tags": [
         "coding",
         "programming"
-      ]
+      ],
+      "imageUrl": "images/blog_image_1.jpg"
     },
     {
       "id": 1,
       "title": "Welcome to My Blog",
-      "content": "This is the first post on my blog. Stay tuned for more updates!",
+      "content": "Welcome! This is the first post on my new blog. Here I’ll be sharing tutorials, tips, and personal insights on web development, JavaScript, CSS, and more. I hope you find these posts helpful—feel free to leave comments or reach out if you have questions.",
       "author": "Noel",
       "createdAt": "2023-10-01T00:00:00.000Z",
       "updatedAt": "2025-04-08T05:00:23.838Z",
       "tags": [
         "introduction",
         "welcome"
-      ]
+      ],
+      "imageUrl": "images/blog_image.jpeg"
     }
   ],
   "nextId": 13

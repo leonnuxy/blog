@@ -2,186 +2,183 @@
 
 /* Post Page Specific Styles */
 
-/* Post Layout */
-.post-article {
-    max-width: 800px;
-    margin: var(--spacing-4) auto;
-    background-color: var(--surface-color);
-    color: var(--text-color);
-    border-radius: var(--border-radius-large);
-    box-shadow: var(--box-shadow-medium);
-    overflow: hidden;
-    padding: var(--spacing-4);
-    transition: all var(--transition-base);
+/* 1) Layout & container */
+.post-page {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 320px); /* main + sidebar */
+  gap: 2rem;
+  margin: 4rem auto;
+  max-width: var(--content-max);
+  padding: 0 var(--gutters);
 }
 
-/* Post Header */
-.post-header {
-    margin-bottom: var(--spacing-4);
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: var(--spacing-3);
+.post-page:not(.with-sidebar) {
+  grid-template-columns: 1fr;
 }
 
+/* 2) Hero section */
+.post-hero {
+  grid-column: 1 / -1; /* span full width */
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.post-hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
 .post-meta {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-bottom: var(--spacing-2);
-    transition: color var(--transition-fast);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 2rem auto 2rem;
 }
-
 .post-meta time {
-    margin-right: var(--spacing-2);
+      background: rgb(0 0 0 / 50%);
+    padding: 0.25rem 0.5rem;
+    border-radius: 1.25rem;
 }
 
-/* Post title styling */
-.post-header h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: var(--spacing-1);
-    color: var(--heading-color);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
+/* 3) Article body */
+.post-article {
+  grid-column: 1 / 2;
+  max-width: 80ch;        /* keep lines readable */
+  margin: 0 auto;         /* center in its column */
+  padding: 0 var(--gutters);
+  line-height: 1.7;
+  font-size: 1rem;
+  color: var(--text-color);
 }
 
-/* Post Content */
-.post-content {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: var(--text-color);
+/* Give every direct child some bottom spacing */
+.post-article > * {
+  margin-bottom: 1.5rem;
 }
 
-.post-content p {
-    margin-bottom: var(--spacing-3);
+/* Headings */
+.post-article h1,
+.post-article h2,
+.post-article h3,
+.post-article h4 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+  color: var(--heading-color);
+}
+.post-article h1 { font-size: 2rem; }
+.post-article h2 { font-size: 1.75rem; }
+.post-article h3 { font-size: 1.5rem; }
+
+/* Paragraphs (already handled by >*) */
+.post-article p {
+  margin: 0;
 }
 
-.post-content h2 {
-    font-size: 2rem;
-    color: var(--heading-color);
-    margin: var(--spacing-4) 0 var(--spacing-2);
+/* Lists */
+.post-article ul,
+.post-article ol {
+  margin-left: 1.5rem;
+}
+.post-article li {
+  margin-bottom: 0.5rem;
 }
 
-.post-content h3 {
-    font-size: 1.5rem;
-    color: var(--heading-color);
-    margin: var(--spacing-3) 0 var(--spacing-2);
+/* Blockquotes */
+.post-article blockquote {
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  background: var(--surface-hover);
+  border-left: 4px solid var(--accent-color);
+  font-style: italic;
 }
 
-.post-content ul,
-.post-content ol {
-    margin: var(--spacing-2) 0 var(--spacing-3);
-    padding-left: var(--spacing-4);
+/* Code blocks & inline code */
+.post-article pre {
+  background: var(--code-bg);
+  padding: 1rem;
+  border-radius: var(--border-radius-small);
+  overflow-x: auto;
+  margin: 0;
+}
+.post-article code {
+  background: var(--code-bg);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-small);
 }
 
-.post-content li {
-    margin-bottom: var(--spacing-1);
+/* Featured image (if inserted) */
+.post-featured-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: var(--border-radius-medium);
+  margin-bottom: 1.5rem;
 }
 
-.post-content img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--border-radius-medium);
-    margin: var(--spacing-3) 0;
+/* 4) Sidebar (optional) */
+.post-sidebar {
+  grid-column: 2 / 3;
+  position: sticky;
+  top: var(--gutters);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.post-content blockquote {
-    border-left: 4px solid var(--primary-color);
-    margin: var(--spacing-3) 0;
-    padding: var(--spacing-2) var(--spacing-3);
-    background-color: var(--surface-alt);
-    border-radius: var(--border-radius-small);
+/* faint end‐of‐post line */
+.post-end-line {
+  border: none;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 3rem 0;
 }
 
-.post-content code {
-    font-family: monospace;
-    background-color: var(--surface-alt);
-    padding: 0.2rem 0.4rem;
-    border-radius: var(--border-radius-small);
-    font-size: 0.9em;
+/* bottom tags */
+.post-tags-bottom {
+  margin: 3rem auto 4rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
-.post-content pre {
-    background-color: var(--surface-alt);
-    padding: var(--spacing-3);
-    border-radius: var(--border-radius-medium);
-    overflow-x: auto;
-    margin: var(--spacing-3) 0;
+.post-tags-bottom .tag-badge {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  transition: background .2s;
+}
+.post-tags-bottom .tag-badge:hover {
+  background: rgba(255,255,255,0.3);
 }
 
-.post-content pre code {
-    background-color: transparent;
-    padding: 0;
-}
-
-/* Post Footer */
-.post-footer {
-    margin-top: var(--spacing-4);
-    padding-top: var(--spacing-3);
-    border-top: 1px solid var(--border-color-light);
-}
-
-.post-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-2);
-    margin-bottom: var(--spacing-3);
-}
-
-.post-tag {
-    background-color: var(--surface-alt);
-    color: var(--text-muted);
-    padding: var(--spacing-1) var(--spacing-2);
-    border-radius: var(--border-radius-full);
-    font-size: 0.9rem;
-    transition: all var(--transition-fast);
-}
-
-.post-tag:hover {
-    background-color: var(--primary-color);
-    color: var(--surface-color);
-}
-
-.post-share {
-    display: flex;
-    gap: var(--spacing-2);
-    margin-top: var(--spacing-3);
-}
-
-.share-button {
-    padding: var(--spacing-2);
-    border-radius: var(--border-radius-full);
-    color: var(--text-muted);
-    transition: all var(--transition-fast);
-}
-
-.share-button:hover {
-    color: var(--primary-color);
-    background-color: var(--surface-hover);
-}
-
+/* 5) Mobile first */
 @media (max-width: 768px) {
-    .post-article {
-        margin: var(--spacing-2);
-        padding: var(--spacing-3);
-    }
-
-    .post-header h1 {
-        font-size: 2rem;
-    }
-
-    .post-content {
-        font-size: 1rem;
-    }
+  .post-page {
+    grid-template-columns: 1fr;
+  }
+  .post-hero {
+    text-align: left;
+  }
 }
 
-/* Dark Mode Adjustments */
-body.dark-mode .post-article {
-    box-shadow: var(--box-shadow-large);
+/* LIGHT MODE OVERRIDES */
+body:not(.dark-mode) .post-meta time {
+  background: rgba(0,0,0,0.1);
+  color: var(--text-color);
 }
 
-body.dark-mode .post-content blockquote {
-    background-color: var(--surface-hover);
+body:not(.dark-mode) .post-tags-bottom .tag-badge {
+  background: rgba(0,0,0,0.15);
+  color: var(--text-color);
 }
 
-body.dark-mode .post-content code {
-    background-color: var(--surface-hover);
+body:not(.dark-mode) .post-end-line {
+  background: rgba(0,0,0,0.1);
 }
