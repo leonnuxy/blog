@@ -1,29 +1,36 @@
-/* 
-   HEADER COMPONENT
-   Contains styles for site header, navigation and search
-*/
+/* header.css */
 
-/* Undocked, rounded, centered nav header */
+/* ==========================================================================
+   HEADER 
+   ========================================================================== */
+
+:root {
+  --header-height: 70px; /* adjust if needed */
+}
+
 .site-header {
-  position: relative;  /* no sticky */
-  margin: 2rem auto;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-index-sticky);
+  margin: 0 auto var(--spacing-4);
+  width: 100%;
   max-width: var(--content-max);
   background: var(--header-background);
   border: 1px solid var(--header-border);
   border-radius: 5rem;
   box-shadow: var(--header-shadow);
   padding: 0.75rem var(--gutters);
+  margin-top: 10px;
 }
 
 .site-header .container {
   display: flex;
   align-items: center;
-  justify-content: center; /* center entire row */
-  gap: var(--spacing-6);
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  
 }
 
-/* Site title */
-.site-title { flex: 0 0 auto; margin: 0; }
 .site-title a {
   color: var(--primary-color);
   font-size: var(--font-size-2xl);
@@ -31,22 +38,26 @@
   text-decoration: none;
 }
 
-/* Nav links */
-.site-nav { flex: 1 1 auto; padding-left: 10rem; margin-top: 10px; }
+/* --------------------------------------------------------------------------
+   Desktop nav
+   -------------------------------------------------------------------------- */
+.site-nav {
+  flex: 1 1 auto;
+}
 .site-nav ul {
   display: flex;
-  list-style: none;       /* remove bullets */
-  margin: 0;
-  padding: 0;
   justify-content: center;
   gap: var(--spacing-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 .site-nav a {
   color: var(--text-color);
   text-decoration: none;
   padding: var(--spacing-2) var(--spacing-3);
   border-radius: var(--border-radius-small);
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+  transition: background var(--transition-fast), color var(--transition-fast);
 }
 .site-nav a:hover,
 .site-nav a:focus {
@@ -57,12 +68,14 @@
   color: var(--primary-color);
 }
 
-/* Search box */
+/* --------------------------------------------------------------------------
+   Search box
+   -------------------------------------------------------------------------- */
 .search-container {
   flex: 0 0 auto;
 }
 .search-container input {
-  width: 200px;
+  width: 180px;
   max-width: 100%;
   height: 36px;
   padding: 0 var(--spacing-3);
@@ -77,33 +90,40 @@
   border-color: var(--primary-color);
 }
 
-/* Container around the input + “Showing X results” box */
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-4);
-}
-
-/* The live‑update box */
-.search-indicator {
-  display: none;              /* shown only when filtering */
-  background: var(--surface-hover);
-  color: var(--text-color);
-  padding: var(--spacing-2) var(--spacing-3);
-  border-radius: var(--border-radius-small);
-  font-size: var(--font-size-sm);
-  white-space: nowrap;
-}
-
-/* The “× Clear Filter” button */
-.clear-filter-btn {
+/* --------------------------------------------------------------------------
+   Mobile toggle (hidden on desktop)
+   -------------------------------------------------------------------------- */
+.mobile-nav-toggle {
+  display: none;
   background: none;
   border: none;
-  color: var(--text-muted);
-  margin-left: var(--spacing-2);
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-}
-.clear-filter-btn:hover {
+  font-size: 1.5rem;
   color: var(--text-color);
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive: switch to mobile header
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .site-nav,
+  .search-container {
+    display: none !important;
+  }
+  .mobile-nav-toggle {
+    display: block !important;
+  }
+}
+
+
+@media (max-width: 480px) {
+  
+  .site-title{
+    font-size: var(--font-size-xl);
+    margin-bottom: 0;
+  }
+  .site-title a {
+    color: var(--primary-color);
+    font-size: var(--font-size-lg);
+  }  
 }
