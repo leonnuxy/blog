@@ -1,6 +1,7 @@
 /**
  * Admin Dashboard entry point
  */
+import { renderHeader } from '../components/navigation/header';
 import { initializeAdminDashboard } from '../controllers/adminController'; // Handles core admin logic
 import { initializeDarkMode, checkSystemDarkModePreference } from '../components/darkMode'; // Handles dark mode UI
 // Consider importing a dedicated modal handler if logic becomes complex

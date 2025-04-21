@@ -20,6 +20,7 @@ exports.showErrorMessage = showErrorMessage;
 const api_1 = require("../services/api");
 const urlTransformer_1 = require("../utils/urlTransformer");
 const darkMode_1 = require("../components/darkMode");
+const marked_1 = require("marked");
 // --- Core Initialization Function ---
 /**
  * Initializes all functionality for the post detail page.
@@ -54,7 +55,7 @@ function loadPostContent(postId) {
             const post = yield (0, api_1.fetchPostById)(postId);
             if (!post)
                 throw new Error(`Post with ID ${postId} not found`);
-            updatePostUI(post);
+            yield updatePostUI(post); // Await the UI update
             updatePageMetadata(post);
             initializeSocialSharing(post);
         }
@@ -68,47 +69,33 @@ function loadPostContent(postId) {
  * Update the post UI with content from the loaded post
  */
 function updatePostUI(post) {
-    const postArticleElement = document.getElementById('post-content');
-    if (!postArticleElement) {
-        console.error('Cannot update UI: #post-content element not found.');
-        return;
-    }
-    // Construct the inner HTML dynamically
-    postArticleElement.innerHTML = `
-        <div class="post-header">
-            <h1>${post.title}</h1>
-            <div class="post-meta">
-                <time datetime="${post.createdAt ? new Date(post.createdAt).toISOString().split('T')[0] : ''}">
-                    ${post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Date unknown'}
-                </time>
-                <span class="author">by ${post.author || 'Anonymous'}</span>
-            </div>
-        </div>
-        
-        ${post.imageUrl ? `<img src="${post.imageUrl}" alt="${post.title}" class="featured-image">` : ''}
-
-        <div class="post-content-body">
-            ${post.content}
-        </div>
-
-        <div class="post-footer">
-            <div class="tags">
-                ${post.tags && post.tags.length > 0 ? `<span>Tags:</span> ${post.tags.map(tag => `<a href="${(0, urlTransformer_1.generateTagFilterUrl)(tag)}">${tag}</a>`).join('')}` : ''}
-            </div>
-            <div class="social-sharing">
-                <span>Share:</span>
-                <button class="share-button twitter" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></button>
-                <button class="share-button facebook" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></button>
-                <button class="share-button linkedin" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></button>
-            </div>
-        </div>
-    `;
+    return __awaiter(this, void 0, void 0, function* () {
+        // 1) Hero
+        const titleEl = document.getElementById('post-title');
+        const dateEl = document.getElementById('post-date');
+        const tagsEl = document.getElementById('post-tags');
+        const imageEl = document.getElementById('post-image');
+        if (titleEl)
+            titleEl.textContent = post.title;
+        if (dateEl)
+            dateEl.textContent = new Date(post.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+        if (tagsEl)
+            tagsEl.innerHTML = post.tags.map(tag => `<a href="${(0, urlTransformer_1.generateTagFilterUrl)(tag)}">${tag}</a>`).join(', ');
+        if (imageEl)
+            imageEl.src = post.imageUrl; // Set the featured image
+        // 2) Content
+        const contentEl = document.getElementById('post-content');
+        if (contentEl)
+            contentEl.innerHTML = marked_1.marked.parse(post.content); // Explicitly cast to string
+    });
 }
 /**
  * Update page metadata like title and URL
  */
 function updatePageMetadata(post) {
-    document.title = `${post.title} | Noel's Blog`;
+    document.title = `${post.title} | Blog`;
 }
 /**
  * Initialize social sharing functionality

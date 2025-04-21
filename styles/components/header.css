@@ -3,210 +3,107 @@
    Contains styles for site header, navigation and search
 */
 
-/* --- Header Container --- */
+/* Undocked, rounded, centered nav header */
 .site-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 var(--spacing-3);
-    height: var(--header-height);
-    width: 100%;
-    background-color: var(--header-background);
-    box-shadow: var(--header-shadow);
-    border-bottom: 1px solid var(--header-border);
-    position: sticky;
-    top: 0;
-    z-index: var(--z-index-sticky);
-    transition: background-color var(--transition-base), border-color var(--transition-base);
+  position: relative;  /* no sticky */
+  margin: 2rem auto;
+  max-width: var(--content-max);
+  background: var(--header-background);
+  border: 1px solid var(--header-border);
+  border-radius: 5rem;
+  box-shadow: var(--header-shadow);
+  padding: 0.75rem var(--gutters);
 }
 
 .site-header .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: var(--container-width);
-    margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center entire row */
+  gap: var(--spacing-6);
 }
 
-.site-header h1 {
-    font-size: var(--font-size-2xl);
-    margin: 0;
-    font-weight: 700;
+/* Site title */
+.site-title { flex: 0 0 auto; margin: 0; }
+.site-title a {
+  color: var(--primary-color);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  text-decoration: none;
 }
 
-.site-header h1 a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: color var(--transition-fast), transform var(--transition-fast);
-    display: inline-block;
-    letter-spacing: 0.5px;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+/* Nav links */
+.site-nav { flex: 1 1 auto; padding-left: 10rem; margin-top: 10px; }
+.site-nav ul {
+  display: flex;
+  list-style: none;       /* remove bullets */
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  gap: var(--spacing-4);
+}
+.site-nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--border-radius-small);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+.site-nav a:hover,
+.site-nav a:focus {
+  background: var(--surface-hover);
+  color: var(--primary-color);
+}
+.site-nav a.active {
+  color: var(--primary-color);
 }
 
-.site-header h1 a:hover,
-.site-header h1 a:focus {
-    color: var(--primary-color-dark);
-    transform: translateY(-1px);
+/* Search box */
+.search-container {
+  flex: 0 0 auto;
+}
+.search-container input {
+  width: 200px;
+  max-width: 100%;
+  height: 36px;
+  padding: 0 var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  background: var(--input-background);
+  color: var(--text-color);
+  transition: border-color var(--transition-base);
+}
+.search-container input:focus {
+  outline: none;
+  border-color: var(--primary-color);
 }
 
-.site-header nav ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: var(--spacing-2);
-}
-
-.site-header nav ul li a {
-    display: inline-block;
-    padding: var(--spacing-2) var(--spacing-3);
-    color: var(--text-color);
-    text-decoration: none;
-    position: relative;
-    transition: color var(--transition-fast);
-    font-weight: 500;
-    border-radius: var(--border-radius-small);
-}
-
-.site-header nav ul li a:hover,
-.site-header nav ul li a:focus {
-    color: var(--primary-color);
-    background-color: var(--surface-hover);
-}
-
-.site-header nav ul li a.active {
-    color: var(--primary-color);
-}
-
-.site-header nav ul li a.active::after {
-    content: "";
-    position: absolute;
-    bottom: -1px;
-    left: var(--spacing-3);
-    right: var(--spacing-3);
-    height: 3px;
-    background-color: var(--header-active-indicator);
-}
-
+/* Container around the input + “Showing X results” box */
 .header-right {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-3);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
 }
 
-.header-right button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-color);
-    align-items: center;
-    justify-content: center;
-    transition: color var(--transition-fast);
+/* The live‑update box */
+.search-indicator {
+  display: none;              /* shown only when filtering */
+  background: var(--surface-hover);
+  color: var(--text-color);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
 }
 
-.header-right button:hover {
-    color: var(--primary-color);
+/* The “× Clear Filter” button */
+.clear-filter-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  margin-left: var(--spacing-2);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
 }
-
-/* --- Search Bar --- */
-.search-container,
-.search-bar {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-right: var(--spacing-3);
+.clear-filter-btn:hover {
+  color: var(--text-color);
 }
-
-.search-container input,
-.search-bar input {
-    height: 36px;
-    padding: 0 var(--spacing-3) 0 var(--spacing-2);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-full);
-    background-color: var(--input-background);
-    color: var(--text-color);
-    font-size: var(--font-size-sm);
-    width: 200px;
-    transition: width var(--transition-base), background-color var(--transition-base);
-}
-
-.search-container input:focus,
-.search-bar input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    width: 220px;
-}
-
-.search-container button,
-.search-bar button {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.search-container button:hover,
-.search-container button:focus,
-.search-bar button:hover,
-.search-bar button:focus {
-    color: var(--primary-color);
-}
-
-/* --- Mobile-Specific Header Styles --- */
-@media (max-width: 768px) {
-    .site-header {
-        padding: 0 var(--spacing-2);
-    }
-    
-    .site-header nav {
-        display: none; /* Hidden on mobile, shown via mobile menu */
-    }
-    
-    .site-header h1 {
-        font-size: var(--font-size-lg);
-    }
-    
-    .mobile-menu-button {
-        display: block;
-        width: 24px;
-        height: 24px;
-        position: relative;
-    }
-    
-    .mobile-menu-button span {
-        display: block;
-        width: 100%;
-        height: 2px;
-        background-color: var(--text-color);
-        margin: 5px 0;
-        transition: transform var(--transition-fast), opacity var(--transition-fast);
-    }
-    
-    .search-container,
-    .search-bar {
-        display: none; /* Hide search on mobile */
-    }
-}
-
-/* --- Tablet-Specific Styles --- */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .search-container input,
-    .search-bar input {
-        width: 160px;
-    }
-    
-    .search-container input:focus,
-    .search-bar input:focus {
-        width: 180px;
-    }
-}
-

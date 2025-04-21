@@ -9,9 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Admin Dashboard entry point
- */
 const adminController_1 = require("../controllers/adminController"); // Handles core admin logic
 const darkMode_1 = require("../components/darkMode"); // Handles dark mode UI
 // Consider importing a dedicated modal handler if logic becomes complex

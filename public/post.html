@@ -1,42 +1,55 @@
-<!-- post.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Blog Post Details"> 
-    <title>Post Details</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A post on Blog" />
+  <title id="page-title">Loading… – Blog</title>
 
-    <link rel="stylesheet" href="styles/global/base.css">
-    <link rel="stylesheet" href="styles/components/animations.css">
-    <link rel="stylesheet" href="styles/components/header.css">
-    <link rel="stylesheet" href="styles/components/buttons.css">
-    <link rel="stylesheet" href="styles/components/mobile-nav.css">
-    <link rel="stylesheet" href="styles/components/hero.css">
-    <link rel="stylesheet" href="styles/components/forms.css">
-    <link rel="stylesheet" href="styles/components/modals.css">
-    <link rel="stylesheet" href="styles/components/search.css">
-    <link rel="stylesheet" href="styles/components/blog-cards.css">
-    <link rel="stylesheet" href="styles/components/pagination.css">
-    <link rel="stylesheet" href="styles/components/post-navigation.css">
-    <link rel="stylesheet" href="styles/components/notifications.css">
-    <link rel="stylesheet" href="styles/components/status-indicators.css">
-    <link rel="stylesheet" href="styles/components/dark-mode.css">
-    <link rel="stylesheet" href="styles/views/post.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- 1) Global styles -->
+  <link rel="stylesheet" href="styles/global/base.css" />
+  <link rel="stylesheet" href="styles/global/utilities.css" />
+  <link rel="stylesheet" href="styles/global/layout.css" />
 
+  <!-- 2) Component styles -->
+  <link rel="stylesheet" href="styles/components/header.css" />
+  <link rel="stylesheet" href="styles/views/post.css" />
+  <link rel="stylesheet" href="styles/components/dark-mode.css" />
+
+  <!-- 3) Third‑party -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="…"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body data-page="post">
-    <div id="header-placeholder"></div> 
 
-    <main>
-        <article id="post-content" class="post-article"> 
-            <p>Loading post...</p> 
-        </article>
-        
-    </main>
-    <script src="dist/client/client.bundle.js" defer></script>
+<body data-page="post">
+  <div id="header-placeholder"></div>
+  <main id="main-content" class="container post-page">
+    <!-- Hero: title + date only -->
+    <section class="post-hero">
+      <h1 id="post-title">Loading…</h1>
+      <div class="post-meta">
+        <time id="post-date" datetime=""></time>
+      </div>
+      <img id="post-image" src="" alt="Post featured image" class="post-featured-image" />
+    </section>
+
+    <!-- Article -->
+    <article id="post-content" class="post-article">
+      <p>Loading post…</p>
+    </article>
+
+    <!-- faint line to mark end -->
+    <hr class="post-end-line" />
+
+    <!-- Tags moved here -->
+    <div id="post-tags" class="post-tags post-tags-bottom"></div>
+  </main>
+  <footer class="site-footer container">
+    <p>&copy; 2025 Blog. All rights reserved.</p>
+  </footer>
+  <script src="dist/client/client.bundle.js" defer></script>
 </body>
+
 </html>

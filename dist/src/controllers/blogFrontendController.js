@@ -10,13 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializeBlogFrontend = initializeBlogFrontend;
-// blogFrontendController.ts
-/**
- * Blog Frontend Controller
- * Client-side controller that handles all frontend functionality for the blog homepage.
- * Manages UI initialization, post rendering, filtering, pagination, and user interactions.
- */
-const api_1 = require("../services/api"); // Uses static fetch now
+const api_1 = require("../services/api");
 const blogCards_1 = require("../components/blogCards");
 const navigation_1 = require("../components/navigation/navigation");
 const state_1 = require("./state");
@@ -27,26 +21,37 @@ function initializeBlogFrontend() {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
         (0, navigation_1.initializeNavigation)();
-        // Initialize posts, which now includes filtering based on URL params
+        // Fetch all posts first
+        const allPosts = yield (0, api_1.fetchBlogPosts)();
+        if (!allPosts || allPosts.length === 0)
+            return;
+        // 1) Hero
+        renderLatestHero(allPosts);
+        // 2) Initialize posts (excluding the hero posts)
         const urlParams = new URLSearchParams(window.location.search);
         const searchTerm = (_a = urlParams.get('search')) !== null && _a !== void 0 ? _a : undefined;
-        yield initializePosts(searchTerm);
-        initializePagination(); // Now calls our local function, not the component
+        yield initializePosts(searchTerm, allPosts.slice(3));
+        initializePagination();
         setupBlogCardsDelegation();
-        // Listen for custom event to reload posts (e.g., after search or filter change)
         document.addEventListener('reloadPosts', handleReloadPosts);
     });
 }
 /**
- * Handles the custom 'reloadPosts' event. Refetches and re-renders posts.
+ * Handles the custom 'reloadPosts' event. Refetches and re-renders posts and hero.
  */
 function handleReloadPosts() {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
-        // Re-initialize posts, which will pick up any new URL parameters (like search query OR tag)
+        // Fetch all posts again
+        const allPosts = yield (0, api_1.fetchBlogPosts)();
+        if (!allPosts || allPosts.length === 0)
+            return;
+        // Update hero
+        renderLatestHero(allPosts);
+        // Remove hero posts from grid
         const urlParams = new URLSearchParams(window.location.search);
         const searchTerm = (_a = urlParams.get('search')) !== null && _a !== void 0 ? _a : undefined;
-        yield initializePosts(searchTerm);
+        yield initializePosts(searchTerm, allPosts.slice(3));
         initializePagination();
         setupBlogCardsDelegation();
     });
@@ -55,13 +60,14 @@ function handleReloadPosts() {
  * Set up event delegation for blog cards container
  */
 function setupBlogCardsDelegation() {
-    const blogCardsContainer = document.querySelector('#blog.blog-cards');
+    // Replace blog container selector to match new HTML
+    const blogCardsContainer = document.querySelector('.posts-grid');
     if (blogCardsContainer) {
         blogCardsContainer.removeEventListener('click', handleBlogCardClick); // Prevent duplicates
         blogCardsContainer.addEventListener('click', handleBlogCardClick);
     }
     else {
-        console.warn('Could not find #blog.blog-cards container for delegation.');
+        console.warn('Could not find .posts-grid container for delegation.');
     }
 }
 /**
@@ -87,36 +93,40 @@ function handleBlogCardClick(event) {
 /**
  * Initialize blog posts: Fetch, filter (based on URL param), and render.
  */
-function initializePosts(searchTerm) {
+function initializePosts(searchTerm, allPostsParam) {
     return __awaiter(this, void 0, void 0, function* () {
-        const blogCardsContainer = document.querySelector('#blog.blog-cards');
+        var _a, _b, _c;
+        const blogCardsContainer = document.querySelector('.posts-grid');
         if (!blogCardsContainer) {
-            console.error('Blog cards container (#blog.blog-cards) not found in the DOM.');
+            console.error('Posts grid (.posts-grid) container not found. Skipping post initialization.');
             return;
         }
-        // --- Check for Tag Filter ---
+        // --- Check for Tag Filter & SearchTerm ---
         const urlParams = new URLSearchParams(window.location.search);
-        const tagFilter = urlParams.get('tag');
-        const filterDisplay = document.getElementById('filter-display'); // Optional element to show filter
-        // --- Determine Base Path (needed for Clear Filter link) ---
-        const currentHostname = window.location.hostname;
-        const isProduction = currentHostname === 'noelugwoke.com' || currentHostname.endsWith('.github.io');
-        // *** IMPORTANT: Change '/blog/' if your GitHub repo name/path is different ***
-        const basePath = isProduction ? '/blog/' : '/';
-        // Remove any existing filter indicator before potentially adding a new one
-        const existingFilterIndicator = document.querySelector('.tag-filter-indicator');
-        if (existingFilterIndicator) {
-            existingFilterIndicator.remove();
+        const tagFilter = (_a = urlParams.get('tag')) !== null && _a !== void 0 ? _a : undefined;
+        // Hide the hero section if filtering or searching
+        const heroSection = document.getElementById('latest-hero');
+        if (tagFilter || searchTerm) {
+            heroSection === null || heroSection === void 0 ? void 0 : heroSection.classList.add('hidden-by-search');
         }
-        // Add filter indicator if tagFilter exists
+        else {
+            heroSection === null || heroSection === void 0 ? void 0 : heroSection.classList.remove('hidden-by-search');
+        }
+        // Optional UI indicator for tag filter
+        const filterDisplay = document.getElementById('filter-display');
+        const currentHostname = window.location.hostname;
+        const isProduction = currentHostname === 'noelugwoke.com' ||
+            currentHostname.endsWith('.github.io');
+        const basePath = isProduction ? '/blog/' : '/';
+        // Remove any old indicator
+        (_b = document.querySelector('.tag-filter-indicator')) === null || _b === void 0 ? void 0 : _b.remove();
         if (tagFilter) {
             const filterContainer = document.createElement('div');
             filterContainer.className = 'tag-filter-indicator';
-            // Use basePath for the Clear filter link's href
             filterContainer.innerHTML = `
-            <p>Showing posts tagged with: <span class="filtered-tag">${tagFilter}</span></p>
-            <a href="${basePath}" class="clear-filter">Clear filter</a>
-        `;
+      <p>Showing posts tagged with: <span class="filtered-tag">${tagFilter}</span></p>
+      <a href="${basePath}" class="clear-filter">Clear filter</a>
+    `;
             const blogSection = document.getElementById('blog');
             if (blogSection === null || blogSection === void 0 ? void 0 : blogSection.parentNode) {
                 blogSection.parentNode.insertBefore(filterContainer, blogSection);
@@ -129,51 +139,44 @@ function initializePosts(searchTerm) {
         else if (filterDisplay) {
             filterDisplay.style.display = 'none';
         }
-        // --- End Check for Tag Filter ---
+        // --- End Filter UI ---
         try {
-            blogCardsContainer.innerHTML = '<div class="loading-spinner"></div><p>Loading posts...</p>';
-            let allPosts = yield (0, api_1.fetchBlogPosts)();
+            blogCardsContainer.innerHTML =
+                '<div class="loading-spinner"></div><p>Loading posts...</p>';
+            let allPosts = allPostsParam || (yield (0, api_1.fetchBlogPosts)());
             // --- Apply Tag Filter ---
             let postsToDisplay = allPosts;
             if (tagFilter) {
-                postsToDisplay = allPosts.filter(post => post.tags && post.tags.some(tag => tag.toLowerCase() === tagFilter.toLowerCase()));
-                // Store the filtered tag in frontend state
+                postsToDisplay = allPosts.filter((post) => { var _a; return (_a = post.tags) === null || _a === void 0 ? void 0 : _a.some((t) => t.toLowerCase() === tagFilter.toLowerCase()); });
                 state_1.frontendState.filteredTag = tagFilter;
             }
             else {
                 state_1.frontendState.filteredTag = undefined;
             }
-            // --- End Apply Tag Filter ---
             // --- Apply Search Filter ---
             if (searchTerm) {
-                postsToDisplay = postsToDisplay.filter(post => post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())));
+                const term = searchTerm.toLowerCase();
+                postsToDisplay = postsToDisplay.filter((post) => post.title.toLowerCase().includes(term) ||
+                    post.content.toLowerCase().includes(term) ||
+                    post.tags.some((t) => t.toLowerCase().includes(term)));
             }
-            // --- End Apply Search Filter ---
             blogCardsContainer.innerHTML = '';
             if (postsToDisplay.length === 0) {
-                showEmptyState(blogCardsContainer, tagFilter !== null && tagFilter !== void 0 ? tagFilter : undefined);
-                const loadMoreBtn = document.getElementById('load-more-btn');
-                if (loadMoreBtn)
-                    loadMoreBtn.style.display = 'none';
+                showEmptyState(blogCardsContainer, tagFilter);
+                (_c = document.getElementById('load-more-btn')) === null || _c === void 0 ? void 0 : _c.setAttribute('style', 'display:none;');
                 return;
             }
-            // Pagination logic
-            const initialPostCount = state_1.frontendState.postsPerPage;
-            const displayPosts = postsToDisplay.slice(0, initialPostCount);
-            const hiddenPosts = postsToDisplay.slice(initialPostCount);
-            displayPosts.forEach(post => {
-                const blogCard = (0, blogCards_1.createBlogCardElement)(post);
-                blogCardsContainer.appendChild(blogCard);
+            // --- Pagination / Load More ---
+            const initialCount = state_1.frontendState.postsPerPage;
+            const displayPosts = postsToDisplay.slice(0, initialCount);
+            const hiddenPosts = postsToDisplay.slice(initialCount);
+            displayPosts.forEach((post) => {
+                blogCardsContainer.appendChild((0, blogCards_1.createBlogCardElement)(post));
             });
-            const hiddenPostsContainer = document.getElementById('hidden-posts');
-            if (hiddenPostsContainer) {
-                hiddenPostsContainer.innerHTML = '';
-                hiddenPosts.forEach(post => {
-                    const blogCard = (0, blogCards_1.createBlogCardElement)(post);
-                    hiddenPostsContainer.appendChild(blogCard);
-                });
+            const hiddenContainer = document.getElementById('hidden-posts');
+            if (hiddenContainer) {
+                hiddenContainer.innerHTML = '';
+                hiddenPosts.forEach((post) => hiddenContainer.appendChild((0, blogCards_1.createBlogCardElement)(post)));
             }
             const loadMoreBtn = document.getElementById('load-more-btn');
             if (loadMoreBtn) {
@@ -226,7 +229,7 @@ function initializePagination() {
 function setupLoadMoreButton() {
     const loadMoreBtn = document.getElementById('load-more-btn');
     const hiddenPostsContainer = document.getElementById('hidden-posts');
-    const visibleContainer = document.querySelector('#blog.blog-cards');
+    const visibleContainer = document.querySelector('.posts-grid');
     if (!loadMoreBtn || !hiddenPostsContainer || !visibleContainer)
         return;
     // Remove existing event listener to prevent duplicates
@@ -240,7 +243,7 @@ function setupLoadMoreButton() {
 function handleLoadMore() {
     const loadMoreBtn = document.getElementById('load-more-btn');
     const hiddenPostsContainer = document.getElementById('hidden-posts');
-    const visibleContainer = document.querySelector('#blog.blog-cards');
+    const visibleContainer = document.querySelector('.posts-grid');
     if (!loadMoreBtn || !hiddenPostsContainer || !visibleContainer)
         return;
     // Get posts to show (use a reasonable batch size)
@@ -265,4 +268,43 @@ function updatePaginationControls() {
     if (loadMoreBtn && hiddenPostsContainer) {
         loadMoreBtn.style.display = hiddenPostsContainer.children.length > 0 ? 'block' : 'none';
     }
+}
+/**
+ * Picks the newest post and renders it as a big hero at the top.
+ */
+function renderLatestHero(posts) {
+    const hero = document.getElementById('latest-hero');
+    const [main, second, third] = posts;
+    const fmt = (d) => new Date(d)
+        .toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    hero.innerHTML = `
+    <a href="post.html?id=${main.id}" class="hero-large">
+      <img src="${main.imageUrl}" alt="${main.title}" class="hero-large-image" />
+      <div class="hero-overlay">
+        <p class="hero-category">${main.tags.join(', ')}</p>
+        <time class="hero-date">${fmt(main.createdAt)}</time>
+        <h2 class="hero-title">${main.title}</h2>
+      </div>
+    </a>
+    <a href="post.html?id=${second.id}" class="hero-small small-1">
+      <img src="${second.imageUrl}" alt="${second.title}" />
+      <div class="hero-small-info">
+        <time class="hero-date">${fmt(second.createdAt)}</time>
+        <h3 class="hero-title-small">${second.title}</h3>
+      </div>
+    </a>
+    <a href="post.html?id=${third.id}" class="hero-small small-2">
+      <img src="${third.imageUrl}" alt="${third.title}" />
+      <div class="hero-small-info">
+        <time class="hero-date">${fmt(third.createdAt)}</time>
+        <h3 class="hero-title-small">${third.title}</h3>
+      </div>
+    </a>
+  `;
+}
+// Utility to strip HTML tags for an excerpt
+function stripHtml(html) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || '';
 }

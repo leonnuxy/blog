@@ -6,73 +6,65 @@ This project is a modern blog application with a Duolingo-inspired design, built
 
 ```
 blog-project
-├── src
-│   ├── client                 # Client-side code
-│   ├── components             # UI components
-│   ├── controllers            # Application controllers
-│   ├── entries                # Entry points for client and admin
-│   ├── models                 # Data models
-│   ├── services               # API services
-│   ├── types                  # TypeScript types and interfaces
-│   └── utils                  # Utility functions
-├── public                     # Static HTML files
+├── data                      # Data files (e.g., posts.json)
+├── fonts                     # Font files
+├── public                    # Static HTML and assets
 │   ├── admin.html            # Admin interface
 │   ├── index.html            # Main blog page
 │   └── post.html             # Individual post page
-├── styles                     # CSS styles
-├── data                       # JSON data files
-├── Dockerfile                 # Docker image instructions
-├── docker-compose.yml         # Docker orchestration file
-├── package.json               # npm configuration file
-├── tsconfig.json              # TypeScript configuration file
-├── webpack.config.js          # Webpack configuration
-└── README.md                  # Project documentation
+├── scripts                   # Utility scripts
+├── shared                    # Shared TypeScript types
+├── src                       # Source code
+│   ├── client                # Client-side code
+│   ├── components            # UI components
+│   ├── controllers           # Application controllers
+│   ├── entries               # Entry points for client and admin
+│   ├── models                # Data models
+│   ├── modules               # Feature modules
+│   ├── services              # API services
+│   ├── types                 # TypeScript types and interfaces
+│   └── utils                 # Utility functions
+├── styles                    # CSS stylesheets
+│   ├── components            # Component-specific styles
+│   ├── global                # Global styles
+│   └── views                 # View-specific styles
+├── views                     # HTML views
+├── Dockerfile                # Docker configuration
+├── docker-compose.yml        # Docker Compose configuration
+├── package.json              # Node.js dependencies and scripts
+├── tsconfig.json             # TypeScript configuration
+├── webpack.config.js         # Webpack configuration
 ```
 
-## Setup Instructions
+## How to Run the Application
 
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   cd blog-project
-   ```
+To build and run the application, use the following commands:
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+```bash
+npm run build && npx tsc && node dist/src/entries/app.js
+```
 
-3. Run the application in development mode:
-   ```
-   npm run dev -- src/entries/client.ts
-   ```
-   
-   For the admin interface:
-   ```
-   npm run dev -- src/entries/admin.ts
-   ```
+### Steps:
+1. `npm run build`: Builds the project using Webpack.
+2. `npx tsc`: Compiles the TypeScript files into JavaScript.
+3. `node dist/src/entries/app.js`: Starts the application.
 
-4. Build the application for production:
-   ```
-   npm run build
-   ```
-   
-5. Start the production build:
-   ```
-   npm start
-   ```
+## Features
+- **Client Interface**: A user-friendly interface for browsing blog posts.
+- **Admin Interface**: Tools for managing blog content.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **Dark Mode**: Toggle between light and dark themes.
+- **Search and Pagination**: Easily find and navigate through posts.
 
-6. To run the application using Docker:
-   ```
-   docker-compose up
-   ```
+## Development
+To contribute or modify the project, ensure you have the following installed:
+- Node.js (v16 or later)
+- npm (v7 or later)
 
-## Usage
+### Setting Up the Development Environment
+1. Clone the repository.
+2. Run `npm install` to install dependencies.
+3. Use `npm run build` to build the project.
+4. Start the application using the run command mentioned above.
 
-- To create a new blog post, send a POST request to `/api/posts` with the blog post data.
-- To retrieve all blog posts, send a GET request to `/api/posts`.
-- To delete a blog post, send a DELETE request to `/api/posts/:id`.
-
-## License
-
-This project is licensed under the MIT License.
+Feel free to explore the `src` directory for the main codebase and the `styles` directory for CSS customizations.

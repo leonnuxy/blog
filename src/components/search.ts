@@ -1,133 +1,115 @@
-// src/components/search.ts
-
-import { fetchBlogPosts } from '../services/api'; // Import if not already there
-
 /**
  * Initializes a simple, client-side search functionality for blog posts.
- * Filters currently visible blog cards on the page as the user types or redirects to the homepage for search on post detail pages.
+ * Filters currently visible blog cards on the page as the user types
+ * or redirects to the homepage for searches on post detail pages.
  */
 export function initializeSearch(): void {
-    const searchBar = document.querySelector('#search-input') as HTMLInputElement;
-    const blogCardsContainer = document.querySelector('#blog.blog-cards'); // Target the main container
-    const heroSection = document.querySelector('.hero') as HTMLElement | null; // Get hero section (can be null)
-    const searchIndicator = document.createElement('div');
+  const searchBar = document.querySelector<HTMLInputElement>('#search-input');
+  const headerRight = document.querySelector<HTMLElement>('.header-right');
+  const blogCardsContainer = document.querySelector<HTMLElement>('.posts-grid');
 
-    searchIndicator.className = 'search-indicator';
-    searchIndicator.setAttribute('aria-live', 'polite');
-    searchIndicator.style.display = 'none';
-    const clearFilterBtn = document.createElement('button');
-    clearFilterBtn.className = 'clear-filter-btn';
-    clearFilterBtn.innerHTML = '<i class="fas fa-times"></i> Clear Filter';
-    clearFilterBtn.setAttribute('aria-label', 'Clear search filter and return to homepage');
-    clearFilterBtn.addEventListener('click', () => {
-        searchBar.value = '';
-        filterBlogCards('');
-        searchBar.focus();
-    });
-    searchIndicator.appendChild(document.createElement('span'));
-    searchIndicator.appendChild(clearFilterBtn);
-    const headerRight = document.querySelector('.header-right');
-    headerRight?.insertBefore(searchIndicator, headerRight.firstChild);
+  if (!searchBar || !headerRight) {
+    console.warn('Search elements not found. Skipping initialization.');
+    return;
+  }
 
-    let allCards: HTMLElement[] = [];
-    let debounceTimer: ReturnType<typeof setTimeout>;
+  // live‑status + clear button
+  const searchIndicator = document.createElement('div');
+  searchIndicator.className = 'search-indicator';
+  searchIndicator.setAttribute('aria-live', 'polite');
+  searchIndicator.style.display = 'none';
 
-    searchBar.addEventListener('input', () => {
-        const searchTerm = searchBar.value.trim().toLowerCase();
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            filterBlogCards(searchTerm);
-        }, 300);
-    });
+  const clearFilterBtn = document.createElement('button');
+  clearFilterBtn.className = 'clear-filter-btn';
+  clearFilterBtn.innerHTML = '<i class="fas fa-times"></i> Clear Filter';
+  clearFilterBtn.setAttribute('aria-label', 'Clear search filter');
+  clearFilterBtn.type = 'button';
+  clearFilterBtn.addEventListener('click', () => {
+    searchBar.value = '';
+    filterBlogCards('');
+    searchBar.focus();
+  });
 
-    function filterBlogCards(term: string): void {
-        if (window.location.pathname.includes('post.html')) {
-            if (term) {
-                window.location.href = `/?search=${encodeURIComponent(term)}`;
-            } else {
-                window.location.href = `/`; // Redirect to homepage if search is cleared
-            }
-            return; // Exit the function as we've redirected
-        }
+  const textSpan = document.createElement('span');
+  searchIndicator.append(textSpan, clearFilterBtn);
+  headerRight.insertBefore(searchIndicator, headerRight.firstChild);
 
-        // if (heroSection) {
-        //     heroSection.style.display = term ? 'none' : '';
-        // }
+  let allCards: HTMLElement[] = [];
+  let debounceTimer: ReturnType<typeof setTimeout>;
 
-        if (!blogCardsContainer) {
-            return; // If no blog cards container (not on main page), do nothing more
-        }
+  searchBar.addEventListener('input', () => {
+    const term = searchBar.value.trim().toLowerCase();
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => filterBlogCards(term), 300);
+  });
 
-        if (allCards.length === 0) {
-            allCards = Array.from(document.querySelectorAll('#blog.blog-cards .blog-card, #hidden-posts .blog-card'));
-            if (allCards.length === 0) {
-                console.log("No blog cards found to filter.");
-                return;
-            }
-            console.log(`Search filtering initialized with ${allCards.length} cards.`);
-        }
+  searchBar.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      searchBar.value = '';
+      filterBlogCards('');
+      searchBar.blur();
+    }
+  });
 
-        let visibleCount = 0;
-        allCards.forEach(card => {
-            let matchesSearch = false;
-            if (!term) {
-                matchesSearch = true;
-            } else {
-                const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
-                const tags = Array.from(card.querySelectorAll('.tag-badge'))
-                    .map(tag => tag.textContent?.toLowerCase() || '');
-                matchesSearch =
-                    title.includes(term) ||
-                    tags.some(tag => tag.includes(term));
-            }
-            if (matchesSearch) {
-                card.classList.remove('hidden-by-search');
-                visibleCount++;
-            } else {
-                card.classList.add('hidden-by-search');
-            }
-        });
-
-        const textSpan = searchIndicator.querySelector('span');
-        if (textSpan) {
-            textSpan.textContent = term
-                ? (visibleCount > 0
-                    ? `Showing ${visibleCount} result${visibleCount > 1 ? 's' : ''} for "${term}"`
-                    : `No results found for "${term}"`)
-                : '';
-        }
-        searchIndicator.style.display = term ? 'block' : 'none';
-
-        const noResultsMessage = blogCardsContainer.querySelector('.no-search-results-message');
-        if (visibleCount === 0 && term) {
-            if (!noResultsMessage) {
-                const message = document.createElement('div');
-                message.className = 'empty-state no-search-results-message';
-                message.innerHTML = `
-                    <i class="fas fa-search fa-3x"></i>
-                    <h3>No matching posts found</h3>
-                    <p>Try different keywords.</p>
-                `;
-                blogCardsContainer.appendChild(message);
-            }
-        } else if (noResultsMessage) {
-            noResultsMessage.remove();
-        }
+  function filterBlogCards(term: string): void {
+    const heroSection = document.getElementById('latest-hero');
+    if (heroSection) {
+      heroSection.style.display = term ? 'none' : '';
+    }
+    // on post page → redirect
+    if (window.location.pathname.includes('post.html')) {
+      window.location.href = term
+        ? `/?search=${encodeURIComponent(term)}`
+        : `/`;
+      return;
     }
 
-    searchBar.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            searchBar.value = '';
-            filterBlogCards('');
-            searchBar.blur();
-        }
+    if (!blogCardsContainer) return;
+
+    if (allCards.length === 0) {
+      allCards = Array.from(
+        document.querySelectorAll('.posts-grid .blog-card, #hidden-posts .blog-card')
+      );
+      if (!allCards.length) {
+        return;
+      }
+    }
+
+    let visibleCount = 0;
+    allCards.forEach(card => {
+      let matches = !term;
+      if (term) {
+        const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+        const tags = Array.from(card.querySelectorAll('.tag-badge'))
+          .map(el => el.textContent?.toLowerCase() || '');
+        matches = title.includes(term) || tags.some(t => t.includes(term));
+      }
+      card.classList.toggle('hidden-by-search', !matches);
+      if (matches) visibleCount++;
     });
 
-    const searchButton = document.querySelector('#search-button');
-    if (searchButton) {
-        searchButton.addEventListener('click', () => {
-            const searchTerm = searchBar.value.trim().toLowerCase();
-            filterBlogCards(searchTerm);
-        });
+    textSpan.textContent = term
+      ? (visibleCount
+        ? `Showing ${visibleCount} result${visibleCount > 1 ? 's' : ''} for "${term}"`
+        : `No results for "${term}"`)
+      : '';
+    searchIndicator.style.display = term ? 'block' : 'none';
+
+    // no‑results message
+    const noResults = blogCardsContainer.querySelector('.no-search-results-message');
+    if (visibleCount === 0 && term) {
+      if (!noResults) {
+        const msg = document.createElement('div');
+        msg.className = 'empty-state no-search-results-message';
+        msg.innerHTML = `
+          <i class="fas fa-search fa-3x"></i>
+          <h3>No matching posts found</h3>
+          <p>Try different keywords.</p>
+        `;
+        blogCardsContainer.append(msg);
+      }
+    } else if (noResults) {
+      noResults.remove();
     }
+  }
 }

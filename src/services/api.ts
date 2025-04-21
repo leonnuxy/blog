@@ -42,8 +42,17 @@ export async function fetchBlogPosts(): Promise<BlogPostData[]> {
             throw new Error(`Failed to fetch ${STATIC_DATA_URL}: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
-        // Assuming the JSON structure is { posts: [...] } 
-        return data.posts || []; 
+        // Map raw data to ensure all fields, including imageUrl, are present
+        return data.posts.map((post: any) => ({
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            author: post.author,
+            createdAt: post.createdAt,
+            updatedAt: post.updatedAt,
+            tags: post.tags,
+            imageUrl: post.imageUrl // Ensure imageUrl is included
+        }));
     } catch (error) {
         console.error(`Error fetching static ${STATIC_DATA_URL}:`, error);
         return []; // Return empty array on error

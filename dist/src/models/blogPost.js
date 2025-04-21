@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class BlogPost {
-    constructor(id, title, content, author, tags = [], createdAt, likes) {
+    constructor(id, title, content, author, imageUrl, tags = [], createdAt, likes) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -10,6 +10,7 @@ class BlogPost {
         this.updatedAt = new Date();
         this.tags = tags || [];
         this.likes = likes !== undefined ? likes : 0;
+        this.imageUrl = imageUrl;
     }
     addTag(tag) {
         if (!this.tags.includes(tag)) {

@@ -22,31 +22,28 @@ export function initializeMobileNav(): void {
         });
     };
 
-    // --- Event Listeners ---
-    const openDrawer = () => {
-        drawer.classList.add('open');
-        overlay.classList.add('visible');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
-    };
+    // --- Drawer/Overlay Open/Close Logic ---
+    const openBtn = document.querySelector('.mobile-nav-toggle')!;
+    const closeBtn = drawer.querySelector('.close-drawer-btn')!;
 
-    const closeDrawer = () => {
-        drawer.classList.remove('open');
-        overlay.classList.remove('visible');
-        document.body.style.overflow = ''; // Restore scrolling
-    };
-
-    hamburgerBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent triggering overlay click
-        openDrawer();
+    openBtn.addEventListener('click', () => {
+      drawer.classList.add('open');
+      overlay.classList.add('open');
     });
-
-    closeDrawerBtn.addEventListener('click', closeDrawer);
-    overlay.addEventListener('click', closeDrawer);
+    closeBtn.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+    });
+    overlay.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+    });
 
     // Close drawer when a link inside it is clicked
     mobileNavContainer.addEventListener('click', (e) => {
         if ((e.target as HTMLElement).tagName === 'A') {
-            closeDrawer();
+            drawer.classList.remove('open');
+            overlay.classList.remove('open');
         }
     });
 

@@ -6,14 +6,12 @@
  * Initialize the About section popup
  */
 export function initializeAbout(): void {
-    // Get DOM elements
     const aboutBtn = document.getElementById('about-btn');
     const aboutPopup = document.getElementById('about-popup');
     const closePopup = document.querySelector('#about-popup .close-popup');
 
-    // Exit if required elements don't exist
     if (!aboutBtn || !aboutPopup || !closePopup) {
-        console.warn('About popup elements not found in the DOM');
+        console.warn('About popup elements not found in the DOM. Skipping initialization.');
         return;
     }
 

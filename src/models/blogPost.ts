@@ -7,12 +7,14 @@ class BlogPost {
     updatedAt: Date;
     tags: string[];
     likes: number;
+    imageUrl: string;
 
     constructor(
         id: number,
         title: string,
         content: string,
         author: string,
+        imageUrl: string,
         tags: string[] = [],
         createdAt?: string | Date,
         likes?: number
@@ -25,6 +27,7 @@ class BlogPost {
         this.updatedAt = new Date();
         this.tags = tags || [];
         this.likes = likes !== undefined ? likes : 0;
+        this.imageUrl = imageUrl;
     }
 
     addTag(tag: string): void {

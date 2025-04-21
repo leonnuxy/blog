@@ -6,7 +6,7 @@ export interface BlogPostData {
     createdAt: string; // Changed from Date to string
     updatedAt?: string; // Made updatedAt optional
     tags: string[];
-    imageUrl?: string; // Added imageUrl property
+    imageUrl: string; // Made imageUrl required
 }
 
 export interface CreatePostRequest {
