@@ -65,7 +65,18 @@ export async function updatePostUI(post: BlogPostData): Promise<void> {
   if (dateEl) dateEl.textContent = new Date(post.createdAt).toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric'
   });
-  if (tagsEl) tagsEl.innerHTML = post.tags.map(tag => `<a href="${generateTagFilterUrl(tag)}">${tag}</a>`).join(', ');
+  if (tagsEl) {
+    tagsEl.innerHTML = post.tags
+      .map(
+        tag => `
+          <a
+            href="${generateTagFilterUrl(tag)}"
+            class="tag-badge"
+          >${tag}</a>
+        `
+      )
+      .join('');
+  }
   if (imageEl) imageEl.src = post.imageUrl; // Set the featured image
 
   // 2) Content

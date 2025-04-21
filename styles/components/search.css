@@ -103,13 +103,13 @@
 }
 
 .clear-filter-btn {
-    background-color: var(--surface-hover);
+    background-color: transparent;
     border: none;
     color: var(--text-color);
     cursor: pointer;
-    padding: 0.5rem 0.75rem;
+    margin-left: 8rem;
     font-size: 0.9rem;
-    border-radius: var(--border-radius-small);
+    border-radius: var(--border-radius-large);
     transition: background-color var(--transition-fast), color var(--transition-fast);
     text-decoration: none; /* Remove underline */
 }
@@ -130,6 +130,19 @@
 
     .search-bar:focus {
         width: 180px;
+    }
+
+    .search-indicator {
+        position: fixed;
+        top: var(--header-height, 70px);
+        left: 0;
+        width: 82vw;
+        margin: 0;
+        border-radius: var(--border-radius-xlarge);
+        z-index: 101;
+        box-sizing: border-box;
+        /* Optional: add a little shadow for separation */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 }
 

@@ -133,7 +133,7 @@ async function initializePosts(
         filterContainer.className = 'tag-filter-indicator';
         filterContainer.innerHTML = `
       <p>Showing posts tagged with: <span class="filtered-tag">${tagFilter}</span></p>
-      <a href="${basePath}" class="clear-filter">Clear filter</a>
+      <a href="${basePath}" class="clear-filter"></a>
     `;
         const blogSection = document.getElementById('blog');
         if (blogSection?.parentNode) {
@@ -319,7 +319,6 @@ function renderLatestHero(posts: BlogPostData[]) {
     <a href="post.html?id=${main.id}" class="hero-large">
       <img src="${main.imageUrl}" alt="${main.title}" class="hero-large-image" />
       <div class="hero-overlay">
-        <p class="hero-category">${main.tags.join(', ')}</p>
         <time class="hero-date">${fmt(main.createdAt)}</time>
         <h2 class="hero-title">${main.title}</h2>
       </div>

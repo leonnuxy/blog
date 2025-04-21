@@ -138,33 +138,116 @@
 }
 
 /* bottom tags */
+/* container at bottom of post */
 .post-tags-bottom {
-  margin: 3rem auto 4rem;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-4);
 }
 
+/* the pill */
 .post-tags-bottom .tag-badge {
-  background: rgba(255,255,255,0.15);
-  color: #fff;
+  display: inline-block;
+  font-size: var(--font-size-sm);
   padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  transition: background .2s;
+  border-radius: var(--border-radius-full);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  text-decoration: none;
+  backdrop-filter: blur(4px);
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
 }
+
 .post-tags-bottom .tag-badge:hover {
-  background: rgba(255,255,255,0.3);
+  background: rgba(0, 0, 0, 0.6);
+  transform: translateY(-1px);
 }
 
 /* 5) Mobile first */
 @media (max-width: 768px) {
   .post-page {
     grid-template-columns: 1fr;
+    margin: 2rem auto; /* Reduced margin for mobile */
+    gap: 1.5rem;
+    padding: 0;
   }
+  
   .post-hero {
     text-align: left;
+    margin-bottom: 0.5rem;
+  }
+  
+  .post-hero h1 {
+    font-size: 1.60rem; /* Smaller font size on mobile */
+    line-height: 1.3;
+    text-align: center;
+  }
+  
+  .post-date {
+    font-size: 0.85rem; /* Smaller date font size */
+    margin: 0;
+    align-self: center;
+  }
+  .post-meta {
+    justify-content: center; /* Left-align on mobile */
+    margin: 1rem 0;
+    gap: 0.5rem;
+  }
+  
+  .post-article {
+    padding: 0;
+    font-size: 0.95rem; /* Slightly smaller text for readability */
+  }
+
+  .post-article ul, .post-article ol{
+    margin-left: 0;
+  }
+  
+  .post-article h1 { font-size: 1.5rem; }
+  .post-article h2 { font-size: 1.35rem; }
+  .post-article h3 { font-size: 1.2rem; }
+  
+  .post-article blockquote {
+    margin: 1.5rem 0;
+    padding: 0.75rem 1rem;
+  }
+
+  .post-page{
+    display: block;
+  }
+  
+  .post-article pre {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .post-sidebar {
+    grid-column: 1 / 2; /* Take full width on mobile */
+    position: static; /* Remove sticky positioning */
+    margin-top: 2rem;
+  }
+  
+  .post-tags-bottom {
+    margin: 2rem auto;
+    justify-content: center; /* Align tags to the left on mobile */
+    gap: 0.5rem; /* Slightly reduce gap on mobile */
+  }
+  
+  .post-tags-bottom .tag-badge {
+    padding: 0.3rem 0.75rem; /* Adjust padding for mobile */
+    font-size: 0.8rem; /* Slightly smaller font on mobile */
+  }
+  
+  .post-featured-image {
+    max-height: 250px; /* Smaller featured images on mobile */
+    margin-bottom: 0;
+  }
+  
+  .post-end-line {
+    margin: 2rem 0;
   }
 }
 
@@ -175,7 +258,11 @@ body:not(.dark-mode) .post-meta time {
 }
 
 body:not(.dark-mode) .post-tags-bottom .tag-badge {
-  background: rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.1); /* Adjusted light mode background */
+  color: var(--text-color);
+}
+body:not(.dark-mode) .post-tags-bottom .tag-badge:hover {
+  background: rgba(0,0,0,0.2); /* Adjusted light mode hover */
   color: var(--text-color);
 }
 

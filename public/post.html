@@ -11,12 +11,9 @@
   <link rel="stylesheet" href="styles/global/base.css" />
   <link rel="stylesheet" href="styles/global/utilities.css" />
   <link rel="stylesheet" href="styles/global/layout.css" />
-
-  <!-- 2) Component styles -->
-  <link rel="stylesheet" href="styles/components/header.css" />
-  <link rel="stylesheet" href="styles/components/mobile-nav.css" />
+  <link rel="stylesheet" href="styles/global/components.css" />
   <link rel="stylesheet" href="styles/views/post.css" />
-  <link rel="stylesheet" href="styles/components/dark-mode.css" />
+
 
   <!-- 3) Third‑party -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
@@ -45,7 +42,12 @@
     <hr class="post-end-line" />
 
     <!-- Tags moved here -->
-    <div id="post-tags" class="post-tags post-tags-bottom"></div>
+    <div id="post-tags" class="post-tags post-tags-bottom">
+      <!-- Example structure - dynamically generated content should follow this -->
+      <a href="/?tag=express" class="tag-badge">express</a>
+      <a href="/?tag=nodejs" class="tag-badge">nodejs</a>
+      <a href="/?tag=backend" class="tag-badge">backend</a>
+    </div>
   </main>
   <footer class="site-footer container">
     <p>&copy; 2025 Blog. All rights reserved.</p>

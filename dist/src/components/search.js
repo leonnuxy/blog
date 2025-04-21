@@ -1,57 +1,94 @@
 "use strict";
+// src/components/search.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializeSearch = initializeSearch;
 /**
  * Initializes a simple, client-side search functionality for blog posts.
  * Filters currently visible blog cards on the page as the user types
- * or redirects to the homepage for searches on post detail pages.
+ * in either the desktop header or the mobile drawer search inputs,
+ * and hides the hero section when filtering. On post detail pages,
+ * redirects back to home with a `?search=` param.
  */
 function initializeSearch() {
-    const searchBar = document.querySelector('#search-input');
+    // grab both desktop and mobile search inputs
+    const desktopInput = document.querySelector('#search-input');
+    const mobileInput = document.querySelector('#search-input-mobile');
     const headerRight = document.querySelector('.header-right');
     const blogCardsContainer = document.querySelector('.posts-grid');
-    if (!searchBar || !headerRight) {
-        console.warn('Search elements not found. Skipping initialization.');
+    // need at least one input + header container
+    if (!headerRight) {
+        console.warn('Header container not found; skipping search initialization.');
         return;
     }
-    // live‑status + clear button
+    if (!desktopInput && !mobileInput) {
+        console.warn('No search inputs found; skipping search initialization.');
+        return;
+    }
+    // create live‑status indicator + clear button
     const searchIndicator = document.createElement('div');
     searchIndicator.className = 'search-indicator';
     searchIndicator.setAttribute('aria-live', 'polite');
     searchIndicator.style.display = 'none';
     const clearFilterBtn = document.createElement('button');
     clearFilterBtn.className = 'clear-filter-btn';
-    clearFilterBtn.innerHTML = '<i class="fas fa-times"></i> Clear Filter';
+    clearFilterBtn.innerHTML = '<i class="fas fa-times"></i>';
     clearFilterBtn.setAttribute('aria-label', 'Clear search filter');
     clearFilterBtn.type = 'button';
     clearFilterBtn.addEventListener('click', () => {
-        searchBar.value = '';
+        var _a;
+        // clear both inputs
+        if (desktopInput)
+            desktopInput.value = '';
+        if (mobileInput)
+            mobileInput.value = '';
         filterBlogCards('');
-        searchBar.focus();
+        // focus desktop input if present, else mobile
+        (_a = (desktopInput || mobileInput)) === null || _a === void 0 ? void 0 : _a.focus();
     });
     const textSpan = document.createElement('span');
     searchIndicator.append(textSpan, clearFilterBtn);
+    // insert indicator to the left of existing header widgets
     headerRight.insertBefore(searchIndicator, headerRight.firstChild);
     let allCards = [];
     let debounceTimer;
-    searchBar.addEventListener('input', () => {
-        const term = searchBar.value.trim().toLowerCase();
+    // unify input listener
+    function onInput(e) {
+        const term = (e.target.value || '').trim().toLowerCase();
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => filterBlogCards(term), 300);
-    });
-    searchBar.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-            searchBar.value = '';
-            filterBlogCards('');
-            searchBar.blur();
-        }
-    });
+    }
+    // wire up desktop input
+    if (desktopInput) {
+        desktopInput.addEventListener('input', onInput);
+        desktopInput.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                desktopInput.value = '';
+                filterBlogCards('');
+                desktopInput.blur();
+            }
+        });
+    }
+    // wire up mobile input
+    if (mobileInput) {
+        mobileInput.addEventListener('input', onInput);
+        mobileInput.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                mobileInput.value = '';
+                filterBlogCards('');
+                mobileInput.blur();
+            }
+        });
+    }
+    /**
+     * Core filtering logic.
+     */
     function filterBlogCards(term) {
+        // hide or show hero based on search term
         const heroSection = document.getElementById('latest-hero');
         if (heroSection) {
             heroSection.style.display = term ? 'none' : '';
         }
-        // on post page → redirect
+        // on a post-detail page, redirect instead of in-place filtering
         if (window.location.pathname.includes('post.html')) {
             window.location.href = term
                 ? `/?search=${encodeURIComponent(term)}`
@@ -60,11 +97,9 @@ function initializeSearch() {
         }
         if (!blogCardsContainer)
             return;
+        // collect cards once
         if (allCards.length === 0) {
             allCards = Array.from(document.querySelectorAll('.posts-grid .blog-card, #hidden-posts .blog-card'));
-            if (!allCards.length) {
-                return;
-            }
         }
         let visibleCount = 0;
         allCards.forEach(card => {
@@ -80,13 +115,14 @@ function initializeSearch() {
             if (matches)
                 visibleCount++;
         });
+        // update indicator text & visibility
         textSpan.textContent = term
-            ? (visibleCount
+            ? (visibleCount > 0
                 ? `Showing ${visibleCount} result${visibleCount > 1 ? 's' : ''} for "${term}"`
                 : `No results for "${term}"`)
             : '';
         searchIndicator.style.display = term ? 'block' : 'none';
-        // no‑results message
+        // handle "no results" empty state below the cards
         const noResults = blogCardsContainer.querySelector('.no-search-results-message');
         if (visibleCount === 0 && term) {
             if (!noResults) {

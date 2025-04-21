@@ -60,16 +60,7 @@
 }
 
 .hero-overlay .hero-category {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: bold;
-  background: rgb(6 6 6 / 55%);
-  color: #fff;
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--border-radius-full);
-  margin-bottom: var(--spacing-2);
-  position: relative; z-index:2;
-  width: fit-content;
+  display: none;
 }
 .hero-overlay .hero-date {
   font-size: 0.75rem;
@@ -160,5 +151,87 @@
   .hero-grid .hero-large,
   .hero-grid .hero-small {
     height: 200px;
+  }
+}
+
+/* ==========================================================================
+   MOBILE HERO TWEAKS (≤600px)
+   ========================================================================== */
+@media (max-width: 600px) {
+  /* 1) Stack featured + teasers */
+  #latest-hero.hero-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 200px);
+    grid-template-areas:
+      "large"
+      "small1"
+      "small2";
+  }
+
+  /* 2) Uniform height */
+  #latest-hero.hero-grid .hero-large,
+  #latest-hero.hero-grid .hero-small {
+    height: 200px;
+  }
+
+  /* 3) Padding reduction */
+  #latest-hero .hero-overlay,
+  .hero-grid .hero-small-info {
+    padding: var(--spacing-2);
+  }
+
+  /* 4) Show category/tag badges */
+  #latest-hero .hero-overlay .hero-category {
+    display: inline-block;
+    font-size: 0.75rem;
+    background: rgba(255,255,255,0.3);
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--border-radius-full);
+    margin-bottom: var(--spacing-1);
+  }
+  .hero-grid .hero-small-info .hero-category {
+    display: inline-block;
+    font-size: 0.75rem;
+    background: rgba(255,255,255,0.3);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--border-radius-full);
+    margin-bottom: var(--spacing-1);
+  }
+
+  /* 5) Smaller text */
+  #latest-hero .hero-overlay .hero-title,
+  .hero-grid .hero-large .hero-title,
+  .hero-grid .hero-small-info .hero-title-small {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    margin: 5px;
+  }
+  #latest-hero .hero-overlay .hero-date,
+  .hero-grid .hero-small-info .hero-date {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  /* 6) Move date above title */
+  #latest-hero .hero-overlay {
+    display: flex;
+    flex-direction: column;
+  }
+  #latest-hero .hero-overlay .hero-date {
+    order: -1;
+    margin-bottom: 0;
+  }
+  .hero-grid .hero-large .hero-info,
+  .hero-grid .hero-small-info {
+    flex-direction: column;
+  }
+
+  /* 7) Rounded corners maintained */
+  #latest-hero .hero-large img,
+  #latest-hero .hero-small img,
+  .hero-grid .hero-large img,
+  .hero-grid .hero-small img {
+    border-radius: var(--border-radius-medium);
   }
 }
