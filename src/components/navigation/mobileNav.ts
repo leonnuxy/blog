@@ -1,55 +1,51 @@
+// src/components/navigation/mobileNav.ts
+
 export function initializeMobileNav(): void {
-    const hamburgerBtn = document.getElementById('hamburger-btn'); // Ensure this ID matches the button in header.js
-    const closeDrawerBtn = document.getElementById('close-drawer-btn');
-    const drawer = document.getElementById('mobile-nav-drawer');
-    const overlay = document.getElementById('drawer-overlay');
-    const mobileNavContainer = drawer?.querySelector('.mobile-nav');
-    const desktopNav = document.querySelector('.site-header nav ul'); // Get the desktop nav list
+  const toggleBtn = document.querySelector<HTMLButtonElement>('.mobile-nav-toggle');
+  const drawer = document.getElementById('mobile-nav-drawer');
+  const overlay = document.getElementById('drawer-overlay');
 
-    if (!hamburgerBtn || !closeDrawerBtn || !drawer || !overlay || !mobileNavContainer || !desktopNav) {
-        console.warn('Mobile navigation elements not found. Skipping initialization.');
-        return;
+  if (!toggleBtn || !drawer || !overlay) {
+    console.warn('Mobile nav elements not found; skipping initialization.');
+    return;
+  }
+
+  const closeBtn = drawer.querySelector<HTMLButtonElement>('.close-drawer-btn');
+  const navLinks = drawer.querySelectorAll<HTMLAnchorElement>('.mobile-nav-list a');
+
+  if (!closeBtn) {
+    console.warn('Close button not found; skipping initialization.');
+    return;
+  }
+
+  const openMenu = () => {
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    toggleBtn.setAttribute('aria-expanded', 'true');
+  };
+
+  const closeMenu = () => {
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    toggleBtn.setAttribute('aria-expanded', 'false');
+  };
+
+  // Event listeners
+  toggleBtn.addEventListener('click', openMenu);
+  closeBtn.addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  
+  // Close menu when clicking nav links
+  navLinks.forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Close menu on ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) {
+      closeMenu();
     }
-
-    // --- Clone Desktop Nav Links to Mobile Drawer ---
-    const cloneNavLinks = () => {
-        mobileNavContainer.innerHTML = ''; // Clear existing links
-        const desktopLinks = desktopNav.querySelectorAll('li a');
-        desktopLinks.forEach(link => {
-            const clonedLink = link.cloneNode(true) as HTMLAnchorElement;
-            // Optional: Add specific classes or modify attributes for mobile if needed
-            mobileNavContainer.appendChild(clonedLink);
-        });
-    };
-
-    // --- Drawer/Overlay Open/Close Logic ---
-    const openBtn = document.querySelector('.mobile-nav-toggle')!;
-    const closeBtn = drawer.querySelector('.close-drawer-btn')!;
-
-    openBtn.addEventListener('click', () => {
-      drawer.classList.add('open');
-      overlay.classList.add('open');
-    });
-    closeBtn.addEventListener('click', () => {
-      drawer.classList.remove('open');
-      overlay.classList.remove('open');
-    });
-    overlay.addEventListener('click', () => {
-      drawer.classList.remove('open');
-      overlay.classList.remove('open');
-    });
-
-    // Close drawer when a link inside it is clicked
-    mobileNavContainer.addEventListener('click', (e) => {
-        if ((e.target as HTMLElement).tagName === 'A') {
-            drawer.classList.remove('open');
-            overlay.classList.remove('open');
-        }
-    });
-
-    // --- Initialization ---
-    cloneNavLinks(); // Initial population
-
-    // Optional: Re-clone if desktop nav might change dynamically (e.g., login/logout)
-    // You might need a more robust way to handle dynamic updates if required.
+  });
 }
