@@ -11,7 +11,7 @@
 .posts-grid {
   display: grid;
   gap: var(--spacing-4);
-  margin: var(--spacing-6) auto;
+  margin: var(--spacing-4) auto;
   width: 100%;
   max-width: var(--content-max);
   /* fit as many columns as will break nicely at 280px minimum */
