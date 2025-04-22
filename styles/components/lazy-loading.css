@@ -1,0 +1,28 @@
+/* Lazy Loading Animation Styles */
+
+/* For regular img elements with loading="lazy" */
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.lazy-image.fade-in {
+  opacity: 1;
+}
+
+/* For elements with background images (like .blog-card) */
+.blog-card[data-lazy-bg-initialized] {
+  /* Start transparent only if lazy loading is initialized for it */
+  opacity: 0;
+  background-image: none !important; /* Ensure no background is shown initially */
+  /* Consolidate transitions here */
+  transition: 
+    opacity 0.6s ease-in-out, 
+    transform 0.3s ease-in-out, 
+    box-shadow 0.3s ease-in-out;
+}
+
+/* State once the background image has loaded */
+.blog-card.loaded {
+  opacity: 1;
+}
