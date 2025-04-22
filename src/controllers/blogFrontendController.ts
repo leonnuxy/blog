@@ -4,9 +4,10 @@
  * Client-side controller that handles all frontend functionality for the blog homepage.
  * Manages UI initialization, post rendering, filtering, pagination, and user interactions.
  */
-import { BlogPostData } from '../../shared/types';
 import { fetchBlogPosts } from '../services/api';
 import { createBlogCardElement } from '../components/blogCards';
+import { BlogPostData } from '../../shared/types';
+import { initBackgroundImageLazyLoading } from '../utils/lazyLoader';
 import { initializeNavigation } from '../components/navigation/navigation';
 import { frontendState, dispatchStateChange } from './state';
 
@@ -179,7 +180,7 @@ async function initializePosts(
         blogCardsContainer.innerHTML = '';
 
         if (postsToDisplay.length === 0) {
-            showEmptyState(blogCardsContainer, tagFilter);
+            showEmptyState(blogCardsContainer, tagFilter ?? undefined, basePath);
             document.getElementById('load-more-btn')?.setAttribute('style', 'display:none;');
             return;
         }
@@ -215,13 +216,17 @@ async function initializePosts(
 /**
  * Show empty state when no posts are available
  */
-function showEmptyState(container: Element, tagFilter?: string): void {
+function showEmptyState(container: Element, tagFilter?: string, basePath = '/') {
     container.innerHTML = `
         <div class="empty-state">
-            <i class="fas fa-newspaper fa-3x"></i>
-            <h3>${tagFilter ? `No posts found with tag "${tagFilter}"` : 'No posts available'}</h3>
-            <p>${tagFilter ? 'Try selecting a different tag or check back later.' : 'Check back later for new content.'}</p>
-            ${tagFilter ? `<a href="/" class="btn">View All Posts</a>` : ''}
+        <i class="fas fa-newspaper fa-3x"></i>
+        <h3>${tagFilter ? `No posts found with tag "${tagFilter}"` : 'No posts available'}</h3>
+        <p>${tagFilter
+                ? 'Try selecting a different tag or check back later.'
+                : 'Check back later for new content.'}</p>
+        ${tagFilter
+                ? `<a href="${basePath}" class="btn">View All Posts</a>`
+                : ''}
         </div>
     `;
 }
@@ -270,27 +275,37 @@ function setupLoadMoreButton(): void {
  * Handle the "Load More" button click
  */
 function handleLoadMore(): void {
+    const hiddenContainer = document.getElementById('hidden-posts');
+    const blogCardsContainer = document.querySelector('.posts-grid');
     const loadMoreBtn = document.getElementById('load-more-btn');
-    const hiddenPostsContainer = document.getElementById('hidden-posts');
-    const visibleContainer = document.querySelector('.posts-grid');
 
-    if (!loadMoreBtn || !hiddenPostsContainer || !visibleContainer) return;
+    if (!hiddenContainer || !blogCardsContainer || !loadMoreBtn) return;
 
-    // Get posts to show (use a reasonable batch size)
-    const postsToShow = Array.from(hiddenPostsContainer.children).slice(0, frontendState.postsPerPage);
+    const postsToLoad = Array.from(hiddenContainer.children).slice(
+        0,
+        frontendState.postsPerPage
+    );
 
-    // Move posts from hidden to visible container
-    postsToShow.forEach(post => {
-        visibleContainer.appendChild(post);
+    if (postsToLoad.length === 0) {
+        loadMoreBtn.style.display = 'none';
+        return;
+    }
+
+    postsToLoad.forEach((postElement) => {
+        // Move the post from hidden to visible container
+        hiddenContainer.removeChild(postElement);
+        blogCardsContainer.appendChild(postElement);
     });
 
-    // Hide button if no more hidden posts
-    if (hiddenPostsContainer.children.length === 0) {
+    // Re-initialize lazy loading for any newly added cards
+    initBackgroundImageLazyLoading('.blog-card');
+
+    // Update button visibility
+    if (hiddenContainer.children.length === 0) {
         loadMoreBtn.style.display = 'none';
     }
 
-    // Dispatch state change for analytics or other components
-    dispatchStateChange('frontend', 'loadedMorePosts');
+    updatePaginationControls(); // Update any pagination indicators if needed
 }
 
 /**
@@ -317,21 +332,21 @@ function renderLatestHero(posts: BlogPostData[]) {
 
     hero.innerHTML = `
     <a href="post.html?id=${main.id}" class="hero-large">
-      <img src="${main.imageUrl}" alt="${main.title}" class="hero-large-image" />
+      <img src="${main.imageUrl}" alt="${main.title}" class="hero-large-image" loading="lazy" />
       <div class="hero-overlay">
         <time class="hero-date">${fmt(main.createdAt)}</time>
         <h2 class="hero-title">${main.title}</h2>
       </div>
     </a>
     <a href="post.html?id=${second.id}" class="hero-small small-1">
-      <img src="${second.imageUrl}" alt="${second.title}" />
+      <img src="${second.imageUrl}" alt="${second.title}" loading="lazy" />
       <div class="hero-small-info">
         <time class="hero-date">${fmt(second.createdAt)}</time>
         <h3 class="hero-title-small">${second.title}</h3>
       </div>
     </a>
     <a href="post.html?id=${third.id}" class="hero-small small-2">
-      <img src="${third.imageUrl}" alt="${third.title}" />
+      <img src="${third.imageUrl}" alt="${third.title}" loading="lazy" />
       <div class="hero-small-info">
         <time class="hero-date">${fmt(third.createdAt)}</time>
         <h3 class="hero-title-small">${third.title}</h3>

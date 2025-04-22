@@ -146,6 +146,14 @@
     min-height: 100vh;
 }
 
+/* Footer for p*/
+.site-footer p{
+    margin: 0;
+    padding: var(--spacing-4) 0;
+    text-align: center;
+    color: var(--text-muted);
+}
+
 /* Responsive Layouts */
 @media (max-width: 1024px) {
     .grid-cols-4 {

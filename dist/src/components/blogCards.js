@@ -10,9 +10,10 @@ function createBlogCardElement(post) {
     const blogCard = document.createElement('div');
     blogCard.className = 'blog-card';
     blogCard.dataset.postId = String(post.id);
-    // 1) Background image
+    // 1) Background image - store in data attribute for lazy loading 
     const imageUrl = post.imageUrl || 'images/blog_image_3.jpeg';
-    blogCard.style.backgroundImage = `url("${imageUrl}")`;
+    blogCard.dataset.bgImage = imageUrl; // Will be used by lazy loader
+    // Don't set backgroundImage style directly anymore
     // 2) Date
     const createdDate = new Date(post.createdAt);
     const dateStr = createdDate.toLocaleDateString('en-US', {
@@ -34,7 +35,6 @@ function createBlogCardElement(post) {
         <h3 class="blog-card-title">${post.title}</h3>
         <span class="blog-card-date">${dateStr}</span>
       </div>
-      <p class="blog-card-excerpt">${excerpt}</p>
       ${tagsHTML}
       <a href="post.html?id=${post.id}"
          class="blog-card-button btn read-more-button">

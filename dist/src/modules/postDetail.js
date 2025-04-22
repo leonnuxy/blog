@@ -70,6 +70,7 @@ function loadPostContent(postId) {
  */
 function updatePostUI(post) {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a;
         // 1) Hero
         const titleEl = document.getElementById('post-title');
         const dateEl = document.getElementById('post-date');
@@ -95,8 +96,18 @@ function updatePostUI(post) {
             imageEl.src = post.imageUrl; // Set the featured image
         // 2) Content
         const contentEl = document.getElementById('post-content');
-        if (contentEl)
-            contentEl.innerHTML = marked_1.marked.parse(post.content); // Explicitly cast to string
+        if (contentEl) {
+            contentEl.innerHTML = marked_1.marked.parse(post.content);
+            // Add line-numbers class to all <pre> blocks
+            contentEl
+                .querySelectorAll('pre')
+                .forEach(pre => pre.classList.add('line-numbers'));
+            // Use whichever Prism reference is present
+            const prismInstance = (_a = window.Prism) !== null && _a !== void 0 ? _a : Prism;
+            if (typeof prismInstance.highlightAll === 'function') {
+                prismInstance.highlightAll();
+            }
+        }
     });
 }
 /**

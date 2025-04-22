@@ -30,7 +30,6 @@
     background-position: center;
     display: flex;
     align-items: flex-end;
-    transition: transform .3s, box-shadow .3s;
 }
 
 /* Lift on hover */
@@ -97,15 +96,6 @@
   padding: 0.25rem 0.75rem; /* widen the pill */
   border-radius: 1rem;
   color: #fff;
-}
-
-/* Excerpt text */
-.blog-card-excerpt {
-  font-size: 0.85rem; /* down from 0.95rem */
-  line-height: 1.4;
-  opacity: 0.9;
-  flex-grow: 1;
-  margin: 0;
 }
 
 /* Tag badges */
@@ -191,7 +181,6 @@
     gap: 0.25rem;
   }
 
-  .blog-card-excerpt,
   .blog-card-button {
     display: none;
   }

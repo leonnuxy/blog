@@ -13,39 +13,71 @@
   <link rel="stylesheet" href="styles/global/layout.css" />
   <link rel="stylesheet" href="styles/global/components.css" />
 
-
   <!-- 3) Third‑party -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     integrity="sha512-…" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Prism.js core CSS (Tomorrow for light mode) -->
+  <link id="prism-theme-light"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.min.css">
+  <!-- Prism.js Okaidia for dark mode (disabled by default) -->
+  <link id="prism-theme-dark"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-okaidia.min.css"
+    disabled>
+  <!-- Prism Line Numbers plugin CSS -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.css">
 </head>
 
 <body data-page="main">
   <div id="header-placeholder"></div>
+
   <main id="main-content" class="container">
-    <!-- Dynamic hero: will be filled with the latest post -->
-    <section id="latest-hero" class="hero-grid">
-      <!-- content injected by JS -->
-    </section>
+    <!-- Dynamic hero: will be filled by JS -->
+    <section id="latest-hero" class="hero-grid"></section>
 
+    <!-- Posts grid -->
     <section class="posts-grid"></section>
+    <section id="hidden-posts" style="display: none;"></section>
 
+    <!-- Load More / Infinite Scroll trigger -->
     <div class="pagination-container">
-      <button id="load-more-btn" class="load-more-button" aria-label="Load More Posts">
+      <button
+        id="load-more-btn"
+        class="load-more-button pagination-button"
+        aria-label="Load More Posts"
+      >
         <i class="fas fa-plus"></i> Load More
       </button>
     </div>
   </main>
 
-
   <footer class="site-footer container">
     <p>&copy; 2025 Blog. All rights reserved.</p>
   </footer>
 
-  <!-- About Popup -->
-  <div id="about-popup" class="modal-popup"> </div>
-
+  <!-- Your client bundle (contains header, dark‑mode toggle, hero, posts, pagination, search…) -->
   <script src="dist/client/client.bundle.js" defer></script>
+
+  <!-- Once your bundle has initialized dark‑mode, sync the Prism theme -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof setPrismTheme === 'function') {
+        setPrismTheme(document.body.classList.contains('dark-mode'));
+      }
+    });
+  </script>
+
+  <!-- Prism.js core -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script>
+  <!-- Prism.js language autoloader (optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js"></script>
+  <!-- Prism.js Line Numbers plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
 </body>
 
 </html>

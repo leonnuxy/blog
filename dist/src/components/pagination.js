@@ -1,94 +1,80 @@
 "use strict";
-// Pagination functionality
+// src/components/pagination.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializePagination = initializePagination;
 /**
- * Initialize pagination functionality with Load More button
+ * Sets up "Load More" pagination — desktop via button, mobile via infinite scroll.
  */
 function initializePagination() {
     const loadMoreBtn = document.getElementById('load-more-btn');
-    const hiddenPosts = document.getElementById('hidden-posts');
-    const blogCardsContainer = document.querySelector('.blog-cards');
-    if (!loadMoreBtn || !hiddenPosts || !blogCardsContainer) {
-        console.warn('Pagination elements not found in the DOM');
+    const visibleContainer = document.querySelector('.posts-grid');
+    const hiddenContainer = document.getElementById('hidden-posts');
+    // guard early and bail if any are missing
+    if (!loadMoreBtn || !visibleContainer || !hiddenContainer) {
+        console.warn('Pagination elements not found; skipping pagination setup.');
         return;
     }
-    let currentPage = 1;
+    // from this point on, these three are guaranteed non‑null
+    const btn = loadMoreBtn;
+    const visible = visibleContainer;
+    const hidden = hiddenContainer;
     const postsPerPage = 3;
-    const totalHiddenPosts = hiddenPosts.children.length;
-    // Hide load more button if no hidden posts
-    if (totalHiddenPosts === 0) {
-        loadMoreBtn.style.display = 'none';
-    }
-    // Set up load more button click handler
-    loadMoreBtn.addEventListener('click', () => {
-        loadMorePosts(loadMoreBtn, hiddenPosts, blogCardsContainer, currentPage, postsPerPage);
-        currentPage++;
-    });
-    // Initialize scroll-based loading (infinite scroll)
-    initializeInfiniteScroll(loadMoreBtn);
-}
-/**
- * Load more posts when the load more button is clicked
- */
-function loadMorePosts(loadMoreBtn, hiddenPosts, blogCardsContainer, currentPage, postsPerPage) {
-    // Show loading state
-    loadMoreBtn.classList.add('loading');
-    loadMoreBtn.innerHTML = '<span class="spinner"></span> Loading...';
-    // Simulate loading delay for better UX
-    setTimeout(() => {
-        // Calculate which posts to load
-        const startIdx = (currentPage - 1) * postsPerPage;
-        const endIdx = Math.min(startIdx + postsPerPage, hiddenPosts.children.length);
-        let postsLoaded = 0;
-        // Clone and move posts from hidden container to visible blog cards
-        for (let i = 0; i < postsPerPage && hiddenPosts.children.length > 0; i++) {
-            const postToAdd = hiddenPosts.children[0]; // Always take the first element
-            if (postToAdd) {
-                const clonedPost = postToAdd.cloneNode(true);
-                clonedPost.classList.add('new'); // Add class for animation
-                blogCardsContainer.appendChild(clonedPost);
-                hiddenPosts.removeChild(postToAdd);
-                postsLoaded++;
-            }
-        }
-        // Check if we've loaded all posts
-        if (hiddenPosts.children.length === 0) {
-            loadMoreBtn.style.display = 'none';
-        }
-        // Reset button state
-        loadMoreBtn.classList.remove('loading');
-        loadMoreBtn.innerHTML = '<i class="fas fa-plus"></i> Load More Posts';
-        // Dispatch custom event when posts are loaded
-        const event = new CustomEvent('postsLoaded', { detail: { count: postsLoaded } });
-        document.dispatchEvent(event);
-    }, 800); // Simulate network delay
-}
-/**
- * Initialize infinite scroll functionality
- */
-function initializeInfiniteScroll(loadMoreBtn) {
-    let scrollTimeout;
-    let isLoadingMorePosts = false;
-    window.addEventListener('scroll', () => {
-        // If the button is hidden (all posts loaded) or already in loading state, do nothing
-        if (loadMoreBtn.style.display === 'none' ||
-            loadMoreBtn.classList.contains('loading') ||
-            isLoadingMorePosts) {
+    let isLoading = false;
+    let scrollDebounce;
+    /**
+     * Move up to postsPerPage items from hidden → visible, with loading UI.
+     */
+    function loadMore() {
+        if (isLoading)
             return;
-        }
-        clearTimeout(scrollTimeout);
-        scrollTimeout = window.setTimeout(() => {
-            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-            // When user scrolls to bottom (with some buffer)
-            if (scrollTop + clientHeight >= scrollHeight - 200) {
-                isLoadingMorePosts = true;
-                loadMoreBtn.click();
-                // Reset flag after animation completes
-                setTimeout(() => {
-                    isLoadingMorePosts = false;
-                }, 1000);
+        isLoading = true;
+        // show loading state
+        btn.classList.add('loading');
+        btn.innerHTML = `<span class="spinner"></span> Loading…`;
+        setTimeout(() => {
+            let moved = 0;
+            while (moved < postsPerPage && hidden.children.length) {
+                const post = hidden.removeChild(hidden.children[0]);
+                post.classList.add('new'); // optional animation class
+                visible.appendChild(post);
+                moved++;
             }
-        }, 200);
-    });
+            // if no more hidden, hide button & stop infinite‑scroll
+            if (!hidden.children.length) {
+                btn.style.display = 'none';
+                window.removeEventListener('scroll', onScroll);
+            }
+            // restore button UI
+            btn.classList.remove('loading');
+            btn.innerHTML = `<i class="fas fa-plus"></i> Load More`;
+            isLoading = false;
+        }, 600);
+    }
+    /**
+     * Debounced scroll handler to trigger loadMore near bottom.
+     */
+    function onScroll() {
+        clearTimeout(scrollDebounce);
+        scrollDebounce = window.setTimeout(() => {
+            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight - 200) {
+                loadMore();
+            }
+        }, 150);
+    }
+    // if no hidden posts up front, hide button immediately
+    if (!hidden.children.length) {
+        btn.style.display = 'none';
+        return;
+    }
+    if (window.innerWidth < 768) {
+        // mobile: infinite scroll
+        btn.style.display = 'none';
+        window.addEventListener('scroll', onScroll);
+    }
+    else {
+        // desktop: click to load more
+        btn.style.display = 'inline-flex';
+        btn.addEventListener('click', loadMore);
+    }
 }

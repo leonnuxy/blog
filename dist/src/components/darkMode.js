@@ -1,62 +1,71 @@
 "use strict";
-// Dark mode functionality
+// src/components/darkMode.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializeDarkMode = initializeDarkMode;
 exports.checkSystemDarkModePreference = checkSystemDarkModePreference;
+const STORAGE_KEY = 'darkMode';
 /**
  * Initialize dark mode toggle
  * This creates a floating dark mode toggle button and adds it to the DOM
  */
 function initializeDarkMode() {
+    var _a;
     // Create dark mode toggle button
     const darkModeToggle = document.createElement('button');
     darkModeToggle.className = 'dark-mode-toggle';
-    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Moon icon
     darkModeToggle.setAttribute('aria-label', 'Toggle Dark Mode');
-    // Check if dark mode preference is already set in local storage
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    // Icon + initial state
+    const isDarkMode = localStorage.getItem(STORAGE_KEY) === 'true';
     if (isDarkMode) {
         document.body.classList.add('dark-mode');
-        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Sun icon for light mode
+        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
     }
-    // Add click event listener
+    else {
+        darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+    }
+    // Apply Prism theme to match
+    (_a = window.setPrismTheme) === null || _a === void 0 ? void 0 : _a.call(window, isDarkMode);
+    // Wire up click
     darkModeToggle.addEventListener('click', toggleDarkMode);
-    // Add button to the DOM
+    // Append to body
     document.body.appendChild(darkModeToggle);
 }
 /**
  * Toggle dark mode on and off
  */
 function toggleDarkMode() {
-    const isDarkMode = document.body.classList.toggle('dark-mode');
-    const darkModeToggle = document.querySelector('.dark-mode-toggle');
-    // Update icon based on mode
-    if (darkModeToggle) {
-        if (isDarkMode) {
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Sun icon for light mode
-        }
-        else {
-            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Moon icon for dark mode
-        }
+    var _a;
+    const isNowDark = document.body.classList.toggle('dark-mode');
+    const toggleBtn = document.querySelector('.dark-mode-toggle');
+    // Swap icon
+    if (toggleBtn) {
+        toggleBtn.innerHTML = isNowDark
+            ? '<i class="fas fa-sun"></i>'
+            : '<i class="fas fa-moon"></i>';
     }
-    // Save preference to local storage
-    localStorage.setItem('darkMode', isDarkMode.toString());
+    // Persist
+    localStorage.setItem(STORAGE_KEY, String(isNowDark));
+    // Swap Prism theme
+    (_a = window.setPrismTheme) === null || _a === void 0 ? void 0 : _a.call(window, isNowDark);
 }
 /**
- * Check if user has system dark mode preference
- * If they do and we haven't set a preference yet, apply dark mode
+ * Check system preference on first load
+ * If the user has no stored preference, respect prefers‐color‐scheme
  */
 function checkSystemDarkModePreference() {
-    // Only check if user hasn't explicitly set a preference
-    if (localStorage.getItem('darkMode') === null) {
-        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDarkMode) {
-            document.body.classList.add('dark-mode');
-            const darkModeToggle = document.querySelector('.dark-mode-toggle');
-            if (darkModeToggle) {
-                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Sun icon
-            }
-            localStorage.setItem('darkMode', 'true');
-        }
+    var _a;
+    if (localStorage.getItem(STORAGE_KEY) !== null) {
+        return; // user already chose
+    }
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (prefersDark) {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem(STORAGE_KEY, 'true');
+        // Update any existing toggle icon if already rendered
+        const toggleBtn = document.querySelector('.dark-mode-toggle');
+        if (toggleBtn)
+            toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        // Swap Prism theme
+        (_a = window.setPrismTheme) === null || _a === void 0 ? void 0 : _a.call(window, true);
     }
 }

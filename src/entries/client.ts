@@ -12,6 +12,8 @@ import { initializeSearch }           from '../components/search';
 import { initializeNavigation }       from '../components/navigation/navigation';
 import { checkSystemDarkModePreference, initializeDarkMode }
                                       from '../components/darkMode';
+import { initBackgroundImageLazyLoading, initImageFadeIn } 
+                                          from '../utils/lazyLoader';
 
 async function initializeClient(): Promise<void> {
   console.log('Client initializing…');
@@ -28,8 +30,8 @@ async function initializeClient(): Promise<void> {
   initializeMobileNav();
   initializeNavigation();
   initializeSearch();
-
-  // 5) Page‑specific logic
+  
+  // 4) Page‑specific logic & Lazy Loading Initialization
   const path = window.location.pathname;
   const isIndex = path === '/' || path.endsWith('/index.html');
   const pageType = document.body.dataset.page;
@@ -39,10 +41,15 @@ async function initializeClient(): Promise<void> {
       console.log('Initializing main blog page…');
       await initializeBlogFrontend();
       console.log('Main page ready.');
+      // Initialize lazy loading AFTER main content is loaded
+      initBackgroundImageLazyLoading('.blog-card'); 
+      initImageFadeIn('.hero-grid img[loading="lazy"]'); // Target hero images specifically
     } else if (pageType === 'post' || path.endsWith('/post.html')) {
       console.log('Initializing post detail page…');
       await initializePostDetailPageLogic();
       console.log('Post detail ready.');
+      // Initialize lazy loading AFTER post content is loaded
+      initImageFadeIn('.post-featured-image[loading="lazy"]'); // Target post image specifically
     } else {
       console.log(`No page‑specific logic for pageType="${pageType}", path="${path}".`);
     }

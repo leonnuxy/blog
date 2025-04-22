@@ -1,5 +1,18 @@
 // src/modules/postDetail.ts
 
+/** Let TS know about the global Prism loader on window */
+declare global {
+  interface Window {
+    Prism?: {
+      highlightAll: () => void;
+    };
+  }
+}
+/** Tell TS there’s a global Prism variable (loaded via CDN) */
+declare const Prism: {
+  highlightAll: () => void;
+};
+
 // --- Imports ---
 import { fetchPostById } from '../services/api';
 import { generateTagFilterUrl } from '../utils/urlTransformer'
@@ -81,7 +94,19 @@ export async function updatePostUI(post: BlogPostData): Promise<void> {
 
   // 2) Content
   const contentEl = document.getElementById('post-content');
-  if (contentEl) contentEl.innerHTML = marked.parse(post.content) as string; // Explicitly cast to string
+  if (contentEl) {
+    contentEl.innerHTML = marked.parse(post.content) as string;
+    // Add line-numbers class to all <pre> blocks
+    contentEl
+      .querySelectorAll<HTMLElement>('pre')
+      .forEach(pre => pre.classList.add('line-numbers'));
+
+    // Use whichever Prism reference is present
+    const prismInstance = window.Prism ?? Prism;
+    if (typeof prismInstance.highlightAll === 'function') {
+      prismInstance.highlightAll();
+    }
+  }
 }
 
 /**
