@@ -45,6 +45,17 @@
     padding: 0 var(--spacing-3);
 }
 
+/* Section Title Styling */
+.section-title {
+    font-size: var(--font-size-xl); /* Base font size */
+    font-weight: 600; /* Semi-bold */
+    color: var(--text-primary);
+    margin-top: var(--spacing-6); /* Space above the title */
+    margin-bottom: var(--spacing-4); /* Space below the title */
+    padding-bottom: var(--spacing-2); /* Space under the text before border */
+    border-bottom: 1px solid var(--border-color); /* Subtle separator */
+}
+
 .page-content {
     min-height: calc(100vh - var(--header-height));
     padding-top: var(--spacing-4);
@@ -172,6 +183,13 @@
 @media (max-width: 768px) {
     .container {
         padding: 0 var(--spacing-2);
+    }
+
+    /* Adjust section title for smaller screens */
+    .section-title {
+        font-size: var(--font-size-lg); /* Slightly smaller font on mobile */
+        margin-top: var(--spacing-5);
+        margin-bottom: var(--spacing-3);
     }
 
     .section {

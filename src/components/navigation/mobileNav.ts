@@ -4,19 +4,10 @@ export function initializeMobileNav(): void {
   const toggleBtn = document.querySelector<HTMLButtonElement>('.mobile-nav-toggle');
   const drawer = document.getElementById('mobile-nav-drawer');
   const overlay = document.getElementById('drawer-overlay');
-
-  if (!toggleBtn || !drawer || !overlay) {
-    console.warn('Mobile nav elements not found; skipping initialization.');
-    return;
-  }
+  if (!toggleBtn || !drawer || !overlay) return;
 
   const closeBtn = drawer.querySelector<HTMLButtonElement>('.close-drawer-btn');
-  const navLinks = drawer.querySelectorAll<HTMLAnchorElement>('.mobile-nav-list a');
-
-  if (!closeBtn) {
-    console.warn('Close button not found; skipping initialization.');
-    return;
-  }
+  if (!closeBtn) return;
 
   const openMenu = () => {
     drawer.classList.add('open');
@@ -24,7 +15,6 @@ export function initializeMobileNav(): void {
     document.body.style.overflow = 'hidden';
     toggleBtn.setAttribute('aria-expanded', 'true');
   };
-
   const closeMenu = () => {
     drawer.classList.remove('open');
     overlay.classList.remove('open');
@@ -32,15 +22,26 @@ export function initializeMobileNav(): void {
     toggleBtn.setAttribute('aria-expanded', 'false');
   };
 
-  // Event listeners
   toggleBtn.addEventListener('click', openMenu);
   closeBtn.addEventListener('click', closeMenu);
   overlay.addEventListener('click', closeMenu);
 
-  // Close menu when clicking nav links
-  navLinks.forEach(link => {
-    link.addEventListener('click', closeMenu);
+  // If a nav link is clicked, also close
+  drawer.querySelectorAll('.mobile-nav-list a').forEach(a => {
+    a.addEventListener('click', closeMenu);
   });
+
+  // ** NEW **: wire up the mobile “Search” button
+  const searchBtn = document.getElementById('drawer-search-btn');
+  if (searchBtn) {
+    searchBtn.addEventListener('click', () => {
+      // close the drawer first
+      closeMenu();
+      // then navigate to homepage with showSearch flag
+      const prefix = window.location.pathname.includes('/blog/') ? '/blog/' : '/';
+      window.location.href = `${prefix}?showSearch=1`;
+    });
+  }
 
   // Close menu on ESC key
   document.addEventListener('keydown', (e) => {

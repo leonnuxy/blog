@@ -122,7 +122,22 @@ body {
   color: var(--primary-color);
 }
 
-
+.mobile-search-btn {
+  display: none;
+  width: 100%;
+  padding: var(--spacing-2);
+  background: var(--surface-alt);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-4);
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .mobile-search-btn {
+    display: block;
+  }
+}
 
 /* --------------------------------------------------------------------------
    Ensure desktop doesn’t show these

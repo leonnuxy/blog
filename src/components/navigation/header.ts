@@ -17,36 +17,36 @@ export function renderHeader(containerId = 'header-placeholder'): void {
       <div class="container">
         <h1 class="site-title"><a href="${base}">Blog</a></h1>
 
-        <!-- desktop nav -->
         <nav class="site-nav">
           <ul>
             <li><a href="${base}" class="${location.pathname === '/' ? 'active' : ''}">Home</a></li>
-            <li><a href="https://noelugwoke.com" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+            <li><a href="https://noelugwoke.com" target="_blank">Portfolio</a></li>
           </ul>
         </nav>
 
         <div class="header-right">
+          <!-- desktop search -->
           <div class="search-container">
             <input id="search-input" type="search" placeholder="Search posts…" />
           </div>
+
+          <!-- hamburger -->
           <button class="mobile-nav-toggle" aria-label="Open menu" aria-expanded="false">
             <i class="fas fa-bars"></i>
           </button>
 
+          <!-- backdrop -->
           <div id="drawer-overlay" class="drawer-overlay"></div>
+
+          <!-- drawer -->
           <nav id="mobile-nav-drawer" class="mobile-nav-drawer" aria-label="Mobile menu">
             <button class="close-drawer-btn" aria-label="Close menu">
               <i class="fas fa-times"></i>
             </button>
-            <div class="drawer-search-container">
-              <input id="search-input-mobile"
-                     type="search"
-                     placeholder="Search posts…"
-                     aria-label="Search posts" />
-            </div>
+
             <ul class="mobile-nav-list">
               <li><a href="./" class="${location.pathname === '/' ? 'active' : ''}">Home</a></li>
-              <li><a href="https://noelugwoke.com" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+              <li><a href="https://noelugwoke.com" target="_blank">Portfolio</a></li>
             </ul>
           </nav>
         </div>
