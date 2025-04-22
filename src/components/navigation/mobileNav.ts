@@ -36,7 +36,7 @@ export function initializeMobileNav(): void {
   toggleBtn.addEventListener('click', openMenu);
   closeBtn.addEventListener('click', closeMenu);
   overlay.addEventListener('click', closeMenu);
-  
+
   // Close menu when clicking nav links
   navLinks.forEach(link => {
     link.addEventListener('click', closeMenu);
@@ -45,6 +45,17 @@ export function initializeMobileNav(): void {
   // Close menu on ESC key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && drawer.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+
+  // Close menu when clicking outside the drawer and toggle button
+  document.addEventListener('mousedown', (event) => {
+    if (
+      drawer.classList.contains('open') &&
+      !drawer.contains(event.target as Node) &&
+      !toggleBtn.contains(event.target as Node)
+    ) {
       closeMenu();
     }
   });
