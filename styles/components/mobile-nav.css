@@ -33,6 +33,7 @@
   overflow-y: auto;
   border-radius: var(--border-radius-large);
   padding: var(--spacing-3);
+  padding-top: var(--spacing-6); /* add extra top padding for the close button */
   transform: translateX(100%);
 }
 
@@ -50,13 +51,17 @@ body {
    CLOSE BUTTON
    -------------------------------------------------------------------------- */
 .close-drawer-btn {
+  position: absolute;
+  top: var(--spacing-3);
+  left: var(--spacing-3);
   background: none;
   border: none;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   color: var(--text-color);
   cursor: pointer;
-  margin: 0 0 var(--spacing-2) auto;
+  margin: 0;
   display: block;
+  z-index: 2;
 }
 
 /* --------------------------------------------------------------------------
