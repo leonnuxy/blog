@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard for Managing Blog Content">
+    <meta name="robots" content="noindex, nofollow"> 
+    <title>Blog Admin Dashboard</title>
+    
+    <link rel="stylesheet" href="styles/global/base.css">
+    <link rel="stylesheet" href="styles/global/utilities.css">
+    <link rel="stylesheet" href="styles/views/admin.css"> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles/components/lazy-loading.css" />
+    <script src="dist/client/admin.bundle.js" defer></script>
+</head>
+<body data-page="admin">
+    <header class="admin-main-header">
+        <h1>Blog Admin Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">View Blog</a></li>
+                <li><a href="#posts" class="active">Manage Posts</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="admin-panel">
+            <div class="admin-header">
+                <h2>Blog Posts</h2>
+                <button id="add-post-btn" class="primary-button">
+                    <i class="fas fa-plus"></i> Add New Post
+                </button>
+            </div>
+            
+            <div class="admin-filter">
+                <input type="text" id="search-posts" placeholder="Search posts..." class="search-input">
+                <div class="filter-options">
+                    <select id="filter-tag" aria-label="Filter by tag">
+                        <option value="">All Tags</option>
+                    </select>
+                    <select id="sort-by" aria-label="Sort posts by">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="title">Title A-Z</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Date</th>
+                            <th>Tags</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="posts-table-body">
+                        <tr class="loading-row">
+                            <td colspan="6">
+                                <div class="loading-spinner"></div>
+                                <p>Loading posts...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="admin-pagination">
+                <button id="prev-page" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                <span id="page-indicator">Page 1 of 1</span>
+                <button id="next-page" disabled>Next <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+    </main>
+    
+    <div id="post-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" aria-label="Close modal"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title">Add New Post</h2>
+            <form id="post-form" class="admin-form">
+                <input type="hidden" id="post-id">
+
+                <div class="form-group">
+                    <label for="post-title">Title</label>
+                    <input type="text" id="post-title" name="post-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="post-author">Author</label>
+                    <input type="text" id="post-author" name="post-author" required>
+                </div>
+                <div class="form-group">
+                    <label for="post-content">Content</label>
+                    <textarea id="post-content" name="post-content" rows="10" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="post-tags">Tags (comma separated)</label>
+                    <input type="text" id="post-tags" name="post-tags" placeholder="e.g. technology, programming">
+                </div>
+                <div class="form-group">
+                    <label for="post-image">Featured Image URL</label>
+                     <input type="url" id="post-image" name="post-image" placeholder="https://example.com/image.jpg">
+                    <p class="form-help">Leave empty to use the default image</p>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="secondary-button" id="cancel-post-btn">Cancel</button>
+                    <button type="submit" class="primary-button" id="save-post-btn">Save Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="confirm-dialog" class="modal">
+        <div class="modal-content confirm-content">
+            <h3>Confirm Deletion</h3> 
+            <p id="confirm-message">Are you sure you want to delete this post? This action cannot be undone.</p> 
+            <div class="confirm-buttons">
+                <button id="cancel-delete-btn" class="secondary-button">Cancel</button>
+                <button id="confirm-delete-btn" class="danger-button">Delete</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast-notification" class="toast" role="alert" aria-live="assertive">
+        <span id="toast-message"></span>
+        <button id="close-toast" aria-label="Close notification"><i class="fas fa-times"></i></button>
+    </div>
+    
+</body>
+</html>
