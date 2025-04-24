@@ -92,6 +92,9 @@ npm install    # Install dependencies
 npm run build  # Build the project with Webpack
 ```
 
+<!-- To run it  -->
+- npm run build && npx tsc && node dist/src/entries/app.js
+
 ## Features
 - **Client Interface**: A user-friendly interface for browsing blog posts.
 - **Admin Interface**: Tools for managing blog content.
