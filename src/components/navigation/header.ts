@@ -19,7 +19,6 @@ export function renderHeader(containerId = 'header-placeholder'): void {
 
         <nav class="site-nav">
           <ul>
-            <li><a href="${base}" class="${location.pathname === '/' ? 'active' : ''}">Home</a></li>
             <li><a href="https://noelugwoke.com" target="_blank">Portfolio</a></li>
           </ul>
         </nav>
@@ -45,7 +44,6 @@ export function renderHeader(containerId = 'header-placeholder'): void {
             </button>
 
             <ul class="mobile-nav-list">
-              <li><a href="./" class="${location.pathname === '/' ? 'active' : ''}">Home</a></li>
               <li><a href="https://noelugwoke.com" target="_blank">Portfolio</a></li>
             </ul>
           </nav>
